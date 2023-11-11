@@ -1,9 +1,12 @@
 import styles from './page.module.scss'
+import {NextPage} from "next";
 
-export default function Home() {
+const Home: NextPage = () => {
     return (
         <main className={styles.main}>
             hahaah
         </main>
     )
 }
+
+export default Home;
