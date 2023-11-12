@@ -29,8 +29,26 @@ yarn build
 
 ## Run
 
+### Next Js
+
+Run
+
+```bash
+yarn start
+```
+
+### Docker compose
+
+```yml
+# here is a docker-compose example
+```
+
 ## Environment
 
-| Parameter | Default value         | Description |
-|-----------|-----------------------|-------------|
-| API_URL   | http://localhost:8080 | Description |
+You can configure your environment by system environment or `.env`
+
+Example of `.env` you can see at `demo.env` file
+
+| Parameter | Default value           | Description        |
+|-----------|-------------------------|--------------------|
+| API_URL   | `http://localhost:8080` | Web api module url |
