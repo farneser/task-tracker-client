@@ -15,11 +15,25 @@ const getBaseUrl = () => {
 type ConstantsType = {
     baseUrl: string;
     authTokenKey: string;
+    statuses: {
+        SUCCESS: number;
+        UNAUTHORIZED: number;
+        ACCESS_TOKEN_EXPIRED: number;
+        REFRESH_TOKEN_EXPIRED: number;
+        SERVER_ERROR: number;
+    };
 }
 
 const constants: Readonly<ConstantsType> = {
     baseUrl: getBaseUrl(),
-    authTokenKey: "auth_token"
+    authTokenKey: "auth_token",
+    statuses: {
+        SUCCESS: 200,
+        UNAUTHORIZED: 401,
+        ACCESS_TOKEN_EXPIRED: 4011,
+        REFRESH_TOKEN_EXPIRED: 4012,
+        SERVER_ERROR: 500,
+    }
 }
 
 export default constants;
