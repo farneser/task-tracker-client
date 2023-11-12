@@ -5,7 +5,7 @@ import {getContentType} from "@/src/api/api.helper";
 import {ErrorMessage} from "@/src/models/errorMessage";
 import {setLocalStorage} from "@/src/utils/localStorage.utils";
 
-const sendTokenRequest = async (data: Token | LoginType, path: string): Promise<Token | null> => {
+const sendTokenRequest = async (data: Token | LoginType | RegisterType, path: string): Promise<Token | null> => {
     const response = await axios.post<Token | ErrorMessage>(`${constants.baseUrl}${path}`, data, {
         headers: getContentType()
     });
@@ -23,6 +23,9 @@ const sendTokenRequest = async (data: Token | LoginType, path: string): Promise<
 export const authService = {
     async login(data: LoginType): Promise<Token | null> {
         return sendTokenRequest(data, "/api/v1/auth")
+    },
+    async register(data: RegisterType): Promise<Token | null> {
+        return sendTokenRequest(data, "/api/v1/auth/register")
     },
     async refreshToken(token: Token): Promise<Token | null> {
         return sendTokenRequest(token, "/api/v1/auth/refresh")
