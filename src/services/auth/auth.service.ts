@@ -6,7 +6,7 @@ import {ErrorMessage} from "@/src/models/errorMessage";
 import {setLocalStorage} from "@/src/utils/localStorage.utils";
 
 export const authService = {
-    async refreshToken(token: Token): Promise<Token> {
+    async refreshToken(token: Token): Promise<Token | null> {
 
         const response = await axios.post<Token | ErrorMessage>(`${constants.baseUrl}/api/v1/auth/refresh`, token, {
             headers: getContentType()
@@ -16,9 +16,10 @@ export const authService = {
             const data = response.data as Token;
 
             setLocalStorage(constants.authTokenKey, data)
+            return data;
         }
 
-        return token;
+        return null;
     }
 }
 
