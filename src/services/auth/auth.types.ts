@@ -1,8 +1,8 @@
-type LoginType = {
+export interface ILogin {
     email: string;
     password: string;
 }
 
-type RegisterType = LoginType & {
+export interface IRegister extends ILogin {
     confirmPassword: string;
 }

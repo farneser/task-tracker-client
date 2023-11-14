@@ -1,3 +1,5 @@
+import {parseJson} from "@/utils/json.utils.ts";
+
 export const getLocalStorageItem = <T>(key: string) => {
     return parseJson<T>(localStorage.getItem(key));
 }

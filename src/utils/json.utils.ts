@@ -1,4 +1,4 @@
-const parseJson = <T>(json: string | null): T | null => {
+export const parseJson = <T>(json: string | null): T | null => {
     if (!json) {
         return null;
     }
