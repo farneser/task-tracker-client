@@ -1,5 +1,5 @@
 const getBaseUrl = () => {
-    let baseUrl = process.env.API_URL
+    let baseUrl = import.meta.env.VITE_API_URL
 
     if (!baseUrl) {
         baseUrl = "http://localhost:8080"
