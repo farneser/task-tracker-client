@@ -1,6 +1,6 @@
 import {createContext, FC, PropsWithChildren, useState} from "react";
 import {Token} from "@/models/token.ts";
-import {getLocalStorageItem} from "@/utils/localStorage.utils.ts";
+import {getLocalStorageItem, removeLocalStorage, setLocalStorage} from "@/utils/localStorage.utils.ts";
 import constants from "@/constants.ts";
 
 export interface IAuthContext {
@@ -16,6 +16,12 @@ export const AuthProvider: FC<PropsWithChildren> = ({children}) => {
 
     const updateToken = (token: Token | null) => {
         setToken(token);
+
+        if (token) {
+            setLocalStorage(constants.authTokenKey, token)
+        } else {
+            removeLocalStorage(constants.authTokenKey);
+        }
     };
 
     return (

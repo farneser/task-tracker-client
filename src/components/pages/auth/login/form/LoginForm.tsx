@@ -14,17 +14,19 @@ const LoginForm: FC = () => {
 
     const onSubmit = async (data: ILogin) => {
         setLoading(true)
-        try {
-            const token = await authService.login(data)
+        auth.updateToken(null)
 
-            auth.updateToken(token);
-        } catch (e) {
-            console.log(e)
-        } finally {
-            setLoading(false)
-            navigate("/")
-        }
-    };
+        authService.login(data)
+            .then(data => {
+                auth.updateToken(data)
+                navigate("/")
+                return data;
+            })
+            .catch(e => console.log(e))
+            .finally(() => {
+                setLoading(false)
+            })
+    }
 
     if (loading) {
         return <div>loading</div>

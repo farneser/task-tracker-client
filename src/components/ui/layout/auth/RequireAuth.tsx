@@ -22,12 +22,14 @@ const RequireAuth = () => {
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching data:', error);
+            } finally {
                 setLoading(false);
             }
         };
 
         fetchData().then();
-    }, []); // TODO check how it works without []
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     if (loading) {
         return <p>Loading...</p>;

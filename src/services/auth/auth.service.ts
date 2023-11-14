@@ -4,7 +4,6 @@ import constants from "@/constants";
 import {Token} from "@/models/token.ts";
 import {ErrorMessage} from "@/models/errorMessage.ts";
 import {getContentType} from "@/api/api.helper.ts";
-import {setLocalStorage} from "@/utils/localStorage.utils.ts";
 import {ILogin, IRegister} from "@/services/auth/auth.types.ts";
 
 const sendTokenRequest = async (data: Token | ILogin | IRegister, path: string): Promise<Token | null> => {
@@ -13,10 +12,7 @@ const sendTokenRequest = async (data: Token | ILogin | IRegister, path: string):
     });
 
     if ((response.data as Token).access_token) {
-        const data = response.data as Token;
-
-        setLocalStorage(constants.authTokenKey, data)
-        return data;
+        return response.data as Token;
     }
 
     return null;
