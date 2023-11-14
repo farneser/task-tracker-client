@@ -13,7 +13,7 @@ const RequireAuth = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                if (auth && auth.token) {
+                if (auth.token) {
                     const token = await authService.refreshToken(auth.token);
 
                     auth.updateToken(token);
