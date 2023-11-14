@@ -1,15 +1,36 @@
 import {useForm} from 'react-hook-form';
 import styles from "./login-form.module.scss"
-import {FC} from "react";
-
-interface LoginForm {
-    email: string;
-    password: string;
-}
+import {FC, useState} from "react";
+import authService from "@/services/auth/auth.service.ts";
+import {ILogin} from "@/services/auth/auth.types.ts";
+import useAuth from "@/hooks/useAuth.ts";
+import {useNavigate} from "react-router-dom";
 
 const LoginForm: FC = () => {
-    const {register, handleSubmit, formState: {errors},} = useForm<LoginForm>();
-    const onSubmit = (data: LoginForm) => console.log(data);
+    const {register, handleSubmit, formState: {errors},} = useForm<ILogin>();
+    const [loading, setLoading] = useState<boolean>(false)
+    const auth = useAuth();
+    const navigate = useNavigate();
+
+
+    // FIXME 14/11/23 infinite loading if bad credentials
+    const onSubmit = async (data: ILogin) => {
+        setLoading(true)
+
+        const token = await authService.login(data)
+
+        auth.updateToken(token);
+
+        if (auth.token) {
+            navigate("/")
+        } else {
+            setLoading(false)
+        }
+    };
+
+    if (loading) {
+        return <div>loading</div>
+    }
 
     return (
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
