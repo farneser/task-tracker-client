@@ -1,5 +1,5 @@
 import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider,} from "react-router-dom";
-import Layout from "@/components/ui/layout/Layout.tsx";
+import Layout from "@/components/ui/layout/default/Layout.tsx";
 import LoginPage from "@/components/pages/auth/login/LoginPage.tsx";
 
 const router = createBrowserRouter(
