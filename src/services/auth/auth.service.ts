@@ -1,9 +1,11 @@
-import constants from "@/src/constants";
-import {Token} from "@/src/models/token";
+
 import axios from "axios";
-import {getContentType} from "@/src/api/api.helper";
-import {ErrorMessage} from "@/src/models/errorMessage";
-import {setLocalStorage} from "@/src/utils/localStorage.utils";
+import {ErrorMessage} from "@/models/errorMessage.ts";
+import {Token} from "@/models/token.ts";
+import {getContentType} from "@/api/api.helper.ts";
+import {setLocalStorage} from "@/utils/localStorage.utils.ts";
+import constants from "@/constants";
+
 
 const sendTokenRequest = async (data: Token | LoginType | RegisterType, path: string): Promise<Token | null> => {
     const response = await axios.post<Token | ErrorMessage>(`${constants.baseUrl}${path}`, data, {

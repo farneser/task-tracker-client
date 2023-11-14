@@ -1,8 +1,8 @@
 import axios from "axios";
-import {Token} from "@/src/models/token";
-import {getLocalStorageItem, removeLocalStorage} from "@/src/utils/localStorage.utils";
-import constants from "@/src/constants";
-import authService from "@/src/services/auth/auth.service";
+import {Token} from "@/models/token";
+import {getLocalStorageItem, removeLocalStorage} from "@/utils/localStorage.utils";
+import constants from "@/constants";
+import authService from "@/services/auth/auth.service.ts";
 
 const axiosInstance = axios.create({
     baseURL: constants.baseUrl,

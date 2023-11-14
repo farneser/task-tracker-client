@@ -38,3 +38,4 @@ vite-env.d.ts
 .idea/
 .vscode/
 target/
+dist/
