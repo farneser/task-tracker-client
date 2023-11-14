@@ -3,7 +3,7 @@ import {Token} from "@/models/token.ts";
 import {getLocalStorageItem} from "@/utils/localStorage.utils.ts";
 import constants from "@/constants.ts";
 
-interface IAuthContext {
+export interface IAuthContext {
     token: Token | null;
     updateToken: (token: Token) => void;
     removeToken: () => void;
