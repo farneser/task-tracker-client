@@ -12,18 +12,19 @@ const LoginForm: FC = () => {
     const auth = useAuth();
     const navigate = useNavigate();
 
-
-    // FIXME 14/11/23 infinite loading if bad credentials
     const onSubmit = async (data: ILogin) => {
         setLoading(true)
+        try {
+            const token = await authService.login(data)
 
-        const token = await authService.login(data)
+            auth.updateToken(token);
 
-        auth.updateToken(token);
-
-        if (auth.token) {
-            navigate("/")
-        } else {
+            if (auth.token) {
+                navigate("/")
+            }
+        } catch (e) {
+            console.log(e)
+        } finally {
             setLoading(false)
         }
     };
