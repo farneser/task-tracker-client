@@ -27,7 +27,7 @@ const RequireAuth = () => {
         };
 
         fetchData().then();
-    }, [auth]);
+    }, []); // TODO check how it works without []
 
     if (loading) {
         return <p>Loading...</p>;

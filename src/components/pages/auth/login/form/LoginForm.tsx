@@ -18,14 +18,11 @@ const LoginForm: FC = () => {
             const token = await authService.login(data)
 
             auth.updateToken(token);
-
-            if (auth.token) {
-                navigate("/")
-            }
         } catch (e) {
             console.log(e)
         } finally {
             setLoading(false)
+            navigate("/")
         }
     };
 
