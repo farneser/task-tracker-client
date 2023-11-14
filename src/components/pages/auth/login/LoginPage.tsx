@@ -1,7 +1,7 @@
-import {NextPage} from 'next';
-import LoginForm from "@/src/components/pages/auth/login/form/LoginForm";
+import {FC} from "react";
+import LoginForm from "@/components/pages/auth/login/form/LoginForm.tsx";
 
-const LoginPage: NextPage = () => {
+const LoginPage: FC = () => {
     return (
         <div>
             login page

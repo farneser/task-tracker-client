@@ -1,14 +1,13 @@
-"use client"
-import {NextPage} from 'next';
 import {useForm} from 'react-hook-form';
 import styles from "./login-form.module.scss"
+import {FC} from "react";
 
 interface LoginForm {
     email: string;
     password: string;
 }
 
-const LoginForm: NextPage = () => {
+const LoginForm: FC = () => {
     const {register, handleSubmit, formState: {errors},} = useForm<LoginForm>();
     const onSubmit = (data: LoginForm) => console.log(data);
 
