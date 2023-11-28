@@ -29,10 +29,6 @@ yarn build
 
 ## Run
 
-### Next Js
-
-Run
-
 ```bash
 yarn start
 ```
