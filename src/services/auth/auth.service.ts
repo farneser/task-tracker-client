@@ -7,15 +7,17 @@ import {getContentType} from "@/api/api.helper.ts";
 import {ILogin, IRegister} from "@/services/auth/auth.types.ts";
 
 const sendTokenRequest = async (data: Token | ILogin | IRegister, path: string): Promise<Token | null> => {
-    const response = await axios.post<Token | ErrorMessage>(`${constants.baseUrl}${path}`, {...data}, {
+    return await axios.post<Token | ErrorMessage>(`${constants.baseUrl}${path}`, {...data}, {
         headers: getContentType()
+    }).then((response) => {
+        console.log(response.data)
+
+        if ((response.data as Token).access_token) {
+            return response.data as Token;
+        }
+
+        return null;
     });
-
-    if ((response.data as Token).access_token) {
-        return response.data as Token;
-    }
-
-    return null;
 }
 
 export const authService = {

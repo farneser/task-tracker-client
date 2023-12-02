@@ -2,6 +2,7 @@ import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider,} f
 import Layout from "@/components/ui/layout/default/Layout.tsx";
 import LoginPage from "@/components/pages/auth/login/LoginPage.tsx";
 import RequireAuth from "@/components/ui/layout/auth/RequireAuth.tsx";
+import HomePage from "@/components/pages/HomePage.tsx";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -11,7 +12,7 @@ const router = createBrowserRouter(
 
             {/* private routes */}
             <Route element={<RequireAuth/>}>
-                <Route index element={<div>homepage</div>}/>
+                <Route index element={<HomePage/>}/>
             </Route>
         </Route>
     )
