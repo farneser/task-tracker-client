@@ -1,9 +1,16 @@
 import {TaskView} from "@/services/task/task.types.ts";
 
-export interface ColumnView {
+export interface CreateColumnDto {
+    columnName: string
+    isCompleted: boolean
+}
+
+export interface PatchColumnDto extends CreateColumnDto {
+    orderNumber: number
+}
+
+
+export interface ColumnView extends PatchColumnDto {
     id: number;
-    columnName: string;
-    isCompleted: boolean;
-    orderNumber: number;
     tasks: TaskView[] | null;
 }
