@@ -1,9 +1,19 @@
 import {ColumnView} from "@/services/column/column.types.ts";
 
-export interface TaskView {
-    id: number;
+export interface CreateTaskDto {
+    columnId: number;
+    taskName: string
+    description: string
+}
+
+export interface PatchTaskDto extends CreateTaskDto {
     taskName: string;
     description: string;
+    columnId: number;
     orderNumber: number;
+}
+
+export interface TaskView extends Omit<PatchTaskDto, "columnId"> {
+    id: number;
     column: ColumnView | null;
 }
