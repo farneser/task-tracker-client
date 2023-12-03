@@ -11,7 +11,7 @@ const axiosInstance = axios.create({
     }
 });
 
-axios.interceptors.request.use(async req => {
+axiosInstance.interceptors.request.use(async req => {
     const token = getLocalStorageItem<Token>(constants.authTokenKey)
 
     req.headers.Authorization = `Bearer ${token?.accessToken}`
@@ -19,12 +19,12 @@ axios.interceptors.request.use(async req => {
     return req;
 });
 
-axios.interceptors.response.use(async res => res, async error => {
+axiosInstance.interceptors.response.use(async res => res, async error => {
 
     const request = error.config;
 
     if (error.response.status == 401) {
-        if ((error.response.body.status == constants.statuses.ACCESS_TOKEN_EXPIRED) && !error.config._isRetry) {
+        if ((error.response.data.status == constants.statuses.ACCESS_TOKEN_EXPIRED) && !error.config._isRetry) {
             error.config._isRetry = true;
             try {
                 const token = getLocalStorageItem<Token>(constants.authTokenKey);

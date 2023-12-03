@@ -1,41 +1,11 @@
 import {Navigate, Outlet, useLocation} from "react-router-dom";
 import useAuth from "@/hooks/useAuth.ts";
-import authService from "@/services/auth/auth.service.ts";
-import {useEffect, useState} from "react";
-
 
 const RequireAuth = () => {
-    const [loading, setLoading] = useState<boolean>(true);
     const location = useLocation();
-
     const auth = useAuth();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                if (auth.token) {
-                    const token = await authService.refreshToken(auth.token);
-
-                    auth.updateToken(token);
-                }
-
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData().then();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    if (loading) {
-        return <p>Loading...</p>;
-    }
-
-    if (!auth || !auth.token) {
+    if (!auth.getToken()) {
         return <Navigate to="/auth/login" state={{from: location}} replace/>;
     }
 
@@ -43,3 +13,4 @@ const RequireAuth = () => {
 }
 
 export default RequireAuth;
+
