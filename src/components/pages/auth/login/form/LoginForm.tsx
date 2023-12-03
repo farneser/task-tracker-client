@@ -13,6 +13,10 @@ const LoginForm: FC = () => {
     const navigate = useNavigate();
 
     const onSubmit = async (data: ILogin) => {
+        if (loading) {
+            return;
+        }
+
         setLoading(true)
         auth.updateToken(null)
 
@@ -20,6 +24,7 @@ const LoginForm: FC = () => {
             .then(data => {
                 auth.updateToken(data)
                 navigate("/")
+
                 return data;
             })
             .catch(e => console.log(e))

@@ -10,9 +10,7 @@ const sendTokenRequest = async (data: Token | ILogin | IRegister, path: string):
     return await axios.post<Token | ErrorMessage>(`${constants.baseUrl}${path}`, {...data}, {
         headers: getContentType()
     }).then((response) => {
-        console.log(response.data)
-
-        if ((response.data as Token).access_token) {
+        if ((response.data as Token).accessToken) {
             return response.data as Token;
         }
 
@@ -22,13 +20,13 @@ const sendTokenRequest = async (data: Token | ILogin | IRegister, path: string):
 
 export const authService = {
     async login(data: ILogin): Promise<Token | null> {
-        return sendTokenRequest(data, "/api/v1/auth")
+        return await sendTokenRequest(data, "/api/v1/auth")
     },
     async register(data: IRegister): Promise<Token | null> {
-        return sendTokenRequest(data, "/api/v1/auth/register")
+        return await sendTokenRequest(data, "/api/v1/auth/register")
     },
     async refreshToken(token: Token): Promise<Token | null> {
-        return sendTokenRequest(token, "/api/v1/auth/refresh")
+        return await sendTokenRequest(token, "/api/v1/auth/refresh")
     }
 }
 

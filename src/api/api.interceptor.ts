@@ -7,14 +7,14 @@ import authService from "@/services/auth/auth.service.ts";
 const axiosInstance = axios.create({
     baseURL: constants.baseUrl,
     headers: {
-        Authorization: `Bearer ${getLocalStorageItem<Token>(constants.authTokenKey)?.access_token}`
+        Authorization: `Bearer ${getLocalStorageItem<Token>(constants.authTokenKey)?.accessToken}`
     }
 });
 
 axios.interceptors.request.use(async req => {
     const token = getLocalStorageItem<Token>(constants.authTokenKey)
 
-    req.headers.Authorization = `Bearer ${token?.access_token}`
+    req.headers.Authorization = `Bearer ${token?.accessToken}`
 
     return req;
 });
