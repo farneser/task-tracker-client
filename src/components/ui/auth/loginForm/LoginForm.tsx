@@ -1,36 +1,20 @@
 import {useForm} from 'react-hook-form';
 import styles from "./login-form.module.scss"
 import {FC, useState} from "react";
-import authService from "@/services/auth/auth.service.ts";
 import {ILogin} from "@/services/auth/auth.types.ts";
-import useAuth from "@/hooks/useAuth.ts";
-import {useNavigate} from "react-router-dom";
 
-const LoginForm: FC = () => {
+type LoginFormProps = {
+    onSubmit: (data: ILogin) => void;
+}
+
+const LoginForm: FC<LoginFormProps> = ({onSubmit}) => {
     const {register, handleSubmit, formState: {errors},} = useForm<ILogin>();
     const [loading, setLoading] = useState<boolean>(false)
-    const auth = useAuth();
-    const navigate = useNavigate();
 
-    const onSubmit = async (data: ILogin) => {
-        if (loading) {
-            return;
-        }
-
+    const submit = async (data: ILogin) => {
         setLoading(true)
-        auth.updateToken(null)
-
-        authService.login(data)
-            .then(data => {
-                auth.updateToken(data)
-                navigate("/")
-
-                return data;
-            })
-            .catch(e => console.log(e))
-            .finally(() => {
-                setLoading(false)
-            })
+        onSubmit(data)
+        setLoading(false)
     }
 
     if (loading) {
@@ -38,7 +22,7 @@ const LoginForm: FC = () => {
     }
 
     return (
-        <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+        <form className={styles.form} onSubmit={handleSubmit(submit)}>
             <label htmlFor="email">Email:</label>
             <input
                 type="text"
