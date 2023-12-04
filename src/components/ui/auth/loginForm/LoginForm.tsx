@@ -59,6 +59,7 @@ const LoginForm: FC = () => {
                 {...register('password', {
                     required: 'Password is required',
                     maxLength: {value: 64, message: 'Password is too long'},
+                    minLength: {value: 8, message: 'Password is too short'},
                 })}
             />
             {errors.password && <p>{errors.password.message}</p>}
