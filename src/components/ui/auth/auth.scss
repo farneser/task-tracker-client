@@ -1,4 +1,3 @@
-
 $primaryColor: #4caf50;
 $primaryColorHover: #45a049;
 $borderColor: #ccc;
@@ -32,6 +31,7 @@ $boxShadowColor: rgba(0, 0, 0, 0.1);
     margin-bottom: 16px;
   }
 
+  button[type="submit"],
   input[type="submit"] {
     background-color: $primaryColor;
     color: white;

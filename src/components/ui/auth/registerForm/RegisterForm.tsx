@@ -1,30 +1,29 @@
 import {useForm} from 'react-hook-form';
 import {FC} from 'react';
-import {ILogin} from '@/services/auth/auth.types.ts';
+import {IRegister} from '@/services/auth/auth.types.ts';
 import '../auth.scss';
 
-type LoginFormProps = {
-    onSubmit: (data: ILogin) => void;
+type RegisterFormProps = {
+    onSubmit: (data: IRegister) => void;
 };
 
-const LoginForm: FC<LoginFormProps> = ({onSubmit}) => {
+const RegisterForm: FC<RegisterFormProps> = ({onSubmit}) => {
     const {
         register,
         handleSubmit,
         formState: {errors},
-    } = useForm<ILogin>();
+    } = useForm<IRegister>();
 
-    const submit = async (data: ILogin) => {
+    const submit = async (data: IRegister) => {
         onSubmit(data);
     };
 
     return (
         <form className="form" onSubmit={handleSubmit(submit)}>
             <div>
-                <label htmlFor="email">Email:</label>
+                <label>Email</label>
                 <input
                     type="text"
-                    id="email"
                     placeholder="Email"
                     {...register('email', {
                         required: 'Email is required',
@@ -34,14 +33,13 @@ const LoginForm: FC<LoginFormProps> = ({onSubmit}) => {
                         },
                     })}
                 />
-                {errors.email && <p className="error-message">{errors.email.message}</p>}
+                {errors.email && <p>{errors.email.message}</p>}
             </div>
 
             <div>
-                <label htmlFor="password">Password:</label>
+                <label>Password</label>
                 <input
                     type="password"
-                    id="password"
                     placeholder="Password"
                     {...register('password', {
                         required: 'Password is required',
@@ -56,8 +54,28 @@ const LoginForm: FC<LoginFormProps> = ({onSubmit}) => {
                     })}
                 />
                 {errors.password && (
-                    <p className="error-message">{errors.password.message}</p>
+                    <p>{errors.password.message}</p>
                 )}
+            </div>
+
+            <div>
+                <label>Confirm Password</label>
+                <input
+                    type="password"
+                    placeholder="Confirm Password"
+                    {...register('confirmPassword', {
+                        required: 'Confirm Password is required',
+                        maxLength: {
+                            value: 64,
+                            message: 'Password is too long',
+                        },
+                        minLength: {
+                            value: 8,
+                            message: 'Password is too short',
+                        },
+                    })}
+                />
+                {errors.confirmPassword && (<p>{errors.confirmPassword.message}</p>)}
             </div>
 
             <button type="submit">Submit</button>
@@ -65,4 +83,4 @@ const LoginForm: FC<LoginFormProps> = ({onSubmit}) => {
     );
 };
 
-export default LoginForm;
+export default RegisterForm;

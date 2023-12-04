@@ -3,7 +3,7 @@ import LoginForm from "@/components/ui/auth/loginForm/LoginForm.tsx";
 import {ILogin} from "@/services/auth/auth.types.ts";
 import authService from "@/services/auth/auth.service.ts";
 import useAuth from "@/hooks/useAuth.ts";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const LoginPage: FC = () => {
     const auth = useAuth();
@@ -27,7 +27,7 @@ const LoginPage: FC = () => {
         <div>
             login page
             <LoginForm onSubmit={onSubmit}/>
-            links
+            <Link to={"/auth/register"}>Don't have an account?</Link>
         </div>
     );
 };
