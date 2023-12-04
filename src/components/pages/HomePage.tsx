@@ -50,7 +50,6 @@ const HomePage: FC = () => {
                             <input type="submit"/>
                         </div>
                     </form>
-                    <button onClick={closePopup}>Cancel</button>
                 </div>
             </Popup>
         </div>
