@@ -26,7 +26,7 @@ type ConstantsType = {
 
 const constants: Readonly<ConstantsType> = {
     baseUrl: getBaseUrl(),
-    authTokenKey: "auth_token",
+    authTokenKey: "authToken",
     statuses: {
         SUCCESS: 200,
         UNAUTHORIZED: 401,
