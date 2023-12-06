@@ -8,6 +8,7 @@ interface ColumnServiceHook {
     isLoading: boolean;
     error: ErrorMessage | null;
     updateColumns: () => Promise<void>;
+    addColumn: (column: ColumnView) => Promise<void>;
 }
 
 const useColumnService = (): ColumnServiceHook => {
@@ -34,7 +35,11 @@ const useColumnService = (): ColumnServiceHook => {
             });
     };
 
-    return {columns, isLoading, error, updateColumns};
+    const addColumn = async (column: ColumnView) => {
+        setColumns([...columns, column]);
+    }
+
+    return {columns, isLoading, error, updateColumns, addColumn};
 };
 
 export default useColumnService;
