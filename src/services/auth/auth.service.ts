@@ -2,7 +2,7 @@ import axios from "axios";
 
 import constants from "@/constants";
 import {Token} from "@/models/token.ts";
-import {ErrorMessage} from "@/models/errorMessage.ts";
+import {ErrorMessage, Message} from "@/models/Message.ts";
 import {getContentType} from "@/api/api.helper.ts";
 import {ILogin, IRegister} from "@/services/auth/auth.types.ts";
 import {setLocalStorage} from "@/utils/localStorage.utils.ts";
@@ -30,6 +30,15 @@ export const authService = {
     },
     async refreshToken(token: Token): Promise<Token | null> {
         return await sendTokenRequest(token, "/api/v1/auth/refresh")
+    },
+    async confirm(id: string): Promise<Message | null> {
+        const message = await axios.post<Message | ErrorMessage>(`${constants.baseUrl}/api/v1/auth/confirm?token=${id}`)
+
+        if ((message.data as ErrorMessage).status != null) {
+            return null
+        }
+
+        return message.data as Message
     }
 }
 

@@ -6,7 +6,7 @@ import {CreateColumnDto} from "@/services/column/column.types.ts";
 import usePopup from "@/hooks/usePopup.tsx";
 import CreateColumnForm from "@/components/ui/column/createForm/CreateColumnForm.tsx";
 
-const HomePage: FC = () => {
+const RootPage: FC = () => {
     const {addColumn, columns, removeColumn} = useColumnService()
     const {reversePopup, closePopup, Popup} = usePopup()
 
@@ -41,4 +41,4 @@ const HomePage: FC = () => {
 
 };
 
-export default HomePage;
+export default RootPage;

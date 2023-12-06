@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {ColumnView} from '@/services/column/column.types.ts';
 import {columnService} from "@/services/column/column.service.ts";
-import {ErrorMessage} from "@/models/errorMessage.ts";
+import {ErrorMessage} from "@/models/Message.ts";
 
 interface ColumnServiceHook {
     columns: ColumnView[];

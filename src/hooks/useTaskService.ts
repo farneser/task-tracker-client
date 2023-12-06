@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {columnService} from "@/services/column/column.service.ts";
-import {ErrorMessage} from "@/models/errorMessage.ts";
+import {ErrorMessage} from "@/models/Message.ts";
 import {TaskView} from "@/services/task/task.types.ts";
 
 interface TaskSeriesHook {
@@ -17,6 +17,7 @@ const useTaskService = (columnId: number): TaskSeriesHook => {
 
     useEffect(() => {
         updateTasks().then();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const updateTasks = async () => {
