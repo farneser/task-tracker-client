@@ -7,7 +7,7 @@ import usePopup from "@/hooks/usePopup.tsx";
 import CreateColumnForm from "@/components/ui/column/createForm/CreateColumnForm.tsx";
 
 const HomePage: FC = () => {
-    const {addColumn, columns} = useColumnService()
+    const {addColumn, columns, removeColumn} = useColumnService()
     const {reversePopup, closePopup, Popup} = usePopup()
 
     const onSubmit = (data: CreateColumnDto) => {
@@ -31,7 +31,11 @@ const HomePage: FC = () => {
         </div>
         <div>
             <h1>columns</h1>
-            {columns.map(column => <Column column={column} key={column.id}/>)}
+            {columns.map(column => <Column column={column} key={column.id} deleteColumn={() => {
+                columnService.delete(column.id).then(() => {
+                    removeColumn(column.id).then()
+                })
+            }}/>)}
         </div>
     </div>
 

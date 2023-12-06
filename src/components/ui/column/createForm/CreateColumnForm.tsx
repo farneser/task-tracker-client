@@ -28,7 +28,7 @@ const CreateColumnForm: FC<CreateColumnFormProps> = ({onSubmit}) => {
                     <label>
                         <span>isCompleted</span>
                         <input type="checkbox"
-                               placeholder="isCompleted" {...register("isCompleted", {required: true})} />
+                               placeholder="isCompleted" {...register("isCompleted")} />
                     </label>
                 </div>
                 <div>
