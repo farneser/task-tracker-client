@@ -42,10 +42,18 @@ const ColumnElement: FC<ColumnProps> = ({column, deleteColumn, updateColumn}) =>
             </div>
         }
         <div>
+            <h2>data</h2>
             <ul>
                 <li>{column.isCompleted ? 'Completed' : 'Not Completed'}</li>
                 <li>{column.orderNumber}</li>
                 <li>{column.tasks?.length}</li>
+            </ul>
+        </div>
+
+        <div>
+            <h2>tasks</h2>
+            <ul>
+                {column.tasks?.map(task => <li key={task.id}>{task.taskName}</li>)}
             </ul>
         </div>
     </div>
