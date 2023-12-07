@@ -1,15 +1,20 @@
 import {FC} from "react";
 import {useForm} from "react-hook-form";
-import {CreateColumnDto} from "@/services/column/column.types.ts";
+import {ColumnView, PatchColumnDto} from "@/services/column/column.types.ts";
 
-type CreateColumnFormProps = {
-    onSubmit: (data: CreateColumnDto) => void;
+type PatchColumnFormProps = {
+    column: ColumnView;
+    onSubmit: (data: PatchColumnDto) => void;
 }
 
-const CreateColumnForm: FC<CreateColumnFormProps> = ({onSubmit}) => {
-    const {register, handleSubmit, reset} = useForm<CreateColumnDto>();
+const PatchColumnForm: FC<PatchColumnFormProps> = ({onSubmit, column}) => {
+    const {
+        register,
+        handleSubmit,
+        reset
+    } = useForm<PatchColumnDto>({defaultValues: column});
 
-    const submit = (data: CreateColumnDto) => {
+    const submit = (data: PatchColumnDto) => {
         onSubmit(data)
         reset()
     }
@@ -21,14 +26,14 @@ const CreateColumnForm: FC<CreateColumnFormProps> = ({onSubmit}) => {
                     <label>
                         <span>columnName</span>
                         <input type="text"
-                               placeholder="columnName" {...register("columnName", {required: true})} />
+                               placeholder="columnName" {...register("columnName")} />
                     </label>
                 </div>
                 <div>
                     <label>
                         <span>isCompleted</span>
                         <input type="checkbox"
-                               placeholder="isCompleted" {...register("isCompleted", {required: true})} />
+                               placeholder="isCompleted" {...register("isCompleted")} />
                     </label>
                 </div>
                 <div>
@@ -39,4 +44,4 @@ const CreateColumnForm: FC<CreateColumnFormProps> = ({onSubmit}) => {
     </div>
 }
 
-export default CreateColumnForm;
+export default PatchColumnForm;
