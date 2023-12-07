@@ -1,0 +1,36 @@
+.kanban-container {
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.controls-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.column-container {
+  display: flex;
+  margin: auto;
+  height: 100vh;
+}
+
+.controls {
+  margin-bottom: 15px;
+
+  h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  button {
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+}
+
+.column {
+  margin-right: 15px;
+}
