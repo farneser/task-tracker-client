@@ -7,7 +7,6 @@ import {CreateTaskDto, TaskView} from "@/services/task/task.types.ts";
 import CreateTaskForm from "@/components/ui/task/create/CreateTaskForm.tsx";
 import {taskService} from "@/services/task/task.service.ts";
 import TaskElement from "@/components/ui/task/TaskElement.tsx";
-import useColumnService from "@/hooks/useColumnService.ts";
 
 type ColumnProps = {
     column: ColumnView;
@@ -18,7 +17,6 @@ type ColumnProps = {
 const ColumnElement: FC<ColumnProps> = ({column, deleteColumn, updateColumn}) => {
     const {reversePopup: reverseEditPopup, closePopup: closeEditPopup, Popup: EditPopup} = usePopup()
     const {reversePopup: reverseCreatePopup, closePopup: closeCreatePopup, Popup: CreatePopup} = usePopup()
-    const {updateTask} = useColumnService()
 
     const onEditSubmit = async (data: PatchColumnDto) => {
         const dto = await columnService.patch(column.id, data);
@@ -44,7 +42,19 @@ const ColumnElement: FC<ColumnProps> = ({column, deleteColumn, updateColumn}) =>
         closeCreatePopup();
     };
     const updateTaskHandler = async (data: TaskView) => {
-        await updateTask(data)
+        let tasks = column.tasks || [];
+
+        tasks = tasks.map(task => {
+            if (task.id === data.id) {
+                return data;
+            }
+
+            return task;
+        })
+
+        if (updateColumn) {
+            updateColumn({...column, tasks: tasks})
+        }
     }
 
     return <div>
