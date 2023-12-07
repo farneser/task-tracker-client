@@ -59,7 +59,9 @@ const useColumnService = (): ColumnServiceHook => {
     }
 
     return {
-        columns, isLoading, error, updateColumns, addColumn, removeColumn, updateColumn
+        columns, isLoading, error,
+        updateColumns, addColumn,
+        removeColumn, updateColumn
     };
 }
 
