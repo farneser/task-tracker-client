@@ -35,30 +35,41 @@ const List: React.FC = () => {
         });
     };
 
-    const handleItemDrop = (item: { id: string; text: string }, targetColumnId: string) => {
+    const handleItemDrop = (
+        draggedItem: { id: string; text: string },
+        sourceColumnId: string,
+        targetColumnId: string,
+        targetItemId: string
+    ) => {
+        console.log(draggedItem, sourceColumnId, targetColumnId, targetItemId)
+
         setColumns((prevColumns) => {
             const updatedColumns = [...prevColumns];
             const sourceColumnIndex = updatedColumns.findIndex((column) =>
-                column.items.some((i) => i.id === item.id)
+                column.items.some((i) => i.id === draggedItem.id)
             );
             const sourceColumn = updatedColumns[sourceColumnIndex];
             const targetColumnIndex = updatedColumns.findIndex((column) => column.id === targetColumnId);
+            const targetColumn = updatedColumns[targetColumnIndex];
 
-            if (sourceColumn.id === targetColumnId) {
-                const sourceItemIndex = sourceColumn.items.findIndex((i) => i.id === item.id);
+            if (sourceColumnId === targetColumnId) {
+                // Reorder items within the same column
+                const sourceItemIndex = sourceColumn.items.findIndex((i) => i.id === draggedItem.id);
                 const updatedItems = [...sourceColumn.items];
                 const [movedItem] = updatedItems.splice(sourceItemIndex, 1);
                 updatedItems.splice(sourceItemIndex, 0, movedItem);
-                updatedColumns[sourceColumnIndex] = { ...sourceColumn, items: updatedItems };
+                updatedColumns[sourceColumnIndex] = {...sourceColumn, items: updatedItems};
             } else {
-                const updatedSourceItems = sourceColumn.items.filter((i) => i.id !== item.id);
-                const targetColumn = updatedColumns[targetColumnIndex];
-                const targetItemIndex = targetColumn.items.findIndex((i) => i.id === item.id);
+                // Move item to a different column
+                const updatedSourceItems = sourceColumn.items.filter((i) => i.id !== draggedItem.id);
                 const updatedTargetItems = [...targetColumn.items];
-                updatedTargetItems.splice(targetItemIndex, 0, item);
+                const targetItemIndex = updatedTargetItems.findIndex((i) => i.id === targetItemId);
 
-                updatedColumns[sourceColumnIndex] = { ...sourceColumn, items: updatedSourceItems };
-                updatedColumns[targetColumnIndex] = { ...targetColumn, items: updatedTargetItems };
+                // Insert the dragged item at the appropriate position in the target column
+                updatedTargetItems.splice(targetItemIndex, 0, draggedItem);
+
+                updatedColumns[sourceColumnIndex] = {...sourceColumn, items: updatedSourceItems};
+                updatedColumns[targetColumnIndex] = {...targetColumn, items: updatedTargetItems};
             }
 
             return updatedColumns;
@@ -67,7 +78,7 @@ const List: React.FC = () => {
 
     return (
         <DndProvider backend={HTML5Backend}>
-            <div style={{display: 'flex'}}>
+            <div style={{display: 'flex', justifyContent: 'left', padding: '20px'}}>
                 {columns.map((column) => (
                     <Column
                         key={column.id}
@@ -77,7 +88,6 @@ const List: React.FC = () => {
                         onItemDrop={handleItemDrop}
                         onColumnDrop={handleColumnDrop}
                     />
-
                 ))}
             </div>
         </DndProvider>

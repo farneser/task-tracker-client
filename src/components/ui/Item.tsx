@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDrag } from 'react-dnd';
+import {useDrag} from 'react-dnd';
 
 interface ItemProps {
     id: string;
@@ -18,7 +18,17 @@ const Item: React.FC<ItemProps> = ({ id, text, onDrop }) => {
     };
 
     return (
-        <div ref={(node) => drag(node)} onClick={handleDrop} style={{ border: '1px solid #000', padding: '8px', marginBottom: '8px', backgroundColor: 'lightgray' }}>
+        <div onClick={handleDrop}
+             ref={(node) => drag(node)}
+             style={{
+                 border: '1px solid #000',
+                 padding: '8px',
+                 marginBottom: '8px',
+                 backgroundColor: '#fff',
+                 borderRadius: '4px',
+                 cursor: 'move',
+             }}
+        >
             {text}
         </div>
     );
