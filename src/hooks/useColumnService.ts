@@ -11,6 +11,7 @@ interface ColumnServiceHook {
     addColumn: (column: ColumnView) => Promise<void>;
     updateColumn: (column: ColumnView) => Promise<void>;
     removeColumn: (columnId: number) => Promise<void>;
+    setColumns: (columns: ColumnView[]) => void;
 }
 
 const useColumnService = (): ColumnServiceHook => {
@@ -58,10 +59,16 @@ const useColumnService = (): ColumnServiceHook => {
         setColumns(newColumns);
     }
 
+    const setColumnsHandler = (columns: ColumnView[]) => {
+        // TODO: update on server side and update on client side
+        setColumns(columns);
+    }
+
     return {
         columns, isLoading, error,
         updateColumns, addColumn,
-        removeColumn, updateColumn
+        removeColumn, updateColumn,
+        setColumns: setColumnsHandler
     };
 }
 
