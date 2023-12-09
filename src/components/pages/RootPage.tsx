@@ -229,19 +229,17 @@ const RootPage: FC = () => {
                 <div className={styles["column-container"]}>
                     <SortableContext items={columnsId}>
                         {columns.map((column) => (
-                            <div className={styles.column} key={column.id}>
-                                <ColumnElement
-                                    column={column}
-                                    deleteColumn={() => {
-                                        deleteColumnHandler(column.id).then()
-                                    }}
-                                    updateColumn={updateColumnHandler}
-                                />
-                            </div>
+                            <ColumnElement
+                                key={column.id}
+                                column={column}
+                                deleteColumn={() => {
+                                    deleteColumnHandler(column.id).then()
+                                }}
+                                updateColumn={updateColumnHandler}
+                            />
                         ))}
                     </SortableContext>
-                    <div className={styles.controls}>
-                        <h1>Controls</h1>
+                    <div className={styles["create-column-container"]}>
                         <button onClick={reversePopup}>Create New Column</button>
                     </div>
                 </div>

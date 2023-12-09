@@ -51,27 +51,14 @@ const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask}) => {
     };
 
     if (isDragging) {
-        return <div className={styles["task-container"]} style={{...style, backgroundColor: "transparent", borderColor: "limegreen"}} ref={setNodeRef}></div>
+        return <div className={styles["task-container-overlay"]} style={style} ref={setNodeRef}></div>
     }
 
     return (<>
             <div ref={setNodeRef} {...attributes} {...listeners} className={styles["task-container"]} style={style}>
-                <div className={styles["task-header"]}>{task.taskName}</div>
+                <div className={styles["task-header"]} onClick={reversePopup}>{task.taskName}</div>
                 <p className={styles["task-description"]}>{task.description}</p>
-
-                {deleteTask && (
-                    <div className={styles["button-container"]}>
-                        <button onClick={deleteTask}>Delete</button>
-                    </div>
-                )}
-
-                {updateTask && (
-                    <div className={styles["button-container"]}>
-                        <button className={styles["edit-button"]} onClick={reversePopup}>
-                            Edit
-                        </button>
-                    </div>
-                )}
+                <button onClick={deleteTask}>Delete</button>
             </div>
             <Popup>
                 <div>

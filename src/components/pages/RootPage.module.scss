@@ -1,36 +1,28 @@
 .kanban-container {
   justify-content: space-between;
-  padding: 0 20px;
-}
-
-.controls-container {
+  background: #262626;
   display: flex;
-  flex-direction: column;
+  height: 100vh;
+  overflow-y: hidden;
+  padding: 0 50px;
 }
 
 .column-container {
   display: flex;
-  margin: auto;
-  height: 100vh;
+  margin: auto 0;
+  height: 70%;
 }
 
-.controls {
-  margin-bottom: 15px;
-
-  h1 {
-    font-size: 24px;
-    margin-bottom: 10px;
-  }
+.create-column-container {
+  height: 100%;
+  width: 350px;
 
   button {
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
+    background: #3b3b3b;
     border: none;
-    cursor: pointer;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    padding: 20px 40px;
   }
-}
-
-.column {
-  margin-right: 15px;
 }
