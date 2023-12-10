@@ -6,8 +6,6 @@ import {ColumnView, CreateColumnDto} from "@/services/column/column.types.ts";
 import usePopup from "@/hooks/usePopup.tsx";
 import CreateColumnForm from "@/components/ui/column/create/CreateColumnForm.tsx";
 
-import styles from "./RootPage.module.scss";
-
 import {
     DndContext,
     DragEndEvent,
@@ -18,18 +16,23 @@ import {
     useSensor,
     useSensors
 } from "@dnd-kit/core";
+
 import {arrayMove, SortableContext} from "@dnd-kit/sortable";
 import {createPortal} from "react-dom";
-import {ItemTypes} from "@/components/ui/ItemTypes.ts";
-import {TaskView} from "@/services/task/task.types.ts";
+import {ItemTypes} from "@/utils/id/ItemTypes.ts";
+import {TaskLookupView} from "@/services/task/task.types.ts";
 import TaskElement from "@/components/ui/task/TaskElement.tsx";
+import useTasksService from "@/hooks/useTasksService.ts";
+import styles from "./RootPage.module.scss";
+import {getColumnId, parseId} from "@/utils/id/id.utils.ts";
 
 const RootPage: FC = () => {
     const {addColumn, columns, removeColumn, updateColumn, setColumns} = useColumnService();
+    const {tasks, setTasks} = useTasksService()
     const {reversePopup, closePopup, Popup} = usePopup();
-    const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
+    const columnsId = useMemo(() => columns.map((col) => getColumnId(col.id)), [columns]);
     const [activeColumn, setActiveColumn] = useState<ColumnView | null>(null);
-    const [activeTask, setActiveTask] = useState<TaskView | null>(null);
+    const [activeTask, setActiveTask] = useState<TaskLookupView | null>(null);
 
     const sensors = useSensors(useSensor(PointerSensor, {
         activationConstraint: {
@@ -73,143 +76,73 @@ const RootPage: FC = () => {
         const {active, over} = event;
         if (!over) return;
 
-        const activeId = active.id;
-        const overId = over.id;
-
-        if (activeId === overId) return;
+        if (active.id === over.id) return;
 
         const isActiveAColumn = active.data.current?.type === ItemTypes.COLUMN;
         if (!isActiveAColumn) return;
 
         setColumns(((columns) => {
-            const activeColumnIndex = columns.findIndex((col) => col.id === active.id);
+            const activeColumnIndex = columns.findIndex((col) => col.id === parseId(active.id));
 
-            const overColumnIndex = columns.findIndex((col) => col.id === over.id);
+            const overColumnIndex = columns.findIndex((col) => col.id === parseId(over.id));
 
             return arrayMove(columns, activeColumnIndex, overColumnIndex);
         })(columns))
-
     }
 
     const onDragOver = (event: DragOverEvent) => {
-        console.log("DRAG OVER")
         const {active, over} = event;
         if (!over) return;
 
-        const isActiveTask = active.data.current?.type === ItemTypes.TASK;
-        const isOverTask = over.data.current?.type === ItemTypes.TASK;
+        const activeId = parseId(active.id);
+        const overId = parseId(over.id);
 
-        if (!isActiveTask) return;
+        if (activeId === overId) return;
 
-        if (isActiveTask && isOverTask) {
-            console.log("DRAG OVER TASK task id " + active.data.current?.task?.id + " over task id " + over.data.current?.task?.id)
+        const isActiveATask = active.data.current?.type === ItemTypes.TASK;
+        const isOverATask = over.data.current?.type === ItemTypes.TASK;
 
-            setColumns(((columns) => {
-                const activeTaskColumn = columns.find((col) => col.tasks?.find((task) => task.id === activeTask?.id));
-                const overTaskColumn = columns.find((col) => col.tasks?.find((task) => task.id === over.data.current?.task?.id));
+        if (!isActiveATask) return;
 
-                if (activeTaskColumn) {
+        if (isActiveATask && isOverATask) {
+            setTasks(((tasks) => {
+                const activeIndex = tasks.findIndex((t) => t.id === activeId);
+                const overIndex = tasks.findIndex((t) => t.id === overId);
 
-                    if (activeTaskColumn?.id == overTaskColumn?.id) {
-                        console.log("SAME COLUMN")
-                        const activeTaskIndex = activeTaskColumn?.tasks?.findIndex((task) => task.id === activeTask?.id) || 0;
-                        const overTaskIndex = overTaskColumn?.tasks?.findIndex((task) => task.id === over.data.current?.task?.id) || 0;
-                        const taskList = arrayMove(activeTaskColumn?.tasks || [], activeTaskIndex, overTaskIndex);
-
-                        return columns.map((col) => {
-                            if (col.id === activeTaskColumn?.id) {
-                                return {...col, tasks: taskList}
-                            }
-
-                            return col;
-                        });
-                    }
-
-                    if (overTaskColumn && activeTask) {
-                        console.log("DIFFERENT COLUMN " + overTaskColumn?.id + " over task id " + over.data.current?.task?.id)
-
-                        const activeColumnTask = activeTaskColumn.tasks?.filter((task) => task.id !== activeTask?.id) || [];
-                        const overTaskIndex = overTaskColumn.tasks?.findIndex((task) => task.id === over.data.current?.task?.id) || 0;
-
-                        let overColumnTasks: TaskView[] = [...overTaskColumn.tasks || [], activeTask]
-
-                        if (overColumnTasks.length > 1) {
-                            overColumnTasks = arrayMove(overColumnTasks, overTaskIndex, overTaskIndex + 1);
-                        }
-
-                        return columns.map((col) => {
-                            if (col.id === activeTaskColumn.id) {
-                                return {...activeTaskColumn, tasks: activeColumnTask};
-                            }
-
-                            if (col.id === overTaskColumn.id) {
-                                return {...overTaskColumn, tasks: overColumnTasks};
-                            }
-
-                            return col;
-                        });
-                    }
+                if (tasks[activeIndex].columnId != tasks[overIndex].columnId) {
+                    tasks[activeIndex].columnId = tasks[overIndex].columnId;
+                    return arrayMove(tasks, activeIndex, overIndex - 1);
                 }
 
-                return columns
-            })(columns));
+                return arrayMove(tasks, activeIndex, overIndex);
+            })(tasks));
         }
 
-        const isOverColumn = over.data.current?.type === ItemTypes.COLUMN;
+        const isOverAColumn = over.data.current?.type === ItemTypes.COLUMN;
 
-        if (isOverColumn) {
-            const taskColumn = columns.find((col) => col.tasks?.find((task) => task.id === activeTask?.id));
-            const overColumn = columns.find((col) => col.id === over.id);
+        if (isActiveATask && isOverAColumn) {
+            setTasks(((tasks) => {
+                const activeIndex = tasks.findIndex((t) => t.id === activeId);
 
-            if (overColumn?.id == taskColumn?.id) {
-                return;
-            }
-
-            if (taskColumn && overColumn) {
-                setColumns(((columns) => {
-
-                    taskColumn.tasks = taskColumn.tasks?.filter((task) => task.id !== activeTask?.id) || [];
-
-                    if (activeTask && overColumn.tasks) {
-                        overColumn.tasks = [...overColumn.tasks, activeTask];
-                    }
-
-                    return columns.map((col) => {
-                        if (col.id === taskColumn.id) {
-                            return taskColumn;
-                        }
-
-                        if (col.id === overColumn.id) {
-                            return overColumn;
-                        }
-
-                        return col;
-                    });
-                })(columns))
-            }
+                tasks[activeIndex].columnId = overId;
+                return arrayMove(tasks, activeIndex, activeIndex);
+            })(tasks));
         }
+    }
+
+    const updateTaskHandler = async (data: TaskLookupView) => {
+        setTasks(tasks.map((task) => {
+            if (task.id !== data.id) return task;
+            return data;
+        }));
     };
 
-    const updateTaskHandler = async () => {
-        const column = columns.find((col) => col.tasks?.find((task) => task.id === activeTask?.id));
-
-        if (column) {
-            await updateColumnHandler({
-                ...column,
-                tasks: column.tasks?.map((task) => task.id === activeTask?.id ? activeTask : task) || []
-            });
-        }
-    };
+    const createTaskHandler = async (dto: TaskLookupView) => {
+        setTasks([...tasks, dto]);
+    }
 
     const deleteTaskHandler = async (id: number) => {
-        const column = columns.find((col) => col.tasks?.find((task) => task.id === id));
-
-        if (column) {
-            await updateColumnHandler({
-                ...column,
-                tasks: column.tasks?.filter((task) => task.id !== id) || []
-            });
-        }
+        setTasks(tasks.filter((task) => task.id !== id));
     };
 
 
@@ -232,10 +165,12 @@ const RootPage: FC = () => {
                             <ColumnElement
                                 key={column.id}
                                 column={column}
-                                deleteColumn={() => {
-                                    deleteColumnHandler(column.id).then()
-                                }}
+                                deleteColumn={() => deleteColumnHandler(column.id).then()}
+                                tasks={tasks.filter((task) => task.columnId === column.id)}
                                 updateColumn={updateColumnHandler}
+                                updateTask={updateTaskHandler}
+                                deleteTask={deleteTaskHandler}
+                                createTask={createTaskHandler}
                             />
                         ))}
                     </SortableContext>
@@ -246,9 +181,15 @@ const RootPage: FC = () => {
 
                 {createPortal(<DragOverlay>
                     {activeColumn && (
-                        <ColumnElement column={activeColumn} updateColumn={updateColumnHandler} deleteColumn={() => {
-                            deleteColumnHandler(activeColumn.id).then()
-                        }}/>
+                        <ColumnElement
+                            tasks={tasks.filter(task => task.columnId === activeColumn.id)}
+                            column={activeColumn}
+                            updateColumn={updateColumnHandler}
+                            deleteColumn={() => deleteColumnHandler(activeColumn.id).then()}
+                            updateTask={updateTaskHandler}
+                            deleteTask={deleteTaskHandler}
+                            createTask={createTaskHandler}
+                        />
                     )}
                     {activeTask && (
                         <TaskElement task={activeTask} updateTask={updateTaskHandler} deleteTask={() => {

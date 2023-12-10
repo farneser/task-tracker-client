@@ -12,7 +12,7 @@ import styles from "./ColumnElement.module.scss";
 import CreateTaskForm from "@/components/ui/task/create/CreateTaskForm.tsx";
 import {SortableContext, useSortable} from "@dnd-kit/sortable";
 import {ItemTypes} from "@/utils/id/ItemTypes.ts";
-import {getColumnId} from "@/utils/id/id.utils.ts";
+import {getColumnId, getTaskId} from "@/utils/id/id.utils.ts";
 
 type ColumnProps = {
     column: ColumnView;
@@ -52,8 +52,8 @@ const ColumnElement: FC<ColumnProps> = (
     })
 
     const tasksIds = useMemo(() => {
-        return column.tasks?.map((task) => task.id) || [];
-    }, [column]);
+        return tasks.map((task) => getTaskId(task.id)) || [];
+    }, [tasks]);
 
     const style = {
         transition,
