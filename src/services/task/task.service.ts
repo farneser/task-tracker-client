@@ -1,9 +1,9 @@
 import axiosInstance from "@/api/api.interceptor.ts";
-import {CreateTaskDto, PatchTaskDto, TaskView} from "@/services/task/task.types.ts";
+import {CreateTaskDto, PatchTaskDto, TaskLookupView, TaskView} from "@/services/task/task.types.ts";
 
 export const taskService = {
-    async get(): Promise<TaskView[]> {
-        const data = await axiosInstance.get<TaskView[]>("/api/v1/task");
+    async get(): Promise<TaskLookupView[]> {
+        const data = await axiosInstance.get<TaskLookupView[]>("/api/v1/task");
 
         return data.data;
     }, async getById(id: number): Promise<TaskView> {
@@ -22,8 +22,8 @@ export const taskService = {
         const data = await axiosInstance.patch<TaskView>(`/api/v1/task/${id}`, dto);
 
         return data.data;
-    }, async getArchived(): Promise<TaskView[]> {
-        const data = await axiosInstance.patch<TaskView[]>(`/api/v1/task/archived`);
+    }, async getArchived(): Promise<TaskLookupView[]> {
+        const data = await axiosInstance.patch<TaskLookupView[]>(`/api/v1/task/archived`);
 
         return data.data;
     }

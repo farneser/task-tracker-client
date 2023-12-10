@@ -1,17 +1,18 @@
 import {useEffect, useState} from 'react';
-import {columnService} from "@/services/column/column.service.ts";
 import {ErrorMessage} from "@/models/Message.ts";
-import {TaskView} from "@/services/task/task.types.ts";
+import {TaskLookupView} from "@/services/task/task.types.ts";
+import {taskService} from "@/services/task/task.service.ts";
 
 interface TaskSeriesHook {
-    tasks: TaskView[];
+    tasks: TaskLookupView[];
     isLoading: boolean;
     error: ErrorMessage | null;
     updateTasks: (id: number) => Promise<void>;
+    setTasks: (tasks: TaskLookupView[]) => void;
 }
 
-const useTaskService = (columnId: number): TaskSeriesHook => {
-    const [tasks, setTasks] = useState<TaskView[]>([]);
+const useTasksService = (): TaskSeriesHook => {
+    const [tasks, setTasks] = useState<TaskLookupView[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<ErrorMessage | null>(null);
 
@@ -22,8 +23,8 @@ const useTaskService = (columnId: number): TaskSeriesHook => {
 
     const updateTasks = async () => {
         setIsLoading(true);
-        columnService
-            .getTasks(columnId)
+        taskService
+            .get()
             .then((tasks) => {
                 setTasks(tasks);
             })
@@ -35,7 +36,12 @@ const useTaskService = (columnId: number): TaskSeriesHook => {
             });
     };
 
-    return {tasks, isLoading, error, updateTasks};
+    const setTasksHandler = (tasks: TaskLookupView[]) => {
+        // TODO: update on server side and update on client side
+        setTasks(tasks);
+    }
+
+    return {tasks, isLoading, error, updateTasks, setTasks: setTasksHandler};
 };
 
-export default useTaskService;
+export default useTasksService;

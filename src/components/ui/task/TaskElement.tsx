@@ -1,18 +1,19 @@
 import {FC} from "react";
-import {PatchTaskDto, TaskView} from "@/services/task/task.types.ts";
+import {PatchTaskDto, TaskLookupView} from "@/services/task/task.types.ts";
 import usePopup from "@/hooks/usePopup.tsx";
 import {taskService} from "@/services/task/task.service.ts";
 import PatchTaskForm from "@/components/ui/task/patch/PatchTaskForm.tsx";
 
 import styles from "./TaskElement.module.scss";
 import {useSortable} from "@dnd-kit/sortable";
-import {ItemTypes} from "@/components/ui/ItemTypes.ts";
+import {ItemTypes} from "@/utils/id/ItemTypes.ts";
 import {CSS} from "@dnd-kit/utilities";
+import {getTaskId} from "@/utils/id/id.utils.ts";
 
 type TaskElementProps = {
-    task: TaskView;
+    task: TaskLookupView;
     deleteTask?: () => void;
-    updateTask?: (data: TaskView) => void;
+    updateTask?: (data: TaskLookupView) => void;
 };
 
 const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask}) => {
@@ -25,7 +26,7 @@ const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask}) => {
         transition,
         isDragging,
     } = useSortable({
-        id: task.id,
+        id: getTaskId(task.id),
         data: {
             type: ItemTypes.TASK,
             task,
@@ -43,9 +44,7 @@ const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask}) => {
     const onSubmit = async (data: PatchTaskDto) => {
         const dto = await taskService.patch(task.id, data);
 
-        if (updateTask) {
-            updateTask(dto);
-        }
+        updateTask && updateTask({...dto, columnId: task.columnId});
 
         closePopup();
     };

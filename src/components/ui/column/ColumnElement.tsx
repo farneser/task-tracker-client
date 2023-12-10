@@ -3,7 +3,7 @@ import {ColumnView, PatchColumnDto} from "@/services/column/column.types.ts";
 import usePopup from "@/hooks/usePopup.tsx";
 import {columnService} from "@/services/column/column.service.ts";
 import PatchColumnForm from "@/components/ui/column/patch/PatchColumnForm.tsx";
-import {CreateTaskDto, TaskView} from "@/services/task/task.types.ts";
+import {CreateTaskDto, TaskLookupView} from "@/services/task/task.types.ts";
 import {taskService} from "@/services/task/task.service.ts";
 import TaskElement from "@/components/ui/task/TaskElement.tsx";
 import {CSS} from "@dnd-kit/utilities";
@@ -11,15 +11,27 @@ import {CSS} from "@dnd-kit/utilities";
 import styles from "./ColumnElement.module.scss";
 import CreateTaskForm from "@/components/ui/task/create/CreateTaskForm.tsx";
 import {SortableContext, useSortable} from "@dnd-kit/sortable";
-import {ItemTypes} from "@/components/ui/ItemTypes.ts";
+import {ItemTypes} from "@/utils/id/ItemTypes.ts";
+import {getColumnId} from "@/utils/id/id.utils.ts";
 
 type ColumnProps = {
     column: ColumnView;
     deleteColumn?: () => void;
     updateColumn?: (data: ColumnView) => void;
+    createTask?: (dto: TaskLookupView) => void;
+    updateTask?: (data: TaskLookupView) => void;
+    deleteTask?: (id: number) => void;
+    tasks: TaskLookupView[];
 };
 
-const ColumnElement: FC<ColumnProps> = ({column, deleteColumn, updateColumn}) => {
+const ColumnElement: FC<ColumnProps> = (
+    {
+        column, tasks,
+        updateTask, deleteTask,
+        deleteColumn, updateColumn,
+        createTask
+    }
+) => {
     const {reversePopup: reverseEditPopup, closePopup: closeEditPopup, Popup: EditPopup} = usePopup();
     const {reversePopup: reverseCreatePopup, closePopup: closeCreatePopup, Popup: CreatePopup} = usePopup();
     const [mouseIsOver, setMouseIsOver] = useState(false);
@@ -32,7 +44,7 @@ const ColumnElement: FC<ColumnProps> = ({column, deleteColumn, updateColumn}) =>
         transition,
         isDragging,
     } = useSortable({
-        id: column.id,
+        id: getColumnId(column.id),
         data: {
             type: ItemTypes.COLUMN,
             column,
@@ -51,9 +63,7 @@ const ColumnElement: FC<ColumnProps> = ({column, deleteColumn, updateColumn}) =>
     const onEditSubmit = async (data: PatchColumnDto) => {
         const dto = await columnService.patch(column.id, data);
 
-        if (updateColumn) {
-            updateColumn(dto);
-        }
+        updateColumn && updateColumn(dto);
 
         closeEditPopup();
     };
@@ -61,31 +71,9 @@ const ColumnElement: FC<ColumnProps> = ({column, deleteColumn, updateColumn}) =>
     const onCreateSubmit = async (data: CreateTaskDto) => {
         const dto = await taskService.create(data);
 
-        let tasks = column.tasks || [];
-
-        tasks = tasks.filter((task) => task.id !== dto.id);
-
-        if (updateColumn) {
-            updateColumn({...column, tasks: [...tasks, dto]});
-        }
+        createTask && createTask({...dto, columnId: column.id});
 
         closeCreatePopup();
-    };
-
-    const updateTaskHandler = async (data: TaskView) => {
-        let tasks = column.tasks || [];
-
-        tasks = tasks.map((task) => {
-            if (task.id === data.id) {
-                return data;
-            }
-
-            return task;
-        });
-
-        if (updateColumn) {
-            updateColumn({...column, tasks: tasks});
-        }
     };
 
     if (isDragging) {
@@ -118,22 +106,12 @@ const ColumnElement: FC<ColumnProps> = ({column, deleteColumn, updateColumn}) =>
 
                 <div className={styles["task-container"]}>
                     <SortableContext items={tasksIds}>
-                        {column.tasks?.map((task) => (
+                        {tasks.map((task) => (
                             <div className={styles["task-element"]} key={task.id}>
                                 <TaskElement
                                     task={task}
-                                    updateTask={updateTaskHandler}
-                                    deleteTask={() => {
-                                        taskService.delete(task.id).then(() => {
-                                            let tasks = column.tasks || [];
-
-                                            tasks = tasks.filter((t) => t.id !== task.id);
-
-                                            if (updateColumn) {
-                                                updateColumn({...column, tasks});
-                                            }
-                                        });
-                                    }}
+                                    updateTask={updateTask}
+                                    deleteTask={() => deleteTask && deleteTask(task.id)}
                                 />
                             </div>
                         ))}

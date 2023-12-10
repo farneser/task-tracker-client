@@ -4,7 +4,7 @@ import {TaskView} from "@/services/task/task.types.ts";
 
 export const columnService = {
     async get(): Promise<ColumnView[]> {
-        const data = await axiosInstance.get<ColumnView[]>("/api/v1/column");
+        const data = await axiosInstance.get<ColumnView[]>("/api/v1/column?retrieveTasks=false");
 
         return data.data;
     }, async getById(id: number): Promise<ColumnView> {
