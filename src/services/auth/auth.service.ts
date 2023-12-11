@@ -23,13 +23,23 @@ const sendTokenRequest = async (data: Token | ILogin | IRegister, path: string):
 
 export const authService = {
     async login(data: ILogin): Promise<Token | null> {
-        return await sendTokenRequest(data, "/api/v1/auth")
+        return await sendTokenRequest({
+            email: data.email,
+            password: data.password
+        }, "/api/v1/auth")
     },
     async register(data: IRegister): Promise<Token | null> {
-        return await sendTokenRequest(data, "/api/v1/auth/register")
+        return await sendTokenRequest({
+            email: data.email,
+            password: data.password,
+            confirmPassword: data.confirmPassword
+        }, "/api/v1/auth/register")
     },
     async refreshToken(token: Token): Promise<Token | null> {
-        return await sendTokenRequest(token, "/api/v1/auth/refresh")
+        return await sendTokenRequest({
+            accessToken: token.accessToken,
+            refreshToken: token.refreshToken
+        }, "/api/v1/auth/refresh")
     },
     async confirm(id: string): Promise<Message | null> {
         const message = await axios.post<Message | ErrorMessage>(`${constants.baseUrl}/api/v1/auth/confirm?token=${id}`)
