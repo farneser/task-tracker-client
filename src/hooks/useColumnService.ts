@@ -44,6 +44,9 @@ const useColumnService = (): ColumnServiceHook => {
 
     const removeColumn = async (columnId: number) => {
         const newColumns = columns.filter((column) => column.id !== columnId);
+
+        columnService.delete(columnId).then();
+
         setColumns(newColumns);
     }
 
@@ -55,6 +58,8 @@ const useColumnService = (): ColumnServiceHook => {
 
             return col;
         })
+
+        columnService.patch(column.id, column).then();
 
         setColumns(newColumns);
     }

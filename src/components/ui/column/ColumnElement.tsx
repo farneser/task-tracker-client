@@ -16,24 +16,27 @@ import {getColumnId, getTaskId} from "@/utils/id/id.utils.ts";
 
 type ColumnProps = {
     column: ColumnView;
-    deleteColumn?: () => void;
-    updateColumn?: (data: ColumnView) => void;
-    createTask?: (dto: TaskLookupView) => void;
-    updateTask?: (data: TaskLookupView) => void;
-    deleteTask?: (id: number) => void;
+    deleteColumn: () => void;
+    updateColumn: (data: ColumnView) => void;
+    createTask: (dto: TaskLookupView) => void;
+    updateTask: (data: TaskLookupView) => void;
+    deleteTask: (id: number) => void;
     tasks: TaskLookupView[];
 };
 
 const ColumnElement: FC<ColumnProps> = (
-    {
-        column, tasks,
-        updateTask, deleteTask,
-        deleteColumn, updateColumn,
-        createTask
-    }
+    {column, tasks, updateTask, deleteTask, deleteColumn, updateColumn, createTask}
 ) => {
-    const {reversePopup: reverseEditPopup, closePopup: closeEditPopup, Popup: EditPopup} = usePopup();
-    const {reversePopup: reverseCreatePopup, closePopup: closeCreatePopup, Popup: CreatePopup} = usePopup();
+    const {
+        reversePopup: reverseEditPopup,
+        closePopup: closeEditPopup,
+        Popup: EditPopup
+    } = usePopup();
+    const {
+        reversePopup: reverseCreatePopup,
+        closePopup: closeCreatePopup,
+        Popup: CreatePopup
+    } = usePopup();
     const [mouseIsOver, setMouseIsOver] = useState(false);
 
     const {
@@ -82,13 +85,6 @@ const ColumnElement: FC<ColumnProps> = (
 
     return (
         <>
-            <CreatePopup>
-                <CreateTaskForm onSubmit={onCreateSubmit} columnId={column.id}/>
-            </CreatePopup>
-            <EditPopup>
-                <PatchColumnForm onSubmit={onEditSubmit} column={column}/>
-            </EditPopup>
-
             <div className={styles["column-container"]} ref={setNodeRef} style={style}
                  onMouseEnter={() => {
                      setMouseIsOver(true);
@@ -96,6 +92,12 @@ const ColumnElement: FC<ColumnProps> = (
                  onMouseLeave={() => {
                      setMouseIsOver(false);
                  }}>
+                <CreatePopup>
+                    <CreateTaskForm onSubmit={onCreateSubmit} columnId={column.id}/>
+                </CreatePopup>
+                <EditPopup>
+                    <PatchColumnForm onSubmit={onEditSubmit} column={column}/>
+                </EditPopup>
                 <div className={styles["column-header"]}
                      {...attributes}
                      {...listeners}>

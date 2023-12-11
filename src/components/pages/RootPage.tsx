@@ -28,7 +28,7 @@ import {getColumnId, parseId} from "@/utils/id/id.utils.ts";
 
 const RootPage: FC = () => {
     const {addColumn, columns, removeColumn, updateColumn, setColumns} = useColumnService();
-    const {tasks, setTasks} = useTasksService()
+    const {tasks, setTasks, updateTask, removeTask} = useTasksService()
     const {reversePopup, closePopup, Popup} = usePopup();
     const columnsId = useMemo(() => columns.map((col) => getColumnId(col.id)), [columns]);
     const [activeColumn, setActiveColumn] = useState<ColumnView | null>(null);
@@ -53,7 +53,6 @@ const RootPage: FC = () => {
     };
 
     const deleteColumnHandler = async (id: number) => {
-        await columnService.delete(id);
         await removeColumn(id);
     }
 
@@ -86,6 +85,10 @@ const RootPage: FC = () => {
 
             const overColumnIndex = columns.findIndex((col) => col.id === parseId(over.id));
 
+            columns[activeColumnIndex].orderNumber = overColumnIndex;
+
+            updateColumnHandler(columns[activeColumnIndex]).then();
+
             return arrayMove(columns, activeColumnIndex, overColumnIndex);
         })(columns))
     }
@@ -111,8 +114,14 @@ const RootPage: FC = () => {
 
                 if (tasks[activeIndex].columnId != tasks[overIndex].columnId) {
                     tasks[activeIndex].columnId = tasks[overIndex].columnId;
+                    tasks[activeIndex].orderNumber = overIndex;
+                    updateTaskHandler(tasks[activeIndex]).then();
                     return arrayMove(tasks, activeIndex, overIndex - 1);
                 }
+
+                tasks[activeIndex].orderNumber = overIndex;
+
+                updateTaskHandler(tasks[activeIndex]).then()
 
                 return arrayMove(tasks, activeIndex, overIndex);
             })(tasks));
@@ -125,12 +134,18 @@ const RootPage: FC = () => {
                 const activeIndex = tasks.findIndex((t) => t.id === activeId);
 
                 tasks[activeIndex].columnId = overId;
+                tasks[activeIndex].orderNumber = tasks.filter((t) => t.columnId === overId).length;
+
+                updateTaskHandler(tasks[activeIndex]).then();
+
                 return arrayMove(tasks, activeIndex, activeIndex);
             })(tasks));
         }
     }
 
     const updateTaskHandler = async (data: TaskLookupView) => {
+        await updateTask(data.id, data)
+
         setTasks(tasks.map((task) => {
             if (task.id !== data.id) return task;
             return data;
@@ -142,7 +157,7 @@ const RootPage: FC = () => {
     }
 
     const deleteTaskHandler = async (id: number) => {
-        setTasks(tasks.filter((task) => task.id !== id));
+        await removeTask(id);
     };
 
 
@@ -167,7 +182,7 @@ const RootPage: FC = () => {
                                 column={column}
                                 deleteColumn={() => deleteColumnHandler(column.id).then()}
                                 tasks={tasks.filter((task) => task.columnId === column.id)}
-                                updateColumn={updateColumnHandler}
+                                updateColumn={updateColumn}
                                 updateTask={updateTaskHandler}
                                 deleteTask={deleteTaskHandler}
                                 createTask={createTaskHandler}
