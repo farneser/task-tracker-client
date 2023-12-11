@@ -17,3 +17,7 @@ export interface TaskView extends Omit<PatchTaskDto, "columnId"> {
     id: number;
     column: ColumnView | null;
 }
+
+export interface TaskLookupView extends PatchTaskDto {
+    id: number;
+}

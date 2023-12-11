@@ -1,0 +1,27 @@
+.task-container {
+  background: #3b3b3b;
+  border-radius: 10px;
+  margin: 10px 0;
+  padding: 10px 20px;
+  color: white;
+  overflow-x: hidden;
+  height: 100px;
+
+  &:hover {
+    background: #4b4b4b;
+    border: deeppink 1px solid;
+  }
+
+  &-overlay{
+    border-radius: 10px;
+    margin: 10px 0;
+    padding: 10px 20px;
+    color: white;
+    overflow-x: hidden;
+    height: 100px;
+    border: deeppink 1px solid;
+    background: rgba(75, 75, 75, 0.5);
+    opacity: 0.6;
+  }
+}
+

@@ -1,18 +1,17 @@
 import {useEffect, useState} from 'react';
-import {ColumnView} from '@/services/column/column.types.ts';
+import {ColumnView, CreateColumnDto, PatchColumnDto} from '@/services/column/column.types.ts';
 import {columnService} from "@/services/column/column.service.ts";
 import {ErrorMessage} from "@/models/Message.ts";
-import {TaskView} from "@/services/task/task.types.ts";
 
 interface ColumnServiceHook {
     columns: ColumnView[];
     isLoading: boolean;
     error: ErrorMessage | null;
     updateColumns: () => Promise<void>;
-    addColumn: (column: ColumnView) => Promise<void>;
-    updateColumn: (column: ColumnView) => Promise<void>;
+    createColumn: (column: CreateColumnDto) => Promise<void>;
+    updateColumn: (id: number, column: PatchColumnDto) => Promise<void>;
     removeColumn: (columnId: number) => Promise<void>;
-    updateTask: (task: TaskView) => Promise<void>;
+    setColumns: (columns: ColumnView[]) => void;
 }
 
 const useColumnService = (): ColumnServiceHook => {
@@ -39,50 +38,41 @@ const useColumnService = (): ColumnServiceHook => {
             });
     };
 
-    const addColumn = async (column: ColumnView) => {
-        setColumns([...columns, column]);
+    const createColumn = async (column: CreateColumnDto) => {
+        const response = await columnService.create(column)
+
+        setColumns([...columns, response]);
     }
 
     const removeColumn = async (columnId: number) => {
         const newColumns = columns.filter((column) => column.id !== columnId);
-        setColumns(newColumns);
-    }
 
-    const updateColumn = async (column: ColumnView) => {
-        const newColumns = columns.map((col) => {
-            if (col.id === column.id) {
-                return column;
-            }
-
-            return col;
-        })
+        columnService.delete(columnId).then();
 
         setColumns(newColumns);
     }
 
-    const updateTask = async (task: TaskView) => {
-        const newColumns = columns.map((col) => {
-            const newTasks = col.tasks?.map((t) => {
-                if (t.id === task.id) {
-                    return task;
-                }
+    const updateColumn = async (id: number, dto: PatchColumnDto) => {
+        columnService.patch(id, {...dto, orderNumber: dto.orderNumber + 1}).then();
 
-                return t;
-            })
-
-            return {
-                ...col,
-                tasks: newTasks || []
+        setColumns(columns.map((column) => {
+            if (column.id === id) {
+                return {...column, ...dto};
             }
-        })
 
-        setColumns(newColumns);
+            return column;
+        }));
+    }
+
+    const setColumnsHandler = (columns: ColumnView[]) => {
+        setColumns(columns);
     }
 
     return {
         columns, isLoading, error,
-        updateColumns, addColumn,
-        removeColumn, updateColumn, updateTask
+        updateColumns, createColumn,
+        removeColumn, updateColumn,
+        setColumns: setColumnsHandler
     };
 }
 

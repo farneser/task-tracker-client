@@ -1,4 +1,4 @@
-import {TaskView} from "@/services/task/task.types.ts";
+import {TaskLookupView} from "@/services/task/task.types.ts";
 
 export interface CreateColumnDto {
     columnName: string;
@@ -12,5 +12,5 @@ export interface PatchColumnDto extends CreateColumnDto {
 
 export interface ColumnView extends PatchColumnDto {
     id: number;
-    tasks: TaskView[] | null;
+    tasks: TaskLookupView[] | null;
 }

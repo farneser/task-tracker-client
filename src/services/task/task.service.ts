@@ -1,9 +1,9 @@
 import axiosInstance from "@/api/api.interceptor.ts";
-import {CreateTaskDto, PatchTaskDto, TaskView} from "@/services/task/task.types.ts";
+import {CreateTaskDto, PatchTaskDto, TaskLookupView, TaskView} from "@/services/task/task.types.ts";
 
 export const taskService = {
-    async get(): Promise<TaskView[]> {
-        const data = await axiosInstance.get<TaskView[]>("/api/v1/task");
+    async get(): Promise<TaskLookupView[]> {
+        const data = await axiosInstance.get<TaskLookupView[]>("/api/v1/task");
 
         return data.data;
     }, async getById(id: number): Promise<TaskView> {
@@ -11,7 +11,11 @@ export const taskService = {
 
         return data.data;
     }, async create(dto: CreateTaskDto): Promise<TaskView> {
-        const data = await axiosInstance.post<TaskView>("/api/v1/task", dto);
+        const data = await axiosInstance.post<TaskView>("/api/v1/task", {
+            taskName: dto.taskName,
+            description: dto.description,
+            columnId: dto.columnId
+        });
 
         return data.data;
     }, async delete(id: number): Promise<null> {
@@ -19,11 +23,16 @@ export const taskService = {
 
         return null;
     }, async patch(id: number, dto: PatchTaskDto): Promise<TaskView> {
-        const data = await axiosInstance.patch<TaskView>(`/api/v1/task/${id}`, dto);
+        const data = await axiosInstance.patch<TaskView>(`/api/v1/task/${id}`, {
+            taskName: dto.taskName,
+            description: dto.description,
+            columnId: dto.columnId,
+            orderNumber: dto.orderNumber
+        });
 
         return data.data;
-    }, async getArchived(): Promise<TaskView[]> {
-        const data = await axiosInstance.patch<TaskView[]>(`/api/v1/task/archived`);
+    }, async getArchived(): Promise<TaskLookupView[]> {
+        const data = await axiosInstance.patch<TaskLookupView[]>(`/api/v1/task/archived`);
 
         return data.data;
     }

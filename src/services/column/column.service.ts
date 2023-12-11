@@ -4,7 +4,7 @@ import {TaskView} from "@/services/task/task.types.ts";
 
 export const columnService = {
     async get(): Promise<ColumnView[]> {
-        const data = await axiosInstance.get<ColumnView[]>("/api/v1/column");
+        const data = await axiosInstance.get<ColumnView[]>("/api/v1/column?retrieveTasks=false");
 
         return data.data;
     }, async getById(id: number): Promise<ColumnView> {
@@ -12,7 +12,10 @@ export const columnService = {
 
         return data.data;
     }, async create(dto: CreateColumnDto): Promise<ColumnView> {
-        const data = await axiosInstance.post<ColumnView>("/api/v1/column", dto);
+        const data = await axiosInstance.post<ColumnView>("/api/v1/column", {
+            columnName: dto.columnName,
+            isCompleted: dto.isCompleted
+        });
 
         return data.data;
     }, async delete(id: number): Promise<null> {
@@ -20,7 +23,11 @@ export const columnService = {
 
         return null;
     }, async patch(id: number, dto: PatchColumnDto): Promise<ColumnView> {
-        const data = await axiosInstance.patch<ColumnView>(`/api/v1/column/${id}`, dto);
+        const data = await axiosInstance.patch<ColumnView>(`/api/v1/column/${id}`, {
+            columnName: dto.columnName,
+            isCompleted: dto.isCompleted,
+            orderNumber: dto.orderNumber
+        });
 
         return data.data;
     }, async getTasks(id: number): Promise<TaskView[]> {

@@ -1,9 +1,9 @@
 import {FC} from "react";
-import {PatchTaskDto, TaskView} from "@/services/task/task.types.ts";
+import {PatchTaskDto, TaskLookupView} from "@/services/task/task.types.ts";
 import {useForm} from "react-hook-form";
 
 type PatchTaskFormProps = {
-    task: TaskView;
+    task: TaskLookupView;
     onSubmit: (data: PatchTaskDto) => void;
 }
 
