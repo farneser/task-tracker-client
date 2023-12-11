@@ -52,18 +52,16 @@ const useColumnService = (): ColumnServiceHook => {
         setColumns(newColumns);
     }
 
-    const updateColumn = async (id: number, column: PatchColumnDto) => {
-        const response = await columnService.patch(id, column);
+    const updateColumn = async (id: number, dto: PatchColumnDto) => {
+        columnService.patch(id, {...dto, orderNumber: dto.orderNumber + 1}).then();
 
-        const newColumns = columns.map((column) => {
+        setColumns(columns.map((column) => {
             if (column.id === id) {
-                return response;
+                return {...column, ...dto};
             }
 
             return column;
-        });
-
-        setColumns(newColumns);
+        }));
     }
 
     const setColumnsHandler = (columns: ColumnView[]) => {

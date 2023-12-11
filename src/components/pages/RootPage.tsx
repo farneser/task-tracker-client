@@ -80,7 +80,7 @@ const RootPage: FC = () => {
         }
     }
 
-    const onDragEnd = (event: DragEndEvent) => {
+    const onDragEnd = async (event: DragEndEvent) => {
         setActiveColumn(null);
         setActiveTask(null);
 
@@ -107,6 +107,7 @@ const RootPage: FC = () => {
 
     const onDragOver = (event: DragOverEvent) => {
         const {active, over} = event;
+
         if (!over) return;
 
         const activeId = parseId(active.id);
@@ -124,14 +125,15 @@ const RootPage: FC = () => {
                 const activeIndex = tasks.findIndex((t) => t.id === activeId);
                 const overIndex = tasks.findIndex((t) => t.id === overId);
 
+                tasks[activeIndex].orderNumber = overIndex;
+
                 if (tasks[activeIndex].columnId != tasks[overIndex].columnId) {
                     tasks[activeIndex].columnId = tasks[overIndex].columnId;
-                    tasks[activeIndex].orderNumber = overIndex;
+
                     updateTaskHandler(tasks[activeIndex].id, tasks[activeIndex]).then();
+
                     return arrayMove(tasks, activeIndex, overIndex - 1);
                 }
-
-                tasks[activeIndex].orderNumber = overIndex;
 
                 updateTaskHandler(tasks[activeIndex].id, tasks[activeIndex]).then();
 
