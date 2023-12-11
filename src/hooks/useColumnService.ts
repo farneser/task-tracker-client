@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {ColumnView} from '@/services/column/column.types.ts';
+import {ColumnView, CreateColumnDto, PatchColumnDto} from '@/services/column/column.types.ts';
 import {columnService} from "@/services/column/column.service.ts";
 import {ErrorMessage} from "@/models/Message.ts";
 
@@ -8,8 +8,8 @@ interface ColumnServiceHook {
     isLoading: boolean;
     error: ErrorMessage | null;
     updateColumns: () => Promise<void>;
-    addColumn: (column: ColumnView) => Promise<void>;
-    updateColumn: (column: ColumnView) => Promise<void>;
+    createColumn: (column: CreateColumnDto) => Promise<void>;
+    updateColumn: (id: number, column: PatchColumnDto) => Promise<void>;
     removeColumn: (columnId: number) => Promise<void>;
     setColumns: (columns: ColumnView[]) => void;
 }
@@ -38,8 +38,10 @@ const useColumnService = (): ColumnServiceHook => {
             });
     };
 
-    const addColumn = async (column: ColumnView) => {
-        setColumns([...columns, column]);
+    const createColumn = async (column: CreateColumnDto) => {
+        const response = await columnService.create(column)
+
+        setColumns([...columns, response]);
     }
 
     const removeColumn = async (columnId: number) => {
@@ -50,28 +52,27 @@ const useColumnService = (): ColumnServiceHook => {
         setColumns(newColumns);
     }
 
-    const updateColumn = async (column: ColumnView) => {
-        const newColumns = columns.map((col) => {
-            if (col.id === column.id) {
-                return column;
+    const updateColumn = async (id: number, column: PatchColumnDto) => {
+        const response = await columnService.patch(id, column);
+
+        const newColumns = columns.map((column) => {
+            if (column.id === id) {
+                return response;
             }
 
-            return col;
-        })
-
-        columnService.patch(column.id, column).then();
+            return column;
+        });
 
         setColumns(newColumns);
     }
 
     const setColumnsHandler = (columns: ColumnView[]) => {
-        // TODO: update on server side and update on client side
         setColumns(columns);
     }
 
     return {
         columns, isLoading, error,
-        updateColumns, addColumn,
+        updateColumns, createColumn,
         removeColumn, updateColumn,
         setColumns: setColumnsHandler
     };

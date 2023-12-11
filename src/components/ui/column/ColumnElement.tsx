@@ -1,25 +1,22 @@
 import {FC, useMemo, useState} from "react";
 import {ColumnView, PatchColumnDto} from "@/services/column/column.types.ts";
 import usePopup from "@/hooks/usePopup.tsx";
-import {columnService} from "@/services/column/column.service.ts";
 import PatchColumnForm from "@/components/ui/column/patch/PatchColumnForm.tsx";
-import {CreateTaskDto, TaskLookupView} from "@/services/task/task.types.ts";
-import {taskService} from "@/services/task/task.service.ts";
+import {CreateTaskDto, PatchTaskDto, TaskLookupView} from "@/services/task/task.types.ts";
 import TaskElement from "@/components/ui/task/TaskElement.tsx";
 import {CSS} from "@dnd-kit/utilities";
-
-import styles from "./ColumnElement.module.scss";
 import CreateTaskForm from "@/components/ui/task/create/CreateTaskForm.tsx";
 import {SortableContext, useSortable} from "@dnd-kit/sortable";
 import {ItemTypes} from "@/utils/id/ItemTypes.ts";
 import {getColumnId, getTaskId} from "@/utils/id/id.utils.ts";
+import styles from "./ColumnElement.module.scss";
 
 type ColumnProps = {
     column: ColumnView;
     deleteColumn: () => void;
-    updateColumn: (data: ColumnView) => void;
-    createTask: (dto: TaskLookupView) => void;
-    updateTask: (data: TaskLookupView) => void;
+    updateColumn: (id: number, data: PatchColumnDto) => void;
+    createTask: (dto: CreateTaskDto) => void;
+    updateTask: (id: number, data: PatchTaskDto) => void;
     deleteTask: (id: number) => void;
     tasks: TaskLookupView[];
 };
@@ -64,17 +61,13 @@ const ColumnElement: FC<ColumnProps> = (
     }
 
     const onEditSubmit = async (data: PatchColumnDto) => {
-        const dto = await columnService.patch(column.id, data);
-
-        updateColumn && updateColumn(dto);
+        updateColumn && updateColumn(column.id, data);
 
         closeEditPopup();
     };
 
     const onCreateSubmit = async (data: CreateTaskDto) => {
-        const dto = await taskService.create(data);
-
-        createTask && createTask({...dto, columnId: column.id});
+        createTask && createTask(data);
 
         closeCreatePopup();
     };

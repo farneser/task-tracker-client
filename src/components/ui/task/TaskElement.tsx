@@ -1,7 +1,6 @@
 import {FC} from "react";
 import {PatchTaskDto, TaskLookupView} from "@/services/task/task.types.ts";
 import usePopup from "@/hooks/usePopup.tsx";
-import {taskService} from "@/services/task/task.service.ts";
 import PatchTaskForm from "@/components/ui/task/patch/PatchTaskForm.tsx";
 
 import styles from "./TaskElement.module.scss";
@@ -13,7 +12,7 @@ import {getTaskId} from "@/utils/id/id.utils.ts";
 type TaskElementProps = {
     task: TaskLookupView;
     deleteTask?: () => void;
-    updateTask?: (data: TaskLookupView) => void;
+    updateTask?: (id: number, data: PatchTaskDto) => void;
 };
 
 const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask}) => {
@@ -42,9 +41,7 @@ const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask}) => {
     }
 
     const onSubmit = async (data: PatchTaskDto) => {
-        const dto = await taskService.patch(task.id, data);
-
-        updateTask && updateTask({...dto, columnId: task.columnId});
+        updateTask && updateTask(task.id, data);
 
         closePopup();
     };

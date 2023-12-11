@@ -1,8 +1,7 @@
 import {FC, useMemo, useState} from "react";
 import useColumnService from "@/hooks/useColumnService.ts";
 import ColumnElement from "@/components/ui/column/ColumnElement.tsx";
-import {columnService} from "@/services/column/column.service.ts";
-import {ColumnView, CreateColumnDto} from "@/services/column/column.types.ts";
+import {ColumnView, CreateColumnDto, PatchColumnDto} from "@/services/column/column.types.ts";
 import usePopup from "@/hooks/usePopup.tsx";
 import CreateColumnForm from "@/components/ui/column/create/CreateColumnForm.tsx";
 
@@ -20,17 +19,32 @@ import {
 import {arrayMove, SortableContext} from "@dnd-kit/sortable";
 import {createPortal} from "react-dom";
 import {ItemTypes} from "@/utils/id/ItemTypes.ts";
-import {TaskLookupView} from "@/services/task/task.types.ts";
+import {CreateTaskDto, PatchTaskDto, TaskLookupView} from "@/services/task/task.types.ts";
 import TaskElement from "@/components/ui/task/TaskElement.tsx";
 import useTasksService from "@/hooks/useTasksService.ts";
 import styles from "./RootPage.module.scss";
 import {getColumnId, parseId} from "@/utils/id/id.utils.ts";
 
 const RootPage: FC = () => {
-    const {addColumn, columns, removeColumn, updateColumn, setColumns} = useColumnService();
-    const {tasks, setTasks, updateTask, removeTask} = useTasksService()
+    const {
+        columns,
+        createColumn,
+        removeColumn,
+        updateColumn,
+        setColumns
+    } = useColumnService();
+
+    const {
+        tasks,
+        createTask,
+        setTasks,
+        updateTask,
+        removeTask
+    } = useTasksService()
+
     const {reversePopup, closePopup, Popup} = usePopup();
     const columnsId = useMemo(() => columns.map((col) => getColumnId(col.id)), [columns]);
+
     const [activeColumn, setActiveColumn] = useState<ColumnView | null>(null);
     const [activeTask, setActiveTask] = useState<TaskLookupView | null>(null);
 
@@ -40,16 +54,14 @@ const RootPage: FC = () => {
         },
     }))
 
-    const onSubmit = (data: CreateColumnDto) => {
-        if (data.columnName.trim() !== "") {
-            columnService.create(data).then((data) => addColumn(data));
+    const onSubmit = async (data: CreateColumnDto) => {
+        await createColumn(data)
 
-            closePopup();
-        }
+        closePopup();
     };
 
-    const updateColumnHandler = async (data: ColumnView) => {
-        await updateColumn(data);
+    const updateColumnHandler = async (columnId: number, data: PatchColumnDto) => {
+        await updateColumn(columnId, data);
     };
 
     const deleteColumnHandler = async (id: number) => {
@@ -87,7 +99,7 @@ const RootPage: FC = () => {
 
             columns[activeColumnIndex].orderNumber = overColumnIndex;
 
-            updateColumnHandler(columns[activeColumnIndex]).then();
+            updateColumnHandler(columns[activeColumnIndex].id, columns[activeColumnIndex]).then();
 
             return arrayMove(columns, activeColumnIndex, overColumnIndex);
         })(columns))
@@ -115,13 +127,13 @@ const RootPage: FC = () => {
                 if (tasks[activeIndex].columnId != tasks[overIndex].columnId) {
                     tasks[activeIndex].columnId = tasks[overIndex].columnId;
                     tasks[activeIndex].orderNumber = overIndex;
-                    updateTaskHandler(tasks[activeIndex]).then();
+                    updateTaskHandler(tasks[activeIndex].id, tasks[activeIndex]).then();
                     return arrayMove(tasks, activeIndex, overIndex - 1);
                 }
 
                 tasks[activeIndex].orderNumber = overIndex;
 
-                updateTaskHandler(tasks[activeIndex]).then()
+                updateTaskHandler(tasks[activeIndex].id, tasks[activeIndex]).then();
 
                 return arrayMove(tasks, activeIndex, overIndex);
             })(tasks));
@@ -136,24 +148,19 @@ const RootPage: FC = () => {
                 tasks[activeIndex].columnId = overId;
                 tasks[activeIndex].orderNumber = tasks.filter((t) => t.columnId === overId).length;
 
-                updateTaskHandler(tasks[activeIndex]).then();
+                updateTaskHandler(tasks[activeIndex].id, tasks[activeIndex]).then();
 
                 return arrayMove(tasks, activeIndex, activeIndex);
             })(tasks));
         }
     }
 
-    const updateTaskHandler = async (data: TaskLookupView) => {
-        await updateTask(data.id, data)
-
-        setTasks(tasks.map((task) => {
-            if (task.id !== data.id) return task;
-            return data;
-        }));
+    const updateTaskHandler = async (id: number, data: PatchTaskDto) => {
+        await updateTask(id, data)
     };
 
-    const createTaskHandler = async (dto: TaskLookupView) => {
-        setTasks([...tasks, dto]);
+    const createTaskHandler = async (dto: CreateTaskDto) => {
+        await createTask(dto);
     }
 
     const deleteTaskHandler = async (id: number) => {
@@ -182,7 +189,7 @@ const RootPage: FC = () => {
                                 column={column}
                                 deleteColumn={() => deleteColumnHandler(column.id).then()}
                                 tasks={tasks.filter((task) => task.columnId === column.id)}
-                                updateColumn={updateColumn}
+                                updateColumn={updateColumnHandler}
                                 updateTask={updateTaskHandler}
                                 deleteTask={deleteTaskHandler}
                                 createTask={createTaskHandler}

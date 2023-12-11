@@ -1,12 +1,13 @@
 import {useEffect, useState} from 'react';
 import {ErrorMessage} from "@/models/Message.ts";
-import {PatchTaskDto, TaskLookupView} from "@/services/task/task.types.ts";
+import {CreateTaskDto, PatchTaskDto, TaskLookupView} from "@/services/task/task.types.ts";
 import {taskService} from "@/services/task/task.service.ts";
 
 interface TaskSeriesHook {
     tasks: TaskLookupView[];
     isLoading: boolean;
     error: ErrorMessage | null;
+    createTask: (task: CreateTaskDto) => Promise<void>;
     updateTasks: () => Promise<void>;
     updateTask: (id: number, data: PatchTaskDto) => Promise<void>;
     setTasks: (tasks: TaskLookupView[]) => void;
@@ -39,10 +40,16 @@ const useTasksService = (): TaskSeriesHook => {
 
     const updateTask = async (id: number, data: PatchTaskDto) => {
         taskService.patch(id, data).then();
+
+        setTasks(tasks.map((task) => {
+            if (task.id === id) {
+                return {...task, ...data};
+            }
+            return task;
+        }));
     }
 
     const setTasksHandler = (tasks: TaskLookupView[]) => {
-        // TODO: update on server side and update on client side
         setTasks(tasks);
     }
 
@@ -51,7 +58,13 @@ const useTasksService = (): TaskSeriesHook => {
         setTasks(tasks.filter((task) => task.id !== taskId));
     }
 
-    return {tasks, isLoading, error, updateTasks, setTasks: setTasksHandler, updateTask, removeTask};
+    const createTask = async (task: CreateTaskDto) => {
+        const response = await taskService.create(task);
+
+        setTasks([...tasks, {...response, columnId: response.column?.id || -1}]);
+    }
+
+    return {tasks, isLoading, error, updateTasks, setTasks: setTasksHandler, updateTask, removeTask, createTask};
 };
 
 export default useTasksService;
