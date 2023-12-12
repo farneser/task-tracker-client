@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {createContext, FC, PropsWithChildren, useEffect, useState} from "react";
 import {ErrorMessage} from "@/models/Message.ts";
 import {CreateTaskDto, PatchTaskDto, TaskLookupView} from "@/services/task/task.types.ts";
 import {taskService} from "@/services/task/task.service.ts";
@@ -14,7 +14,10 @@ interface TaskSeriesHook {
     removeTask: (taskId: number) => Promise<void>;
 }
 
-const useTasksService = (): TaskSeriesHook => {
+
+export const TaskContext = createContext<TaskSeriesHook | null>(null);
+
+export const TaskProvider: FC<PropsWithChildren> = ({children}) => {
     const [tasks, setTasks] = useState<TaskLookupView[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<ErrorMessage | null>(null);
@@ -64,7 +67,14 @@ const useTasksService = (): TaskSeriesHook => {
         setTasks([...tasks, {...response, columnId: response.column?.id || -1}]);
     }
 
-    return {tasks, isLoading, error, updateTasks, setTasks: setTasksHandler, updateTask, removeTask, createTask};
+    return (
+        <TaskContext.Provider
+            value={{
+                tasks, isLoading, error,
+                updateTasks, setTasks: setTasksHandler, updateTask,
+                removeTask, createTask
+            }}>
+            {children}
+        </TaskContext.Provider>
+    );
 };
-
-export default useTasksService;

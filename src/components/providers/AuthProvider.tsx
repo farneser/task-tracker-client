@@ -4,6 +4,7 @@ import {userService} from "@/services/user/user.service.ts";
 import {Token} from "@/models/token.ts";
 import {getLocalStorageItem, removeLocalStorage, setLocalStorage} from "@/utils/localStorage.utils.ts";
 import constants from "@/constants.ts";
+import {ErrorMessage} from "@/models/Message.ts";
 
 export interface IAuthContext {
     updateToken: (token: Token | null) => void;
@@ -12,6 +13,7 @@ export interface IAuthContext {
     user: UserView | null;
     loading: boolean;
     logout: () => void;
+    error: ErrorMessage | null;
 }
 
 
@@ -20,17 +22,21 @@ export const AuthContext = createContext<IAuthContext | null>(null);
 export const AuthProvider: FC<PropsWithChildren> = ({children}) => {
     const [user, setUser] = useState<UserView | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<ErrorMessage | null>(null);
 
     const refreshAuth = async () => {
-        try {
-            setLoading(true);
-            const user = await userService.get();
-            setUser(user);
-        } catch (error) {
-            setUser(null);
-        } finally {
-            setLoading(false);
-        }
+        setLoading(true);
+        userService
+            .get()
+            .then((user) => {
+                setUser(user);
+            })
+            .catch((e) => {
+                setError(e);
+            })
+            .finally(() => {
+                setLoading(false);
+            })
     };
 
     const updateToken = (newToken: Token | null) => {
@@ -43,7 +49,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({children}) => {
         return newToken;
     };
 
-    const logout = () => {
+    const logout = async () => {
         updateToken(null);
         setUser(null);
     }
@@ -56,9 +62,8 @@ export const AuthProvider: FC<PropsWithChildren> = ({children}) => {
         refreshAuth().then()
     }, []);
 
-
     return (
-        <AuthContext.Provider value={{updateToken, getToken, user, refreshAuth, loading, logout}}>
+        <AuthContext.Provider value={{updateToken, getToken, user, refreshAuth, loading, logout, error}}>
             {children}
         </AuthContext.Provider>
     );

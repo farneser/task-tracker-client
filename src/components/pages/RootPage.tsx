@@ -1,5 +1,5 @@
 import {FC, useEffect, useMemo, useState} from "react";
-import useColumnService from "@/hooks/useColumnService.ts";
+import useColumns from "@/hooks/useColumns.ts";
 import ColumnElement from "@/components/ui/column/ColumnElement.tsx";
 import {ColumnView, CreateColumnDto} from "@/services/column/column.types.ts";
 import usePopup from "@/hooks/usePopup.tsx";
@@ -20,14 +20,16 @@ import {createPortal} from "react-dom";
 import {ItemTypes} from "@/utils/id/ItemTypes.ts";
 import {TaskLookupView} from "@/services/task/task.types.ts";
 import TaskElement from "@/components/ui/task/TaskElement.tsx";
-import useTasksService from "@/hooks/useTasksService.ts";
+import useTasks from "@/hooks/useTasks.ts";
 import styles from "./RootPage.module.scss";
 import {getColumnId, parseId} from "@/utils/id/id.utils.ts";
 import ColumnForm from "@/components/ui/column/form/ColumnForm.tsx";
+import useAuth from "@/hooks/useAuth.ts";
 
 const RootPage: FC = () => {
-    const {columns, createColumn, removeColumn, updateColumn, setColumns, isLoading: isColumnsLoading} = useColumnService();
-    const {tasks, createTask, setTasks, updateTask, removeTask, isLoading: isTasksLoading} = useTasksService()
+    const auth = useAuth();
+    const {columns, createColumn, removeColumn, updateColumn, setColumns, isLoading: isColumnsLoading} = useColumns();
+    const {tasks, createTask, setTasks, updateTask, removeTask, isLoading: isTasksLoading} = useTasks()
 
     const {reversePopup, closePopup, Popup} = usePopup(isColumnsLoading || columns.length === 0);
     const columnsId = useMemo(() => columns.map((col) => getColumnId(col.id)), [columns]);
@@ -39,6 +41,7 @@ const RootPage: FC = () => {
         if (!isColumnsLoading && columns.length !== 0) {
             closePopup();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isColumnsLoading, columns])
 
     const sensors = useSensors(useSensor(PointerSensor, {
@@ -143,7 +146,10 @@ const RootPage: FC = () => {
     }
 
     // TODO: create preloader
-    if (isColumnsLoading || isTasksLoading) return (<div>Loading...</div>);
+    if (isColumnsLoading || isTasksLoading || auth.loading) {
+        console.log('loading in root page')
+        return <div>Loading...</div>
+    }
 
     return (
         <div className={styles["kanban-container"]}>
