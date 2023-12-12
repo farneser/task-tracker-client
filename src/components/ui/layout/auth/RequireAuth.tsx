@@ -1,5 +1,6 @@
 import {Navigate, Outlet, useLocation} from "react-router-dom";
 import useAuth from "@/hooks/useAuth.ts";
+import Footer from "@/components/ui/layout/footer/Footer.tsx";
 
 const RequireAuth = () => {
     const location = useLocation();
@@ -9,7 +10,11 @@ const RequireAuth = () => {
         return <Navigate to="/auth/login" state={{from: location}} replace/>;
     }
 
-    return <Outlet/>;
+    return <>
+        <header>header data</header>
+        <Outlet/>
+        <Footer/>
+    </>;
 }
 
 export default RequireAuth;

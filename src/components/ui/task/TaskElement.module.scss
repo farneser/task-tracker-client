@@ -1,27 +1,52 @@
-.task-container {
-  background: #3b3b3b;
-  border-radius: 10px;
-  margin: 10px 0;
-  padding: 10px 20px;
-  color: white;
-  overflow-x: hidden;
-  height: 100px;
+@import "src/styles/constants";
 
-  &:hover {
-    background: #4b4b4b;
-    border: deeppink 1px solid;
-  }
-
-  &-overlay{
+.task {
+  &__container {
+    background: lighten($background-color, 10%);
     border-radius: 10px;
     margin: 10px 0;
     padding: 10px 20px;
     color: white;
     overflow-x: hidden;
     height: 100px;
-    border: deeppink 1px solid;
-    background: rgba(75, 75, 75, 0.5);
-    opacity: 0.6;
+    border: 1px solid lighten($background-color, 10%);
+
+    &:hover {
+      background: lighten($background-color, 15%);
+      border: 1px solid $accent-color;
+      cursor: grab;
+    }
+
+    &_overlay {
+      border-radius: 10px;
+      margin: 10px 0;
+      padding: 10px 20px;
+      color: white;
+      overflow-x: hidden;
+      height: 100px;
+      background-color: rgba(lighten($background-color, 15%), 0.3);
+      border: 1px solid $accent-color;
+      opacity: 0.6;
+    }
+  }
+
+  &__name {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__description {
+
+  }
+
+  &__delete {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+
+    &:hover {
+      color: $accent-color;
+    }
   }
 }
-

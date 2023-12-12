@@ -5,13 +5,13 @@ import ColumnForm from "@/components/ui/column/form/ColumnForm.tsx";
 import {CreateTaskDto, PatchTaskDto, TaskLookupView} from "@/services/task/task.types.ts";
 import TaskElement from "@/components/ui/task/TaskElement.tsx";
 import {CSS} from "@dnd-kit/utilities";
-import CreateTaskForm from "@/components/ui/task/create/CreateTaskForm.tsx";
 import {SortableContext, useSortable} from "@dnd-kit/sortable";
 import {ItemTypes} from "@/utils/id/ItemTypes.ts";
 import {getColumnId, getTaskId} from "@/utils/id/id.utils.ts";
 import styles from "./ColumnElement.module.scss";
 import TrashIcon from "@/components/ui/icons/TrashIcon.tsx";
 import BarsIcon from "@/components/ui/icons/BarsIcon.tsx";
+import TaskForm from "@/components/ui/task/form/TaskForm.tsx";
 
 type ColumnProps = {
     column: ColumnView;
@@ -83,7 +83,7 @@ const ColumnElement: FC<ColumnProps> = (
              onMouseLeave={() => setMouseIsOver(false)}
         >
             <CreatePopup>
-                <CreateTaskForm onSubmit={onCreateSubmit} columnId={column.id}/>
+                <TaskForm onSubmit={onCreateSubmit} columnId={column.id}/>
             </CreatePopup>
             <EditPopup>
                 <ColumnForm onSubmit={onEditSubmit} column={column}/>
@@ -95,7 +95,7 @@ const ColumnElement: FC<ColumnProps> = (
                 >
                     <BarsIcon/>
                 </div>
-                <div onClick={reverseEditPopup}>{column.columnName}</div>
+                <div onClick={reverseEditPopup} className={styles.header__title}>{column.columnName}</div>
                 {deleteColumn && mouseIsOver &&
                     <button className={styles.header__delete} onClick={deleteColumn}>
                         <TrashIcon/>

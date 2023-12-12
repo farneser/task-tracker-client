@@ -29,6 +29,9 @@ const ColumnForm: FC<PatchColumnFormProps> = ({onSubmit, column}) => {
 
     return <form className={styles.form} onSubmit={handleSubmit(submit)}>
         <div>
+            <h1>{column ? "Update column" : "Create a new column"}</h1>
+        </div>
+        <div>
             <input
                 type="text"
                 placeholder="Column name"

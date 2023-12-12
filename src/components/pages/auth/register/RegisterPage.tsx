@@ -96,9 +96,11 @@ const RegisterPage: FC = () => {
                     )}
                 </div>
 
-                <button type="submit" className="form__button">
-                    Submit
-                </button>
+                <div>
+                    <button type="submit" className="form__button">
+                        Submit
+                    </button>
+                </div>
                 <div className="form__link">
                     <Link to={"/auth/login"}>Already have an account?</Link>
                 </div>
