@@ -27,7 +27,7 @@ const TaskForm: FC<PatchTaskFormProps> = ({onSubmit, task, columnId}) => {
         </div>
         <div>
             <label className={styles.form__label}>taskName</label>
-            <input type="text" placeholder="columnName" {...register("taskName")} autoFocus={true}/>
+            <input type="text" placeholder="columnName" {...register("taskName")}/>
         </div>
         <div>
             <label className={styles.form__label}>description</label>

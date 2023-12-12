@@ -37,7 +37,6 @@ const ColumnForm: FC<PatchColumnFormProps> = ({onSubmit, column}) => {
                 placeholder="Column name"
                 {...register("columnName", {required: true})}
                 className={styles.createColumnForm__form__field__input}
-                autoFocus={true}
             />
         </div>
         <div className={styles.createColumnForm__form__field}>

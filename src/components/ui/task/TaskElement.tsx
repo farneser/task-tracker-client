@@ -35,6 +35,17 @@ const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask}) => {
         // or when the user is editing the column title
         // disabled: updateMode
     })
+
+    const formattedDate = new Date(task.editDate || task.creationDate).toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        timeZone: 'UTC'
+    });
+
     const [mouseIsOver, setMouseIsOver] = useState(false);
 
     const style = {
@@ -49,7 +60,9 @@ const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask}) => {
     };
 
     if (isDragging) {
-        return <div className={styles.task__container_overlay} style={style} ref={setNodeRef}></div>
+        return <div className={styles.task__container + " " + styles.task__container_overlay} style={style}
+                    ref={setNodeRef}>
+        </div>
     }
 
     return (<>
@@ -61,11 +74,16 @@ const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask}) => {
                  onMouseEnter={() => setMouseIsOver(true)}
                  onMouseLeave={() => setMouseIsOver(false)}
             >
-                <div className={styles.task__name} onClick={reversePopup}>{task.taskName}</div>
-                <p className={styles.task__description}>{task.description}</p>
-                {mouseIsOver && <button onClick={deleteTask} className={styles.task__delete}>
-                    <TrashIcon/>
-                </button>}
+                <div className={styles.task__name} onClick={reversePopup}>
+                    <div>{task.taskName}</div>
+                    {mouseIsOver && <div>
+                        <button onClick={deleteTask} className={styles.task__delete}>
+                            <TrashIcon/>
+                        </button>
+                    </div>}
+                </div>
+                <div className={styles.task__description}>{task.description}</div>
+                <div className={styles.task__date}>{formattedDate}</div>
             </div>
             <Popup>
                 <TaskForm onSubmit={onSubmit} task={task} columnId={task.columnId}/>

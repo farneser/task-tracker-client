@@ -102,11 +102,11 @@ const ColumnElement: FC<ColumnProps> = (
                     </button>}
             </div>
 
-            <div className={styles.task__container}>
+            <div className={styles.tasks__container}>
                 <SortableContext items={tasksIds}>
                     {tasks.map((task) => (
                         <TaskElement
-                            key={task.id}
+                            key={getTaskId(task.id)}
                             task={task}
                             updateTask={updateTask}
                             deleteTask={() => deleteTask && deleteTask(task.id)}

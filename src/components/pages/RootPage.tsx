@@ -95,8 +95,8 @@ const RootPage: FC = () => {
 
         if (!over) return;
 
-        const activeId = parseId(active.id);
-        const overId = parseId(over.id);
+        const activeId = active.id;
+        const overId = over.id;
 
         if (activeId === overId) return;
 
@@ -107,8 +107,8 @@ const RootPage: FC = () => {
 
         if (isActiveATask && isOverATask) {
             setTasks(((tasks) => {
-                const activeIndex = tasks.findIndex((t) => t.id === activeId);
-                const overIndex = tasks.findIndex((t) => t.id === overId);
+                const activeIndex = tasks.findIndex((t) => t.id === parseId(activeId));
+                const overIndex = tasks.findIndex((t) => t.id === parseId(overId));
 
                 tasks[activeIndex].orderNumber = overIndex;
 
@@ -130,10 +130,10 @@ const RootPage: FC = () => {
 
         if (isActiveATask && isOverAColumn) {
             setTasks(((tasks) => {
-                const activeIndex = tasks.findIndex((t) => t.id === activeId);
+                const activeIndex = tasks.findIndex((t) => t.id === parseId(activeId));
 
-                tasks[activeIndex].columnId = overId;
-                tasks[activeIndex].orderNumber = tasks.filter((t) => t.columnId === overId).length;
+                tasks[activeIndex].columnId = parseId(overId);
+                tasks[activeIndex].orderNumber = tasks.filter((t) => t.columnId === parseId(overId)).length;
 
                 updateTask(tasks[activeIndex].id, tasks[activeIndex]).then();
 
@@ -162,7 +162,7 @@ const RootPage: FC = () => {
                     <SortableContext items={columnsId}>
                         {columns.map((column) => (
                             <ColumnElement
-                                key={column.id}
+                                key={getColumnId(column.id)}
                                 column={column}
                                 deleteColumn={() => removeColumn(column.id).then()}
                                 tasks={tasks.filter((task) => task.columnId === column.id)}

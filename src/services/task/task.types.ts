@@ -20,4 +20,6 @@ export interface TaskView extends Omit<PatchTaskDto, "columnId"> {
 
 export interface TaskLookupView extends PatchTaskDto {
     id: number;
+    editDate: string;
+    creationDate: string;
 }

@@ -5,11 +5,15 @@
     background: lighten($background-color, 10%);
     border-radius: 10px;
     margin: 10px 0;
-    padding: 10px 20px;
+    padding: 20px;
     color: white;
     overflow-x: hidden;
-    height: 100px;
+    //min-height: 35px;
+    height: 70px;
     border: 1px solid lighten($background-color, 10%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
     &:hover {
       background: lighten($background-color, 15%);
@@ -17,13 +21,7 @@
       cursor: grab;
     }
 
-    &_overlay {
-      border-radius: 10px;
-      margin: 10px 0;
-      padding: 10px 20px;
-      color: white;
-      overflow-x: hidden;
-      height: 100px;
+    &_overlay, &_overlay:hover {
       background-color: rgba(lighten($background-color, 15%), 0.3);
       border: 1px solid $accent-color;
       opacity: 0.6;
@@ -31,13 +29,32 @@
   }
 
   &__name {
+    font-weight: bold;
+    display: flex;
+    cursor: pointer;
+
+    div:first-child {
+      min-height: 35px;
+      width: calc(100% - 30px);
+      margin-bottom: 8px;
+
+      &:hover{
+        color: lighten($accent-color, 60%);
+      }
+    }
+
     &:hover {
-      cursor: pointer;
     }
   }
 
+
   &__description {
 
+  }
+
+  &__date {
+    font-size: 12px;
+    opacity: 0.7;
   }
 
   &__delete {
