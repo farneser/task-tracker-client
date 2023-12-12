@@ -6,21 +6,24 @@
   display: flex;
   height: 100vh;
   overflow-y: hidden;
-  padding: 0 50px;
 }
 
 .column-container {
   display: flex;
   margin: auto 0;
   height: 70%;
+
+  & > div {
+    margin: 0 20px;
+  }
 }
 
 .create-column-container {
   height: 100%;
-  width: 350px;
+  margin: 0 20px;
 
   button {
-    background: #3b3b3b;
+    background: lighten($background-color, 5%);
     border: none;
     border-radius: 10px;
     color: white;
@@ -29,7 +32,7 @@
 
     &:hover {
       cursor: pointer;
-      background: #4b4b4b;
+      background: lighten($background-color, 10%);
     }
   }
 }

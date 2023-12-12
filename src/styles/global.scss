@@ -6,9 +6,16 @@
   margin: 0;
   padding: 0;
   font-family: 'Roboto', sans-serif;
+  font-size: 16px;
 
   input, button {
-    all: unset;
+    border: none;
+    background: none;
+    color: inherit;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
   }
 
   input {
@@ -18,5 +25,10 @@
     border-radius: 4px;
     background-color: lighten($background-color, 10%);
     color: #fff;
+
+    &:hover, &:focus {
+      border-color: $accent-color;
+      background-color: lighten($background-color, 15%);
+    }
   }
 }

@@ -13,11 +13,11 @@
       height: 0;
 
       &:checked + .slider {
-        background-color: $confirm-button-color;
+        background-color: $accent-color;
       }
 
       &:focus + .slider {
-        box-shadow: 0 0 1px $confirm-button-color;
+        box-shadow: 0 0 1px $accent-color;
       }
 
       &:checked + .slider:before {

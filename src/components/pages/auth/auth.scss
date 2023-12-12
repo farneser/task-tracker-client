@@ -39,7 +39,7 @@
     }
 
     &__button {
-      background-color: $confirm-button-color;
+      background-color: $accent-color;
       color: #fff;
       padding: 10px 20px;
       cursor: pointer;
@@ -48,12 +48,12 @@
       font-size: 16px;
 
       &:hover {
-        background-color: darken($confirm-button-color, 10%);
+        background-color: darken($accent-color, 10%);
       }
     }
 
     &__link {
-      color: $confirm-button-color;
+      color: $accent-color;
       margin-top: 16px;
       text-decoration: none;
 
@@ -64,7 +64,7 @@
   }
 
   a {
-    color: $confirm-button-color;
+    color: $accent-color;
     margin-top: 16px;
     text-decoration: none;
 

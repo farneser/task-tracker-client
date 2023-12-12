@@ -10,6 +10,8 @@ import {SortableContext, useSortable} from "@dnd-kit/sortable";
 import {ItemTypes} from "@/utils/id/ItemTypes.ts";
 import {getColumnId, getTaskId} from "@/utils/id/id.utils.ts";
 import styles from "./ColumnElement.module.scss";
+import BarsIcon from "@/components/ui/icons/BarsIcon.tsx";
+import TrashIcon from "@/components/ui/icons/TrashIcon.tsx";
 
 type ColumnProps = {
     column: ColumnView;
@@ -57,7 +59,7 @@ const ColumnElement: FC<ColumnProps> = (
 
     const style = {
         transition,
-        transform: CSS.Transform.toString(transform),
+        transform: CSS.Transform.toString(transform)
     }
 
     const onEditSubmit = async (data: PatchColumnDto) => {
@@ -73,48 +75,49 @@ const ColumnElement: FC<ColumnProps> = (
     };
 
     if (isDragging) {
-        return <div ref={setNodeRef} style={style} className={styles["column-container"]}></div>
+        return <div ref={setNodeRef} style={style} className={styles.column__container_overlay}></div>
     }
 
     return (
-        <>
-            <div className={styles["column-container"]} ref={setNodeRef} style={style}
-                 onMouseEnter={() => {
-                     setMouseIsOver(true);
-                 }}
-                 onMouseLeave={() => {
-                     setMouseIsOver(false);
-                 }}>
-                <CreatePopup>
-                    <CreateTaskForm onSubmit={onCreateSubmit} columnId={column.id}/>
-                </CreatePopup>
-                <EditPopup>
-                    <PatchColumnForm onSubmit={onEditSubmit} column={column}/>
-                </EditPopup>
-                <div className={styles["column-header"]}
+        <div className={styles.column__container} ref={setNodeRef} style={style}
+             onMouseEnter={() => setMouseIsOver(true)}
+             // onMouseLeave={() => setMouseIsOver(false)}
+        >
+            <CreatePopup>
+                <CreateTaskForm onSubmit={onCreateSubmit} columnId={column.id}/>
+            </CreatePopup>
+            <EditPopup>
+                <PatchColumnForm onSubmit={onEditSubmit} column={column}/>
+            </EditPopup>
+            <div className={styles['column-header']}>
+                <div className={styles['column-header__drag-icon']}
                      {...attributes}
-                     {...listeners}>
-                    <span onClick={reverseEditPopup}>{column.columnName}</span>
-                    {deleteColumn && mouseIsOver &&
-                        <button className={styles["delete-button"]} onClick={deleteColumn}>Del</button>}
+                     {...listeners}
+                >
+                    <BarsIcon/>
                 </div>
-
-                <div className={styles["task-container"]}>
-                    <SortableContext items={tasksIds}>
-                        {tasks.map((task) => (
-                            <div className={styles["task-element"]} key={task.id}>
-                                <TaskElement
-                                    task={task}
-                                    updateTask={updateTask}
-                                    deleteTask={() => deleteTask && deleteTask(task.id)}
-                                />
-                            </div>
-                        ))}
-                    </SortableContext>
-                </div>
-                <button onClick={reverseCreatePopup} className={styles.editButton}>Create New Task</button>
+                <div className={styles['column-header__column-name']}
+                     onClick={reverseEditPopup}>{column.columnName}</div>
+                {deleteColumn && mouseIsOver &&
+                    <button className={styles['column-header__delete-button']} onClick={deleteColumn}>
+                        <TrashIcon/>
+                    </button>}
             </div>
-        </>
+
+            <div className={styles['task-container']}>
+                <SortableContext items={tasksIds}>
+                    {tasks.map((task) => (
+                        <TaskElement
+                            task={task}
+                            updateTask={updateTask}
+                            deleteTask={() => deleteTask && deleteTask(task.id)}
+                        />
+                    ))}
+                </SortableContext>
+            </div>
+            <button onClick={reverseCreatePopup} className={styles['edit-button']}>Create New Task</button>
+        </div>
     );
 };
+
 export default ColumnElement;
