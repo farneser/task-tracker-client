@@ -43,6 +43,12 @@
 
       &__title {
         cursor: pointer;
+        transition: 700ms;
+
+        &:hover {
+          color: $accent-color;
+          transition: 100ms;
+        }
       }
 
       &__drag {

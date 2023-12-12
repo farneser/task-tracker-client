@@ -3,9 +3,15 @@ import styles from "./Header.module.scss";
 import useAuth from "@/hooks/useAuth.ts";
 import useColumns from "@/hooks/useColumns.ts";
 import useTasks from "@/hooks/useTasks.ts";
+import usePopup from "@/hooks/usePopup.tsx";
+import SettingsIcon from "@/components/ui/icons/SettingsIcon.tsx";
+import UserSettingsForm from "@/components/ui/user/UserSettingsForm.tsx";
+import {UserView} from "@/services/user/user.types.ts";
 
 const Header: FC = () => {
-    const {user, logout, loading} = useAuth();
+    const {user, logout, loading, patchUser} = useAuth();
+    const {Popup, reversePopup, closePopup} = usePopup(false)
+
     const {updateColumns} = useColumns()
     const {updateTasks} = useTasks()
 
@@ -19,11 +25,21 @@ const Header: FC = () => {
         await updateTasks().then()
     }
 
+    const onSettingsSubmit = (data: UserView) => {
+        patchUser(data)
+
+        closePopup()
+    }
+
     return <header className={styles.header}>
+        {user && <Popup>
+            <UserSettingsForm user={user} onSubmit={onSettingsSubmit}/>
+        </Popup>}
         <div className={styles.header__container}>
             <button className={styles.header__refresh} onClick={refresh}>Refresh tasks</button>
-            <div className={styles.header__user}>
-                <span className={styles.header__user_email}>You are logged in as: {user?.email}</span>
+            <div className={styles.header__user} onClick={reversePopup}>
+                <span>You are logged in as: <span className={styles.header__user_email}>{user?.email}</span></span>
+                <span className={styles.header__settings}><SettingsIcon/></span>
             </div>
 
             <button className={styles.header__logout} onClick={logout}>Logout</button>

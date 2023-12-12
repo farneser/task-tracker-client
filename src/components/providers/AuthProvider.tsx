@@ -14,8 +14,8 @@ export interface IAuthContext {
     loading: boolean;
     logout: () => void;
     error: ErrorMessage | null;
+    patchUser: (user: UserView) => void;
 }
-
 
 export const AuthContext = createContext<IAuthContext | null>(null);
 
@@ -58,12 +58,27 @@ export const AuthProvider: FC<PropsWithChildren> = ({children}) => {
         return getLocalStorageItem<Token>(constants.authTokenKey);
     }
 
+    const patchUser = async (user: UserView) => {
+        setLoading(true);
+        userService
+            .patch({isSubscribed: user.isSubscribed})
+            .then((user) => {
+                setUser(user);
+            })
+            .catch((e) => {
+                setError(e);
+            })
+            .finally(() => {
+                setLoading(false);
+            })
+    }
+
     useEffect(() => {
         refreshAuth().then()
     }, []);
 
     return (
-        <AuthContext.Provider value={{updateToken, getToken, user, refreshAuth, loading, logout, error}}>
+        <AuthContext.Provider value={{updateToken, getToken, user, refreshAuth, loading, logout, error, patchUser}}>
             {children}
         </AuthContext.Provider>
     );
