@@ -1,0 +1,45 @@
+@import "src/styles/constants";
+
+.footer {
+  color: #fff;
+  margin: 0 20px;
+  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  &__text {
+    font-size: 1em;
+  }
+
+  &__link {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  & > div {
+    opacity: 0.5;
+    transition: 1s;
+    padding: 20px 15px;
+
+    &:hover{
+      opacity: 1;
+      transition: 350ms;
+    }
+  }
+
+  @media (max-width: 768px) {
+    &{
+      flex-direction: column;
+      justify-content: left;
+      text-align: left;
+    }
+
+    & > div {
+      padding: 10px 0;
+    }
+  }
+}

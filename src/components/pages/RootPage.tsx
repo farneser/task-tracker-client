@@ -196,7 +196,6 @@ const RootPage: FC = () => {
                         }}/>
                     )}
                 </DragOverlay>, document.body)}
-
             </DndContext>
         </div>
     );
