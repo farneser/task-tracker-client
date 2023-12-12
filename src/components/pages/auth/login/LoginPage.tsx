@@ -71,12 +71,12 @@ const LoginPage: FC = () => {
                         <p className="form__error">{errors.password.message}</p>
                     )}
                 </div>
-
                 <button type="submit" className="form__button">
                     Submit
                 </button>
-                <Link to={"/auth/register"}>Don't have an account?</Link>
-
+                <div className="form__link">
+                    <Link to={"/auth/register"}>Don't have an account?</Link>
+                </div>
             </form>
         </div>
     );

@@ -30,8 +30,9 @@ const RegisterPage: FC = () => {
 
     return (
         <div className="page">
-            <h1>Register page</h1>
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
+                <h1>Register page</h1>
+
                 <div>
                     <label className="form__label">Email</label>
                     <input
@@ -98,8 +99,10 @@ const RegisterPage: FC = () => {
                 <button type="submit" className="form__button">
                     Submit
                 </button>
+                <div className="form__link">
+                    <Link to={"/auth/login"}>Already have an account?</Link>
+                </div>
             </form>
-            <Link to={"/auth/login"}>Already have an account?</Link>
         </div>
     );
 };
