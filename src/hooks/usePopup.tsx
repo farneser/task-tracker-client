@@ -9,8 +9,8 @@ interface PopupHook {
     reversePopup: () => void
 }
 
-const usePopup: () => PopupHook = (): PopupHook => {
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
+const usePopup: (isOpenByDefault?: boolean) => PopupHook = (isOpenByDefault = false): PopupHook => {
+    const [isPopupOpen, setIsPopupOpen] = useState(isOpenByDefault || false);
 
     const openPopup = () => {
         setIsPopupOpen(true);

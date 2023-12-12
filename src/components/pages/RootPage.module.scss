@@ -1,6 +1,8 @@
+@import "src/styles/constants";
+
 .kanban-container {
   justify-content: space-between;
-  background: #262626;
+  background: $background-color;
   display: flex;
   height: 100vh;
   overflow-y: hidden;

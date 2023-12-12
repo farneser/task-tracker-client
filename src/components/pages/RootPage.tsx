@@ -1,4 +1,4 @@
-import {FC, useMemo, useState} from "react";
+import {FC, useEffect, useMemo, useState} from "react";
 import useColumnService from "@/hooks/useColumnService.ts";
 import ColumnElement from "@/components/ui/column/ColumnElement.tsx";
 import {ColumnView, CreateColumnDto} from "@/services/column/column.types.ts";
@@ -26,14 +26,21 @@ import styles from "./RootPage.module.scss";
 import {getColumnId, parseId} from "@/utils/id/id.utils.ts";
 
 const RootPage: FC = () => {
-    const {columns, createColumn, removeColumn, updateColumn, setColumns} = useColumnService();
+    const {columns, createColumn, removeColumn, updateColumn, setColumns, isLoading} = useColumnService();
     const {tasks, createTask, setTasks, updateTask, removeTask} = useTasksService()
 
-    const {reversePopup, closePopup, Popup} = usePopup();
+    const {reversePopup, closePopup, Popup} = usePopup(isLoading || columns.length === 0);
     const columnsId = useMemo(() => columns.map((col) => getColumnId(col.id)), [columns]);
 
     const [activeColumn, setActiveColumn] = useState<ColumnView | null>(null);
     const [activeTask, setActiveTask] = useState<TaskLookupView | null>(null);
+
+
+    useEffect(() => {
+        if (!isLoading && columns.length !== 0) {
+            closePopup();
+        }
+    }, [isLoading, columns]);
 
     const sensors = useSensors(useSensor(PointerSensor, {
         activationConstraint: {

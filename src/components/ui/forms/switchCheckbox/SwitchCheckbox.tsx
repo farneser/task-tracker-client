@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './SwitchCheckbox.module.scss';
+import styles from '@/components/ui/forms/switchCheckbox/SwitchCheckbox.module.scss';
 
 interface SwitchCheckboxProps {
     isChecked: boolean;
@@ -8,13 +8,13 @@ interface SwitchCheckboxProps {
 
 const SwitchCheckbox: React.FC<SwitchCheckboxProps> = ({isChecked, onCheckboxChange}) => {
     return (
-        <label className={styles["switch-checkbox"]}>
+        <label className={styles.switch__checkbox}>
             <input
                 type="checkbox"
                 checked={isChecked}
                 onChange={onCheckboxChange}
             />
-            <span className={styles["slider"]}></span>
+            <span className={styles.slider}></span>
         </label>
     );
 };
