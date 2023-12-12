@@ -1,7 +1,7 @@
 import {FC, useState} from "react";
 import {useForm} from "react-hook-form";
 import {ColumnView, PatchColumnDto} from "@/services/column/column.types.ts";
-import styles from "./PatchColumnForm.module.scss";
+import styles from "./ColumnForm.module.scss";
 import SwitchCheckbox from "@/components/ui/forms/switchCheckbox/SwitchCheckbox.tsx";
 
 type PatchColumnFormProps = {
@@ -9,7 +9,7 @@ type PatchColumnFormProps = {
     onSubmit: (data: PatchColumnDto) => void;
 }
 
-const PatchColumnForm: FC<PatchColumnFormProps> = ({onSubmit, column}) => {
+const ColumnForm: FC<PatchColumnFormProps> = ({onSubmit, column}) => {
     const {
         register,
         handleSubmit,
@@ -34,6 +34,7 @@ const PatchColumnForm: FC<PatchColumnFormProps> = ({onSubmit, column}) => {
                 placeholder="Column name"
                 {...register("columnName", {required: true})}
                 className={styles.createColumnForm__form__field__input}
+                autoFocus={true}
             />
         </div>
         <div className={styles.createColumnForm__form__field}>
@@ -51,4 +52,4 @@ const PatchColumnForm: FC<PatchColumnFormProps> = ({onSubmit, column}) => {
     </form>
 }
 
-export default PatchColumnForm;
+export default ColumnForm;

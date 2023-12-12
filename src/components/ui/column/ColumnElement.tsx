@@ -1,7 +1,7 @@
 import {FC, useMemo, useState} from "react";
 import {ColumnView, PatchColumnDto} from "@/services/column/column.types.ts";
 import usePopup from "@/hooks/usePopup.tsx";
-import PatchColumnForm from "@/components/ui/column/patch/PatchColumnForm.tsx";
+import ColumnForm from "@/components/ui/column/form/ColumnForm.tsx";
 import {CreateTaskDto, PatchTaskDto, TaskLookupView} from "@/services/task/task.types.ts";
 import TaskElement from "@/components/ui/task/TaskElement.tsx";
 import {CSS} from "@dnd-kit/utilities";
@@ -64,7 +64,6 @@ const ColumnElement: FC<ColumnProps> = (
 
     const onEditSubmit = async (data: PatchColumnDto) => {
         updateColumn && updateColumn(column.id, data);
-
         closeEditPopup();
     };
 
@@ -87,27 +86,27 @@ const ColumnElement: FC<ColumnProps> = (
                 <CreateTaskForm onSubmit={onCreateSubmit} columnId={column.id}/>
             </CreatePopup>
             <EditPopup>
-                <PatchColumnForm onSubmit={onEditSubmit} column={column}/>
+                <ColumnForm onSubmit={onEditSubmit} column={column}/>
             </EditPopup>
-            <div className={styles['column-header']}>
-                <div className={styles['column-header__drag-icon']}
+            <div className={styles.header}>
+                <div className={styles.header__drag}
                      {...attributes}
                      {...listeners}
                 >
                     <BarsIcon/>
                 </div>
-                <div className={styles['column-header__column-name']}
-                     onClick={reverseEditPopup}>{column.columnName}</div>
+                <div onClick={reverseEditPopup}>{column.columnName}</div>
                 {deleteColumn && mouseIsOver &&
-                    <button className={styles['column-header__delete-button']} onClick={deleteColumn}>
+                    <button className={styles.header__delete} onClick={deleteColumn}>
                         <TrashIcon/>
                     </button>}
             </div>
 
-            <div className={styles['task-container']}>
+            <div className={styles.task__container}>
                 <SortableContext items={tasksIds}>
                     {tasks.map((task) => (
                         <TaskElement
+                            key={task.id}
                             task={task}
                             updateTask={updateTask}
                             deleteTask={() => deleteTask && deleteTask(task.id)}
@@ -115,7 +114,7 @@ const ColumnElement: FC<ColumnProps> = (
                     ))}
                 </SortableContext>
             </div>
-            <button onClick={reverseCreatePopup} className={styles['edit-button']}>Create New Task</button>
+            <button onClick={reverseCreatePopup}>Create New Task</button>
         </div>
     );
 };

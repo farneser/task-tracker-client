@@ -23,23 +23,23 @@ import TaskElement from "@/components/ui/task/TaskElement.tsx";
 import useTasksService from "@/hooks/useTasksService.ts";
 import styles from "./RootPage.module.scss";
 import {getColumnId, parseId} from "@/utils/id/id.utils.ts";
-import PatchColumnForm from "@/components/ui/column/patch/PatchColumnForm.tsx";
+import ColumnForm from "@/components/ui/column/form/ColumnForm.tsx";
 
 const RootPage: FC = () => {
-    const {columns, createColumn, removeColumn, updateColumn, setColumns, isLoading} = useColumnService();
-    const {tasks, createTask, setTasks, updateTask, removeTask} = useTasksService()
+    const {columns, createColumn, removeColumn, updateColumn, setColumns, isLoading: isColumnsLoading} = useColumnService();
+    const {tasks, createTask, setTasks, updateTask, removeTask, isLoading: isTasksLoading} = useTasksService()
 
-    const {reversePopup, closePopup, Popup} = usePopup(isLoading || columns.length === 0);
+    const {reversePopup, closePopup, Popup} = usePopup(isColumnsLoading || columns.length === 0);
     const columnsId = useMemo(() => columns.map((col) => getColumnId(col.id)), [columns]);
 
     const [activeColumn, setActiveColumn] = useState<ColumnView | null>(null);
     const [activeTask, setActiveTask] = useState<TaskLookupView | null>(null);
 
     useEffect(() => {
-        if (!isLoading && columns.length !== 0) {
+        if (!isColumnsLoading && columns.length !== 0) {
             closePopup();
         }
-    }, [isLoading, columns])
+    }, [isColumnsLoading, columns])
 
     const sensors = useSensors(useSensor(PointerSensor, {
         activationConstraint: {
@@ -142,6 +142,9 @@ const RootPage: FC = () => {
         }
     }
 
+    // TODO: create preloader
+    if (isColumnsLoading || isTasksLoading) return (<div>Loading...</div>);
+
     return (
         <div className={styles["kanban-container"]}>
             <DndContext
@@ -152,7 +155,7 @@ const RootPage: FC = () => {
             >
 
                 <Popup>
-                    <PatchColumnForm onSubmit={onSubmit}/>
+                    <ColumnForm onSubmit={onSubmit}/>
                 </Popup>
 
                 <div className={styles["column-container"]}>
