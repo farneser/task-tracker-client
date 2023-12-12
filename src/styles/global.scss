@@ -7,28 +7,34 @@
   padding: 0;
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
+}
 
-  input, button {
-    border: none;
-    background: none;
-    color: inherit;
-    padding: 0;
-    font: inherit;
-    cursor: pointer;
-    outline: inherit;
+
+input, button {
+  border: none;
+  background: none;
+  color: inherit;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
+
+input {
+  padding: 8px;
+  border: 1px solid lighten($background-color, 15%);
+  border-radius: 4px;
+  background-color: lighten($background-color, 10%);
+  color: #fff;
+
+  &:hover, &:focus {
+    border-color: $accent-color;
+    background-color: lighten($background-color, 15%);
   }
+}
 
-  input {
-    padding: 8px;
-    margin-bottom: 16px;
-    border: 1px solid lighten($background-color, 15%);
-    border-radius: 4px;
-    background-color: lighten($background-color, 10%);
-    color: #fff;
-
-    &:hover, &:focus {
-      border-color: $accent-color;
-      background-color: lighten($background-color, 15%);
-    }
-  }
+a {
+  color: $accent-color;
+  margin-top: 16px;
+  text-decoration: none;
 }

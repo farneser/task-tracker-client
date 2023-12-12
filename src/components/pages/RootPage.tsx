@@ -35,12 +35,11 @@ const RootPage: FC = () => {
     const [activeColumn, setActiveColumn] = useState<ColumnView | null>(null);
     const [activeTask, setActiveTask] = useState<TaskLookupView | null>(null);
 
-
     useEffect(() => {
         if (!isLoading && columns.length !== 0) {
             closePopup();
         }
-    }, [isLoading, columns]);
+    }, [isLoading, columns])
 
     const sensors = useSensors(useSensor(PointerSensor, {
         activationConstraint: {

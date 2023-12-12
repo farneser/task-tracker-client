@@ -10,8 +10,8 @@ import {SortableContext, useSortable} from "@dnd-kit/sortable";
 import {ItemTypes} from "@/utils/id/ItemTypes.ts";
 import {getColumnId, getTaskId} from "@/utils/id/id.utils.ts";
 import styles from "./ColumnElement.module.scss";
-import BarsIcon from "@/components/ui/icons/BarsIcon.tsx";
 import TrashIcon from "@/components/ui/icons/TrashIcon.tsx";
+import BarsIcon from "@/components/ui/icons/BarsIcon.tsx";
 
 type ColumnProps = {
     column: ColumnView;
@@ -81,7 +81,7 @@ const ColumnElement: FC<ColumnProps> = (
     return (
         <div className={styles.column__container} ref={setNodeRef} style={style}
              onMouseEnter={() => setMouseIsOver(true)}
-             // onMouseLeave={() => setMouseIsOver(false)}
+             onMouseLeave={() => setMouseIsOver(false)}
         >
             <CreatePopup>
                 <CreateTaskForm onSubmit={onCreateSubmit} columnId={column.id}/>

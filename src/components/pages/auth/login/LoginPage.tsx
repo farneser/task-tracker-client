@@ -30,8 +30,9 @@ const LoginPage: FC = () => {
     return (
         <div className="page">
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
-                <h1>Login page</h1>
-
+                <div>
+                    <h1>Login page</h1>
+                </div>
                 <div>
                     <label className="form__label">Email</label>
                     <input
@@ -71,9 +72,11 @@ const LoginPage: FC = () => {
                         <p className="form__error">{errors.password.message}</p>
                     )}
                 </div>
-                <button type="submit" className="form__button">
-                    Submit
-                </button>
+                <div>
+                    <button type="submit" className="form__button">
+                        Submit
+                    </button>
+                </div>
                 <div className="form__link">
                     <Link to={"/auth/register"}>Don't have an account?</Link>
                 </div>
