@@ -3,7 +3,6 @@ import useColumnService from "@/hooks/useColumnService.ts";
 import ColumnElement from "@/components/ui/column/ColumnElement.tsx";
 import {ColumnView, CreateColumnDto} from "@/services/column/column.types.ts";
 import usePopup from "@/hooks/usePopup.tsx";
-import CreateColumnForm from "@/components/ui/column/create/CreateColumnForm.tsx";
 
 import {
     DndContext,
@@ -24,6 +23,7 @@ import TaskElement from "@/components/ui/task/TaskElement.tsx";
 import useTasksService from "@/hooks/useTasksService.ts";
 import styles from "./RootPage.module.scss";
 import {getColumnId, parseId} from "@/utils/id/id.utils.ts";
+import PatchColumnForm from "@/components/ui/column/patch/PatchColumnForm.tsx";
 
 const RootPage: FC = () => {
     const {columns, createColumn, removeColumn, updateColumn, setColumns, isLoading} = useColumnService();
@@ -152,7 +152,7 @@ const RootPage: FC = () => {
             >
 
                 <Popup>
-                    <CreateColumnForm onSubmit={onSubmit}/>
+                    <PatchColumnForm onSubmit={onSubmit}/>
                 </Popup>
 
                 <div className={styles["column-container"]}>

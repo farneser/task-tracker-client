@@ -1,9 +1,11 @@
-import {FC} from "react";
+import {FC, useState} from "react";
 import {useForm} from "react-hook-form";
 import {ColumnView, PatchColumnDto} from "@/services/column/column.types.ts";
+import styles from "./PatchColumnForm.module.scss";
+import SwitchCheckbox from "@/components/ui/forms/switchCheckbox/SwitchCheckbox.tsx";
 
 type PatchColumnFormProps = {
-    column: ColumnView;
+    column?: ColumnView;
     onSubmit: (data: PatchColumnDto) => void;
 }
 
@@ -14,34 +16,39 @@ const PatchColumnForm: FC<PatchColumnFormProps> = ({onSubmit, column}) => {
         reset
     } = useForm<PatchColumnDto>({defaultValues: column});
 
+    const [isChecked, setIsChecked] = useState(!column ? false : column.isCompleted);
+
+    const handleCheckboxChange = () => {
+        setIsChecked(!isChecked);
+    };
+
     const submit = (data: PatchColumnDto) => {
-        onSubmit(data)
+        onSubmit({...data, isCompleted: isChecked})
         reset()
     }
 
-    return <div>
+    return <form className={styles.form} onSubmit={handleSubmit(submit)}>
         <div>
-            <form onSubmit={handleSubmit(submit)}>
-                <div>
-                    <label>
-                        <span>columnName</span>
-                        <input type="text"
-                               placeholder="columnName" {...register("columnName")} />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        <span>isCompleted</span>
-                        <input type="checkbox"
-                               placeholder="isCompleted" {...register("isCompleted")} />
-                    </label>
-                </div>
-                <div>
-                    <input type="submit"/>
-                </div>
-            </form>
+            <input
+                type="text"
+                placeholder="Column name"
+                {...register("columnName", {required: true})}
+                className={styles.createColumnForm__form__field__input}
+            />
         </div>
-    </div>
+        <div className={styles.createColumnForm__form__field}>
+            <label className={styles.form__label}>Mark tasks in this list as completed</label>
+            <SwitchCheckbox
+                isChecked={isChecked}
+                onCheckboxChange={handleCheckboxChange}
+            />
+        </div>
+        <div>
+            <button type="submit" className="form__button">
+                {column ? "Update column" : "Add column"}
+            </button>
+        </div>
+    </form>
 }
 
 export default PatchColumnForm;
