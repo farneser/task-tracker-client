@@ -24,5 +24,10 @@
     color: white;
     font-weight: bold;
     padding: 20px 40px;
+
+    &:hover {
+      cursor: pointer;
+      background: #4b4b4b;
+    }
   }
 }
