@@ -26,12 +26,14 @@ const TaskForm: FC<PatchTaskFormProps> = ({onSubmit, task, columnId}) => {
             <h1>{task ? "Update task" : "Create a new task"}</h1>
         </div>
         <div>
-            <label className={styles.form__label}>taskName</label>
-            <input type="text" placeholder="columnName" {...register("taskName")}/>
+            <label className={styles.form__label}>Title</label>
+            <textarea className={styles.form__input + " " + styles.form__input_area}
+                      placeholder="columnName" {...register("taskName")}/>
         </div>
         <div>
-            <label className={styles.form__label}>description</label>
-            <input type="text" placeholder="description" {...register("description")} />
+            <label className={styles.form__label}>Description</label>
+            <textarea className={styles.form__input + " " + styles.form__input_area}
+                      placeholder="description" {...register("description")} />
         </div>
         <div>
             <button type="submit" className="form__button">

@@ -35,7 +35,13 @@
 
   &__input {
     width: 94%;
+
+    &_area {
+      resize: vertical;
+      height: auto;
+    }
   }
+
 
   &__button {
     background-color: $accent-color;
@@ -58,5 +64,23 @@
     &:hover {
       text-decoration: underline;
     }
+  }
+
+  input, textarea {
+    padding: 8px;
+    border: 1px solid lighten($background-color, 15%);
+    border-radius: 4px;
+    background-color: lighten($background-color, 10%);
+    color: #fff;
+
+    &:hover {
+      border-color: $accent-color;
+      background-color: lighten($background-color, 15%);
+    }
+  }
+
+  a {
+    color: $accent-color;
+    text-decoration: none;
   }
 }
