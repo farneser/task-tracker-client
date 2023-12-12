@@ -9,6 +9,11 @@
   font-size: 16px;
 }
 
+a {
+  color: $accent-color;
+  text-decoration: none;
+}
+
 input, button, textarea {
   border: none;
   background: none;

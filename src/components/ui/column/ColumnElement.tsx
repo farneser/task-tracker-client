@@ -114,7 +114,7 @@ const ColumnElement: FC<ColumnProps> = (
                     ))}
                 </SortableContext>
             </div>
-            <button onClick={reverseCreatePopup}>Create New Task</button>
+            <button onClick={reverseCreatePopup} className={styles.create__task}>Create New Task</button>
         </div>
     );
 };
