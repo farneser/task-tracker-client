@@ -11,6 +11,7 @@ export interface IAuthContext {
     refreshAuth: () => void;
     user: UserView | null;
     loading: boolean;
+    logout: () => void;
 }
 
 
@@ -42,6 +43,11 @@ export const AuthProvider: FC<PropsWithChildren> = ({children}) => {
         return newToken;
     };
 
+    const logout = () => {
+        updateToken(null);
+        setUser(null);
+    }
+
     const getToken = (): Token | null => {
         return getLocalStorageItem<Token>(constants.authTokenKey);
     }
@@ -52,7 +58,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({children}) => {
 
 
     return (
-        <AuthContext.Provider value={{updateToken, getToken, user, refreshAuth, loading}}>
+        <AuthContext.Provider value={{updateToken, getToken, user, refreshAuth, loading, logout}}>
             {children}
         </AuthContext.Provider>
     );

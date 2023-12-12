@@ -1,6 +1,7 @@
 import {Navigate, Outlet, useLocation} from "react-router-dom";
 import useAuth from "@/hooks/useAuth.ts";
 import Footer from "@/components/ui/layout/footer/Footer.tsx";
+import Header from "@/components/ui/layout/header/Header.tsx";
 
 const RequireAuth = () => {
     const location = useLocation();
@@ -11,7 +12,7 @@ const RequireAuth = () => {
     }
 
     return <>
-        <header>header data</header>
+        <Header/>
         <Outlet/>
         <Footer/>
     </>;
