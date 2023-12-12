@@ -25,6 +25,7 @@ import styles from "./RootPage.module.scss";
 import {getColumnId, parseId} from "@/utils/id/id.utils.ts";
 import ColumnForm from "@/components/ui/column/form/ColumnForm.tsx";
 import useAuth from "@/hooks/useAuth.ts";
+import PlusIcon from "@/components/ui/icons/PlusIcon.tsx";
 
 const RootPage: FC = () => {
     const auth = useAuth();
@@ -180,7 +181,10 @@ const RootPage: FC = () => {
                         ))}
                     </SortableContext>
                     <div className={styles["create-column-container"]}>
-                        <button onClick={reversePopup}>Create New Column</button>
+                        <button onClick={reversePopup}>
+                            <div> Create New Column</div>
+                            <div style={{width: "30px", height: "30px"}}><PlusIcon/></div>
+                        </button>
                     </div>
                 </div>
 

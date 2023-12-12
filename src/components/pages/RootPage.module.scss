@@ -10,7 +10,7 @@
 .column-container {
   display: flex;
   margin: auto 0;
-  height: 70%;
+  height: 90%;
 
   & > div {
     margin: 0 20px;
@@ -28,10 +28,19 @@
     color: white;
     font-weight: bold;
     padding: 20px 40px;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    transition: 400ms;
+
+    & > div {
+      margin: auto 5px;
+    }
 
     &:hover {
-      cursor: pointer;
       background: lighten($background-color, 10%);
+      color: $accent-color;
+      transition: 100ms;
     }
   }
 }

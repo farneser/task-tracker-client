@@ -1,6 +1,8 @@
 @import "src/styles/constants";
 
 .footer {
+  bottom: 0;
+  width: 100%;
   color: #fff;
   text-align: center;
   display: flex;
@@ -21,17 +23,17 @@
 
   & > div {
     opacity: 0.5;
-    transition: 1s;
+    transition: 400ms;
     padding: 20px 15px;
 
-    &:hover{
+    &:hover {
       opacity: 1;
-      transition: 350ms;
+      transition: 400ms;
     }
   }
 
   @media (max-width: 768px) {
-    &{
+    & {
       flex-direction: column;
       justify-content: left;
       text-align: left;

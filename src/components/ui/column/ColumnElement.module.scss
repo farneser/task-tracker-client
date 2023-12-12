@@ -43,7 +43,7 @@
 
       &__title {
         cursor: pointer;
-        transition: 700ms;
+        transition: 400ms;
 
         &:hover {
           color: $accent-color;
@@ -55,8 +55,10 @@
         width: 30px;
         height: 30px;
         cursor: grab;
+        transition: 400ms;
 
         &:hover {
+          transition: 100ms;
           color: $accent-color;
         }
       }
@@ -69,9 +71,11 @@
         border: none;
         cursor: pointer;
         border-radius: 10px;
+        transition: 400ms;
 
         &:hover {
           color: $accent-color;
+          transition: 100ms;
         }
       }
     }
@@ -92,9 +96,12 @@
       background: lighten($background-color, 5%);
       border-radius: 0 0 10px 10px;
       cursor: pointer;
+      transition: 400ms;
 
       &:hover {
         background: lighten($background-color, 10%);
+        color: $accent-color;
+        transition: 100ms;
       }
     }
   }

@@ -1,7 +1,6 @@
 @import "src/styles/constants";
 
 .header {
-  position: absolute;
   width: 100%;
   color: white;
 
@@ -62,6 +61,11 @@
     border-radius: 5px;
     padding: 5px 10px;
     cursor: pointer;
+    transition: 400ms;
+
+    &:hover {
+      transition: 100ms;
+    }
   }
 
   &__logout {
@@ -69,5 +73,10 @@
     border-radius: 5px;
     padding: 5px 10px;
     cursor: pointer;
+    transition: 400ms;
+
+    &:hover {
+      transition: 100ms;
+    }
   }
 }

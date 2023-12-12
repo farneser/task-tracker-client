@@ -21,7 +21,6 @@ const UserSettingsForm: FC<UserSettingsFormProps> = ({user, onSubmit}) => {
         onSubmit({...data, isSubscribed: isChecked})
     }
 
-
     return <form className={styles.form} onSubmit={handleSubmit(submit)}>
         <div>
             <h1>User settings</h1>

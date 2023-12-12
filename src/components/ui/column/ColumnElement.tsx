@@ -12,6 +12,7 @@ import styles from "./ColumnElement.module.scss";
 import TrashIcon from "@/components/ui/icons/TrashIcon.tsx";
 import BarsIcon from "@/components/ui/icons/BarsIcon.tsx";
 import TaskForm from "@/components/ui/task/form/TaskForm.tsx";
+import PlusIcon from "@/components/ui/icons/PlusIcon.tsx";
 
 type ColumnProps = {
     column: ColumnView;
@@ -114,7 +115,10 @@ const ColumnElement: FC<ColumnProps> = (
                     ))}
                 </SortableContext>
             </div>
-            <button onClick={reverseCreatePopup} className={styles.create__task}>Create New Task</button>
+            <button onClick={reverseCreatePopup} className={styles.create__task}>
+                <div>Create New Task</div>
+                <div style={{width: "30px", height: "30px"}}><PlusIcon/></div>
+            </button>
         </div>
     );
 };
