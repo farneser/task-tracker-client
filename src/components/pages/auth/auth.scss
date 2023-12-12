@@ -1,0 +1,61 @@
+@import "src/styles/constants";
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: $background-color;
+  color: #fff;
+  font-family: Arial, sans-serif;
+
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .form {
+    max-width: 300px;
+    width: 100%;
+    padding: 20px;
+    background-color: #333;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    &__label {
+      color: #fff;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    &__error {
+      color: #ff3333;
+      margin-top: 4px;
+    }
+
+    &__button {
+      background-color: $confirm-button-color;
+      color: #fff;
+      padding: 10px 20px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+
+      &:hover {
+        background-color: darken($confirm-button-color, 10%);
+      }
+    }
+  }
+
+  a {
+    color: $confirm-button-color;
+    margin-top: 16px;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

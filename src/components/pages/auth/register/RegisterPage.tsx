@@ -1,13 +1,19 @@
 import {FC} from "react";
-import RegisterForm from "@/components/ui/auth/registerForm/RegisterForm.tsx";
 import useAuth from "@/hooks/useAuth.ts";
 import {Link, useNavigate} from "react-router-dom";
 import {IRegister} from "@/services/auth/auth.types.ts";
 import authService from "@/services/auth/auth.service.ts";
+import "../auth.scss";
+import {useForm} from "react-hook-form";
 
 const RegisterPage: FC = () => {
     const auth = useAuth();
     const navigate = useNavigate();
+    const {
+        register,
+        handleSubmit,
+        formState: {errors},
+    } = useForm<IRegister>();
 
     const onSubmit = async (data: IRegister) => {
         auth.updateToken(null)
@@ -22,11 +28,77 @@ const RegisterPage: FC = () => {
             .catch(e => console.log(e))
     }
 
-
     return (
-        <div>
-            Register page
-            <RegisterForm onSubmit={onSubmit}/>
+        <div className="page">
+            <h1>Register page</h1>
+            <form className="form" onSubmit={handleSubmit(onSubmit)}>
+                <div>
+                    <label className="form__label">Email</label>
+                    <input
+                        type="text"
+                        placeholder="Email"
+                        className="form__input"
+                        {...register('email', {
+                            required: 'Email is required',
+                            pattern: {
+                                value: /^\S+@\S+$/i,
+                                message: 'Invalid email address',
+                            },
+                        })}
+                    />
+                    {errors.email && <p className="form__error">{errors.email.message}</p>}
+                </div>
+
+                <div>
+                    <label className="form__label">Password</label>
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        className="form__input"
+                        {...register('password', {
+                            required: 'Password is required',
+                            maxLength: {
+                                value: 64,
+                                message: 'Password is too long',
+                            },
+                            minLength: {
+                                value: 8,
+                                message: 'Password is too short',
+                            },
+                        })}
+                    />
+                    {errors.password && (
+                        <p className="form__error">{errors.password.message}</p>
+                    )}
+                </div>
+
+                <div>
+                    <label className="form__label">Confirm Password</label>
+                    <input
+                        type="password"
+                        placeholder="Confirm Password"
+                        className="form__input"
+                        {...register('confirmPassword', {
+                            required: 'Confirm Password is required',
+                            maxLength: {
+                                value: 64,
+                                message: 'Password is too long',
+                            },
+                            minLength: {
+                                value: 8,
+                                message: 'Password is too short',
+                            },
+                        })}
+                    />
+                    {errors.confirmPassword && (
+                        <p className="form__error">{errors.confirmPassword.message}</p>
+                    )}
+                </div>
+
+                <button type="submit" className="form__button">
+                    Submit
+                </button>
+            </form>
             <Link to={"/auth/login"}>Already have an account?</Link>
         </div>
     );
