@@ -46,7 +46,7 @@ const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask}) => {
         timeZone: 'UTC'
     });
 
-    const [mouseIsOver, setMouseIsOver] = useState(false);
+    const [mouseIsOver, setMouseIsOver] = useState(true);
 
     const style = {
         transition,
@@ -74,9 +74,11 @@ const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask}) => {
                  onMouseEnter={() => setMouseIsOver(true)}
                  onMouseLeave={() => setMouseIsOver(false)}
             >
-                <div className={styles.task__name} onClick={reversePopup}>
+                <div className={styles.task__name} onClick={() => {
+                    return updateTask && reversePopup();
+                }}>
                     <div>{task.taskName}</div>
-                    {mouseIsOver && <div>
+                    {mouseIsOver && deleteTask && <div>
                         <button onClick={deleteTask} className={styles.task__delete}>
                             <TrashIcon/>
                         </button>

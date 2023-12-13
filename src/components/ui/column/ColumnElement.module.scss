@@ -27,6 +27,7 @@
       border-radius: 10px 10px 0 0;
       color: white;
       font-weight: bold;
+      height: 30px;
       background: lighten($background-color, 5%);
       padding: 20px;
       display: flex;
@@ -42,8 +43,10 @@
       }
 
       &__title {
+        display: flex;
         cursor: pointer;
         transition: 400ms;
+        align-items: center;
 
         &:hover {
           color: $accent-color;

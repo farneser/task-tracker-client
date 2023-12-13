@@ -35,5 +35,7 @@ export const taskService = {
         const data = await axiosInstance.patch<TaskLookupView[]>(`/api/v1/task/archived`);
 
         return data.data;
+    }, async archive(): Promise<void> {
+        await axiosInstance.put(`/api/v1/task/archive`);
     }
 }

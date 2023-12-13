@@ -12,6 +12,7 @@ interface TaskSeriesHook {
     updateTask: (id: number, data: PatchTaskDto) => Promise<void>;
     setTasks: (tasks: TaskLookupView[]) => void;
     removeTask: (taskId: number) => Promise<void>;
+    archiveTasks: () => Promise<void>;
 }
 
 
@@ -67,12 +68,17 @@ export const TaskProvider: FC<PropsWithChildren> = ({children}) => {
         setTasks([...tasks, {...response, columnId: response.column?.id || -1}]);
     }
 
+    const archiveTasks = async () => {
+        await taskService.archive().then();
+        await updateTasks().then();
+    }
+
     return (
         <TaskContext.Provider
             value={{
                 tasks, isLoading, error,
                 updateTasks, setTasks: setTasksHandler, updateTask,
-                removeTask, createTask
+                removeTask, createTask, archiveTasks
             }}>
             {children}
         </TaskContext.Provider>

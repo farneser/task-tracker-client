@@ -12,6 +12,9 @@ interface ColumnServiceHook {
     updateColumn: (id: number, column: PatchColumnDto) => Promise<void>;
     removeColumn: (columnId: number) => Promise<void>;
     setColumns: (columns: ColumnView[]) => void;
+    isArchiveOpen: boolean;
+    setIsArchiveOpen: (value: boolean) => void;
+    archiveColumn: ColumnView;
 }
 
 
@@ -21,6 +24,7 @@ export const ColumnProvider: FC<PropsWithChildren> = ({children}) => {
     const [columns, setColumns] = useState<ColumnView[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<ErrorMessage | null>(null);
+    const [isArchiveOpen, setIsArchiveOpen] = useState(false);
 
     useEffect(() => {
         updateColumns().then();
@@ -71,13 +75,23 @@ export const ColumnProvider: FC<PropsWithChildren> = ({children}) => {
         setColumns(columns);
     }
 
+    const archiveColumn: ColumnView = {
+        id: -1,
+        columnName: "Archive",
+        orderNumber: -1,
+        isCompleted: false,
+        tasks: null
+    }
+
 
     return (
         <ColumnContext.Provider value={{
             columns, isLoading, error,
             updateColumns, createColumn,
             removeColumn, updateColumn,
-            setColumns: setColumnsHandler
+            setColumns: setColumnsHandler,
+            isArchiveOpen, setIsArchiveOpen,
+            archiveColumn
         }}>
             {children}
         </ColumnContext.Provider>

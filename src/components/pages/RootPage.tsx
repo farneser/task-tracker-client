@@ -29,7 +29,16 @@ import PlusIcon from "@/components/ui/icons/PlusIcon.tsx";
 
 const RootPage: FC = () => {
     const auth = useAuth();
-    const {columns, createColumn, removeColumn, updateColumn, setColumns, isLoading: isColumnsLoading} = useColumns();
+    const {
+        columns,
+        createColumn,
+        removeColumn,
+        updateColumn,
+        setColumns,
+        isLoading: isColumnsLoading,
+        isArchiveOpen,
+        archiveColumn
+    } = useColumns();
     const {tasks, createTask, setTasks, updateTask, removeTask, isLoading: isTasksLoading} = useTasks()
 
     const {reversePopup, closePopup, Popup} = usePopup(isColumnsLoading || columns.length === 0);
@@ -180,6 +189,11 @@ const RootPage: FC = () => {
                             />
                         ))}
                     </SortableContext>
+                    {isArchiveOpen && <ColumnElement
+                        column={archiveColumn}
+                        tasks={tasks.filter(task => task.columnId < 0)}
+                        deleteTask={removeTask}
+                    />}
                     <div className={styles["create-column-container"]}>
                         <button onClick={reversePopup}>
                             <div> Create New Column</div>
@@ -188,27 +202,30 @@ const RootPage: FC = () => {
                     </div>
                 </div>
 
-                {createPortal(<DragOverlay>
-                    {activeColumn && (
-                        <ColumnElement
-                            tasks={tasks.filter(task => task.columnId === activeColumn.id)}
-                            column={activeColumn}
-                            updateColumn={updateColumn}
-                            deleteColumn={() => removeColumn(activeColumn.id).then()}
-                            updateTask={updateTask}
-                            deleteTask={removeTask}
-                            createTask={createTask}
-                        />
-                    )}
-                    {activeTask && (
-                        <TaskElement task={activeTask} updateTask={updateTask} deleteTask={() => {
-                            removeTask(activeTask.id).then()
-                        }}/>
-                    )}
-                </DragOverlay>, document.body)}
+                {
+                    createPortal(<DragOverlay>
+                        {activeColumn && (
+                            <ColumnElement
+                                tasks={tasks.filter(task => task.columnId === activeColumn.id)}
+                                column={activeColumn}
+                                updateColumn={updateColumn}
+                                deleteColumn={() => removeColumn(activeColumn.id).then()}
+                                updateTask={updateTask}
+                                deleteTask={removeTask}
+                                createTask={createTask}
+                            />
+                        )}
+                        {activeTask && (
+                            <TaskElement task={activeTask} updateTask={updateTask} deleteTask={() => {
+                                removeTask(activeTask.id).then()
+                            }}/>
+                        )}
+                    </DragOverlay>, document.body)
+                }
             </DndContext>
         </div>
-    );
+    )
+        ;
 }
 
 
