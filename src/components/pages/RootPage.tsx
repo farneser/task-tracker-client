@@ -26,6 +26,7 @@ import {getColumnId, parseId} from "@/utils/id/id.utils.ts";
 import ColumnForm from "@/components/ui/column/form/ColumnForm.tsx";
 import useAuth from "@/hooks/useAuth.ts";
 import PlusIcon from "@/components/ui/icons/PlusIcon.tsx";
+import Loader from "@/components/ui/loader/Loader.tsx";
 
 const RootPage: FC = () => {
     const auth = useAuth();
@@ -155,17 +156,16 @@ const RootPage: FC = () => {
         }
     }
 
-    // TODO: create preloader
     if (isColumnsLoading || isTasksLoading || auth.loading) {
-        return <div>Loading...</div>
+        return <Loader/>
     }
 
     return (
         <div className={styles["kanban-container"]}>
             <DndContext sensors={sensors}
-                onDragStart={onDragStart}
-                onDragEnd={onDragEnd}
-                onDragOver={onDragOver}>
+                        onDragStart={onDragStart}
+                        onDragEnd={onDragEnd}
+                        onDragOver={onDragOver}>
 
                 <Popup>
                     <ColumnForm onSubmit={onSubmit}/>
