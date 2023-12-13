@@ -31,8 +31,9 @@ const RegisterPage: FC = () => {
     return (
         <div className="page">
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
-                <h1>Register page</h1>
-
+                <div>
+                    <h1>Register page</h1>
+                </div>
                 <div>
                     <label className="form__label">Email</label>
                     <input
