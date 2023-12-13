@@ -162,12 +162,10 @@ const RootPage: FC = () => {
 
     return (
         <div className={styles["kanban-container"]}>
-            <DndContext
+            <DndContext sensors={sensors}
                 onDragStart={onDragStart}
                 onDragEnd={onDragEnd}
-                onDragOver={onDragOver}
-                sensors={sensors}
-            >
+                onDragOver={onDragOver}>
 
                 <Popup>
                     <ColumnForm onSubmit={onSubmit}/>
@@ -223,9 +221,7 @@ const RootPage: FC = () => {
                 }
             </DndContext>
         </div>
-    )
-        ;
+    );
 }
-
 
 export default RootPage;
