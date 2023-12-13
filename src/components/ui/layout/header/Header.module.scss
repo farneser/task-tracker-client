@@ -1,0 +1,82 @@
+@import "src/styles/constants";
+
+.header {
+  width: 100%;
+  color: white;
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px 20px;
+    background-color: rgba(darken($background-color, 5%), 0.5);
+
+    & > * {
+      margin: 5px 10px;
+    }
+
+    & > button {
+      background-color: lighten($background-color, 10%);
+      padding: 10px 20px;
+
+      &:hover {
+        background-color: lighten($background-color, 15%);
+      }
+    }
+  }
+
+  &__settings {
+    width: 30px;
+    height: 30px;
+  }
+
+  &__user {
+    display: flex;
+    align-items: center;
+    margin: auto 0 auto auto;
+    cursor: pointer;
+    transition: 400ms;
+
+    &_email {
+      padding: 5px;
+      border-radius: 5px;
+    }
+
+    & > span {
+      margin: 10px 5px;
+
+      &:last-child {
+        margin: 0;
+      }
+    }
+
+    &:hover {
+      color: $accent-color;
+      transition: 100ms;
+    }
+  }
+
+  &__refresh {
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: 400ms;
+
+    &:hover {
+      transition: 100ms;
+    }
+  }
+
+  &__logout {
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: 400ms;
+
+    &:hover {
+      transition: 100ms;
+    }
+  }
+}

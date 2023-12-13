@@ -1,7 +1,7 @@
-import {useEffect, useState} from 'react';
-import {ColumnView, CreateColumnDto, PatchColumnDto} from '@/services/column/column.types.ts';
-import {columnService} from "@/services/column/column.service.ts";
+import {createContext, FC, PropsWithChildren, useEffect, useState} from "react";
+import {ColumnView, CreateColumnDto, PatchColumnDto} from "@/services/column/column.types.ts";
 import {ErrorMessage} from "@/models/Message.ts";
+import {columnService} from "@/services/column/column.service.ts";
 
 interface ColumnServiceHook {
     columns: ColumnView[];
@@ -14,7 +14,10 @@ interface ColumnServiceHook {
     setColumns: (columns: ColumnView[]) => void;
 }
 
-const useColumnService = (): ColumnServiceHook => {
+
+export const ColumnContext = createContext<ColumnServiceHook | null>(null);
+
+export const ColumnProvider: FC<PropsWithChildren> = ({children}) => {
     const [columns, setColumns] = useState<ColumnView[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<ErrorMessage | null>(null);
@@ -68,12 +71,15 @@ const useColumnService = (): ColumnServiceHook => {
         setColumns(columns);
     }
 
-    return {
-        columns, isLoading, error,
-        updateColumns, createColumn,
-        removeColumn, updateColumn,
-        setColumns: setColumnsHandler
-    };
-}
 
-export default useColumnService;
+    return (
+        <ColumnContext.Provider value={{
+            columns, isLoading, error,
+            updateColumns, createColumn,
+            removeColumn, updateColumn,
+            setColumns: setColumnsHandler
+        }}>
+            {children}
+        </ColumnContext.Provider>
+    );
+};

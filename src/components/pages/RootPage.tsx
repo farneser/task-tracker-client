@@ -1,9 +1,8 @@
-import {FC, useMemo, useState} from "react";
-import useColumnService from "@/hooks/useColumnService.ts";
+import {FC, useEffect, useMemo, useState} from "react";
+import useColumns from "@/hooks/useColumns.ts";
 import ColumnElement from "@/components/ui/column/ColumnElement.tsx";
-import {ColumnView, CreateColumnDto, PatchColumnDto} from "@/services/column/column.types.ts";
+import {ColumnView, CreateColumnDto} from "@/services/column/column.types.ts";
 import usePopup from "@/hooks/usePopup.tsx";
-import CreateColumnForm from "@/components/ui/column/create/CreateColumnForm.tsx";
 
 import {
     DndContext,
@@ -19,34 +18,32 @@ import {
 import {arrayMove, SortableContext} from "@dnd-kit/sortable";
 import {createPortal} from "react-dom";
 import {ItemTypes} from "@/utils/id/ItemTypes.ts";
-import {CreateTaskDto, PatchTaskDto, TaskLookupView} from "@/services/task/task.types.ts";
+import {TaskLookupView} from "@/services/task/task.types.ts";
 import TaskElement from "@/components/ui/task/TaskElement.tsx";
-import useTasksService from "@/hooks/useTasksService.ts";
+import useTasks from "@/hooks/useTasks.ts";
 import styles from "./RootPage.module.scss";
 import {getColumnId, parseId} from "@/utils/id/id.utils.ts";
+import ColumnForm from "@/components/ui/column/form/ColumnForm.tsx";
+import useAuth from "@/hooks/useAuth.ts";
+import PlusIcon from "@/components/ui/icons/PlusIcon.tsx";
 
 const RootPage: FC = () => {
-    const {
-        columns,
-        createColumn,
-        removeColumn,
-        updateColumn,
-        setColumns
-    } = useColumnService();
+    const auth = useAuth();
+    const {columns, createColumn, removeColumn, updateColumn, setColumns, isLoading: isColumnsLoading} = useColumns();
+    const {tasks, createTask, setTasks, updateTask, removeTask, isLoading: isTasksLoading} = useTasks()
 
-    const {
-        tasks,
-        createTask,
-        setTasks,
-        updateTask,
-        removeTask
-    } = useTasksService()
-
-    const {reversePopup, closePopup, Popup} = usePopup();
+    const {reversePopup, closePopup, Popup} = usePopup(isColumnsLoading || columns.length === 0);
     const columnsId = useMemo(() => columns.map((col) => getColumnId(col.id)), [columns]);
 
     const [activeColumn, setActiveColumn] = useState<ColumnView | null>(null);
     const [activeTask, setActiveTask] = useState<TaskLookupView | null>(null);
+
+    useEffect(() => {
+        if (!isColumnsLoading && columns.length !== 0) {
+            closePopup();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isColumnsLoading, columns])
 
     const sensors = useSensors(useSensor(PointerSensor, {
         activationConstraint: {
@@ -59,14 +56,6 @@ const RootPage: FC = () => {
 
         closePopup();
     };
-
-    const updateColumnHandler = async (columnId: number, data: PatchColumnDto) => {
-        await updateColumn(columnId, data);
-    };
-
-    const deleteColumnHandler = async (id: number) => {
-        await removeColumn(id);
-    }
 
     const onDragStart = (event: DragStartEvent) => {
         if (event.active.data.current?.type === ItemTypes.COLUMN) {
@@ -99,7 +88,7 @@ const RootPage: FC = () => {
 
             columns[activeColumnIndex].orderNumber = overColumnIndex;
 
-            updateColumnHandler(columns[activeColumnIndex].id, columns[activeColumnIndex]).then();
+            updateColumn(columns[activeColumnIndex].id, columns[activeColumnIndex]).then();
 
             return arrayMove(columns, activeColumnIndex, overColumnIndex);
         })(columns))
@@ -110,8 +99,8 @@ const RootPage: FC = () => {
 
         if (!over) return;
 
-        const activeId = parseId(active.id);
-        const overId = parseId(over.id);
+        const activeId = active.id;
+        const overId = over.id;
 
         if (activeId === overId) return;
 
@@ -122,20 +111,20 @@ const RootPage: FC = () => {
 
         if (isActiveATask && isOverATask) {
             setTasks(((tasks) => {
-                const activeIndex = tasks.findIndex((t) => t.id === activeId);
-                const overIndex = tasks.findIndex((t) => t.id === overId);
+                const activeIndex = tasks.findIndex((t) => t.id === parseId(activeId));
+                const overIndex = tasks.findIndex((t) => t.id === parseId(overId));
 
                 tasks[activeIndex].orderNumber = overIndex;
 
                 if (tasks[activeIndex].columnId != tasks[overIndex].columnId) {
                     tasks[activeIndex].columnId = tasks[overIndex].columnId;
 
-                    updateTaskHandler(tasks[activeIndex].id, tasks[activeIndex]).then();
+                    updateTask(tasks[activeIndex].id, tasks[activeIndex]).then();
 
                     return arrayMove(tasks, activeIndex, overIndex - 1);
                 }
 
-                updateTaskHandler(tasks[activeIndex].id, tasks[activeIndex]).then();
+                updateTask(tasks[activeIndex].id, tasks[activeIndex]).then();
 
                 return arrayMove(tasks, activeIndex, overIndex);
             })(tasks));
@@ -145,30 +134,23 @@ const RootPage: FC = () => {
 
         if (isActiveATask && isOverAColumn) {
             setTasks(((tasks) => {
-                const activeIndex = tasks.findIndex((t) => t.id === activeId);
+                const activeIndex = tasks.findIndex((t) => t.id === parseId(activeId));
 
-                tasks[activeIndex].columnId = overId;
-                tasks[activeIndex].orderNumber = tasks.filter((t) => t.columnId === overId).length;
+                tasks[activeIndex].columnId = parseId(overId);
+                tasks[activeIndex].orderNumber = tasks.filter((t) => t.columnId === parseId(overId)).length;
 
-                updateTaskHandler(tasks[activeIndex].id, tasks[activeIndex]).then();
+                updateTask(tasks[activeIndex].id, tasks[activeIndex]).then();
 
                 return arrayMove(tasks, activeIndex, activeIndex);
             })(tasks));
         }
     }
 
-    const updateTaskHandler = async (id: number, data: PatchTaskDto) => {
-        await updateTask(id, data)
-    };
-
-    const createTaskHandler = async (dto: CreateTaskDto) => {
-        await createTask(dto);
+    // TODO: create preloader
+    if (isColumnsLoading || isTasksLoading || auth.loading) {
+        console.log('loading in root page')
+        return <div>Loading...</div>
     }
-
-    const deleteTaskHandler = async (id: number) => {
-        await removeTask(id);
-    };
-
 
     return (
         <div className={styles["kanban-container"]}>
@@ -180,26 +162,29 @@ const RootPage: FC = () => {
             >
 
                 <Popup>
-                    <CreateColumnForm onSubmit={onSubmit}/>
+                    <ColumnForm onSubmit={onSubmit}/>
                 </Popup>
 
                 <div className={styles["column-container"]}>
                     <SortableContext items={columnsId}>
                         {columns.map((column) => (
                             <ColumnElement
-                                key={column.id}
+                                key={getColumnId(column.id)}
                                 column={column}
-                                deleteColumn={() => deleteColumnHandler(column.id).then()}
+                                deleteColumn={() => removeColumn(column.id).then()}
                                 tasks={tasks.filter((task) => task.columnId === column.id)}
-                                updateColumn={updateColumnHandler}
-                                updateTask={updateTaskHandler}
-                                deleteTask={deleteTaskHandler}
-                                createTask={createTaskHandler}
+                                updateColumn={updateColumn}
+                                updateTask={updateTask}
+                                deleteTask={removeTask}
+                                createTask={createTask}
                             />
                         ))}
                     </SortableContext>
                     <div className={styles["create-column-container"]}>
-                        <button onClick={reversePopup}>Create New Column</button>
+                        <button onClick={reversePopup}>
+                            <div> Create New Column</div>
+                            <div style={{width: "30px", height: "30px"}}><PlusIcon/></div>
+                        </button>
                     </div>
                 </div>
 
@@ -208,20 +193,19 @@ const RootPage: FC = () => {
                         <ColumnElement
                             tasks={tasks.filter(task => task.columnId === activeColumn.id)}
                             column={activeColumn}
-                            updateColumn={updateColumnHandler}
-                            deleteColumn={() => deleteColumnHandler(activeColumn.id).then()}
-                            updateTask={updateTaskHandler}
-                            deleteTask={deleteTaskHandler}
-                            createTask={createTaskHandler}
+                            updateColumn={updateColumn}
+                            deleteColumn={() => removeColumn(activeColumn.id).then()}
+                            updateTask={updateTask}
+                            deleteTask={removeTask}
+                            createTask={createTask}
                         />
                     )}
                     {activeTask && (
-                        <TaskElement task={activeTask} updateTask={updateTaskHandler} deleteTask={() => {
-                            deleteTaskHandler(activeTask.id).then()
+                        <TaskElement task={activeTask} updateTask={updateTask} deleteTask={() => {
+                            removeTask(activeTask.id).then()
                         }}/>
                     )}
                 </DragOverlay>, document.body)}
-
             </DndContext>
         </div>
     );

@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+@import 'constants';
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+}
+
+a {
+  color: $accent-color;
+  text-decoration: none;
+}
+
+input, button, textarea {
+  border: none;
+  background: none;
+  color: inherit;
+  padding: 0;
+  font: inherit;
+  outline: inherit;
+}

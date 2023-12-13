@@ -43,7 +43,7 @@ yarn start
 
 You can configure your environment by system environment or `.env`
 
-Example of `.env` you can see at `demo.env` file
+Example of `.env` you can see at `env.example` file
 
 | Parameter | Default value           | Description        |
 |-----------|-------------------------|--------------------|

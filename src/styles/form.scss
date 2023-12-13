@@ -1,0 +1,81 @@
+@import "constants";
+
+.form {
+  max-width: 300px;
+  width: 100%;
+  padding: 3%;
+  background-color: lighten($background-color, 5%);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+  & > div {
+    margin-bottom: 16px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    & > h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+  }
+
+  &__label {
+    color: #fff;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  &__error {
+    color: #ff3333;
+    //margin-top: 4px;
+  }
+
+  &__input {
+    width: 94%;
+
+    &_area {
+      resize: vertical;
+      height: auto;
+    }
+  }
+
+
+  &__button {
+    background-color: $accent-color;
+    color: #fff;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+
+    &:hover {
+      background-color: darken($accent-color, 10%);
+    }
+  }
+
+  &__link {
+    color: $accent-color;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  input, textarea {
+    padding: 8px;
+    border: 1px solid lighten($background-color, 15%);
+    border-radius: 4px;
+    background-color: lighten($background-color, 10%);
+    color: #fff;
+
+    &:hover {
+      border-color: $accent-color;
+      background-color: lighten($background-color, 15%);
+    }
+  }
+}

@@ -1,28 +1,46 @@
+@import "src/styles/constants";
+
 .kanban-container {
   justify-content: space-between;
-  background: #262626;
   display: flex;
   height: 100vh;
   overflow-y: hidden;
-  padding: 0 50px;
 }
 
 .column-container {
   display: flex;
   margin: auto 0;
-  height: 70%;
+  height: 90%;
+
+  & > div {
+    margin: 0 20px;
+  }
 }
 
 .create-column-container {
   height: 100%;
-  width: 350px;
+  margin: 0 20px;
 
   button {
-    background: #3b3b3b;
+    background: lighten($background-color, 5%);
     border: none;
     border-radius: 10px;
     color: white;
     font-weight: bold;
     padding: 20px 40px;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    transition: 400ms;
+
+    & > div {
+      margin: auto 5px;
+    }
+
+    &:hover {
+      background: lighten($background-color, 10%);
+      color: $accent-color;
+      transition: 100ms;
+    }
   }
 }

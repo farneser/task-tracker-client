@@ -4,6 +4,7 @@ import {userService} from "@/services/user/user.service.ts";
 import {Token} from "@/models/token.ts";
 import {getLocalStorageItem, removeLocalStorage, setLocalStorage} from "@/utils/localStorage.utils.ts";
 import constants from "@/constants.ts";
+import {ErrorMessage} from "@/models/Message.ts";
 
 export interface IAuthContext {
     updateToken: (token: Token | null) => void;
@@ -11,25 +12,31 @@ export interface IAuthContext {
     refreshAuth: () => void;
     user: UserView | null;
     loading: boolean;
+    logout: () => void;
+    error: ErrorMessage | null;
+    patchUser: (user: UserView) => void;
 }
-
 
 export const AuthContext = createContext<IAuthContext | null>(null);
 
 export const AuthProvider: FC<PropsWithChildren> = ({children}) => {
     const [user, setUser] = useState<UserView | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<ErrorMessage | null>(null);
 
     const refreshAuth = async () => {
-        try {
-            setLoading(true);
-            const user = await userService.get();
-            setUser(user);
-        } catch (error) {
-            setUser(null);
-        } finally {
-            setLoading(false);
-        }
+        setLoading(true);
+        userService
+            .get()
+            .then((user) => {
+                setUser(user);
+            })
+            .catch((e) => {
+                setError(e);
+            })
+            .finally(() => {
+                setLoading(false);
+            })
     };
 
     const updateToken = (newToken: Token | null) => {
@@ -42,17 +49,36 @@ export const AuthProvider: FC<PropsWithChildren> = ({children}) => {
         return newToken;
     };
 
+    const logout = async () => {
+        updateToken(null);
+        setUser(null);
+    }
+
     const getToken = (): Token | null => {
         return getLocalStorageItem<Token>(constants.authTokenKey);
+    }
+
+    const patchUser = async (user: UserView) => {
+        setLoading(true);
+        userService
+            .patch({isSubscribed: user.isSubscribed})
+            .then((user) => {
+                setUser(user);
+            })
+            .catch((e) => {
+                setError(e);
+            })
+            .finally(() => {
+                setLoading(false);
+            })
     }
 
     useEffect(() => {
         refreshAuth().then()
     }, []);
 
-
     return (
-        <AuthContext.Provider value={{updateToken, getToken, user, refreshAuth, loading}}>
+        <AuthContext.Provider value={{updateToken, getToken, user, refreshAuth, loading, logout, error, patchUser}}>
             {children}
         </AuthContext.Provider>
     );
