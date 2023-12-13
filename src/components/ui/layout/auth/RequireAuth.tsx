@@ -16,7 +16,6 @@ const RequireAuth = () => {
 
     // TODO loader
     if (loading) {
-        console.log('loading')
         return <div>Loading...</div>;
     }
 

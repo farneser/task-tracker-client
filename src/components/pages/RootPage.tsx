@@ -157,7 +157,6 @@ const RootPage: FC = () => {
 
     // TODO: create preloader
     if (isColumnsLoading || isTasksLoading || auth.loading) {
-        console.log('loading in root page')
         return <div>Loading...</div>
     }
 

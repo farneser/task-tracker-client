@@ -12,7 +12,7 @@ const Header: FC = () => {
     const {user, logout, loading, patchUser} = useAuth();
     const {Popup, reversePopup, closePopup} = usePopup(false)
 
-    const {updateColumns, setIsArchiveOpen, isArchiveOpen} = useColumns()
+    const {updateColumns, setIsArchiveOpen, isArchiveOpen, columns} = useColumns()
     const {archiveTasks} = useTasks()
     const {updateTasks} = useTasks()
 
@@ -38,7 +38,10 @@ const Header: FC = () => {
 
         <div className={styles.header__container}>
             <button className={styles.header__button} onClick={refresh}>Refresh tasks</button>
-            <button className={styles.header__button} onClick={archiveTasks}>Archive tasks</button>
+            <button className={styles.header__button} onClick={() => archiveTasks(
+                columns.filter(c => c.isCompleted).map(c => c.id))}>
+                Archive tasks
+            </button>
             <button className={styles.header__button} onClick={() => setIsArchiveOpen(!isArchiveOpen)}>
                 {isArchiveOpen ? "Close archive" : "Open archive"}
             </button>
