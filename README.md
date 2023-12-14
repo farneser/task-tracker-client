@@ -39,6 +39,10 @@ yarn start
 # here is a docker-compose example
 ```
 
+### Dockerfile
+
+You can get dist folder from docker image on `/app/dist`
+
 ## Environment
 
 You can configure your environment by system environment or `.env`
