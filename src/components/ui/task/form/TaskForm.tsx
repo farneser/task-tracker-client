@@ -29,8 +29,12 @@ const TaskForm: FC<PatchTaskFormProps> = ({onSubmit, task, columnId}) => {
         <div>
             <label className={styles.form__label}>Title</label>
             <textarea className={styles.form__input + " " + styles.form__input_area}
-                      placeholder="Task title" {...register("taskName", {required: "Task title is required"})}/>
-            {errors.taskName && <p className="form__error">{errors.taskName.message}</p>}
+                      placeholder="Task title" {...register("taskName", {
+                required: "Task title is required",
+                minLength: {value: 1, message: "Task title is too short"},
+                maxLength: {value: 255, message: "Task title is too long. Max length is 255 characters"}
+            })}/>
+            {errors.taskName && <p className={styles.form__error}>{errors.taskName.message}</p>}
         </div>
         <div>
             <label className={styles.form__label}>Description</label>
@@ -38,7 +42,7 @@ const TaskForm: FC<PatchTaskFormProps> = ({onSubmit, task, columnId}) => {
                       placeholder="Description" {...register("description")} />
         </div>
         <div>
-            <button type="submit" className="form__button">
+            <button type="submit" className={styles.form__button}>
                 {task ? "Update task" : "Add task"}
             </button>
         </div>
