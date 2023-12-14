@@ -13,14 +13,15 @@ import TrashIcon from "@/components/ui/icons/TrashIcon.tsx";
 import BarsIcon from "@/components/ui/icons/BarsIcon.tsx";
 import TaskForm from "@/components/ui/task/form/TaskForm.tsx";
 import PlusIcon from "@/components/ui/icons/PlusIcon.tsx";
+import CheckIcon from "@/components/ui/icons/CheckIcon.tsx";
 
 type ColumnProps = {
     column: ColumnView;
-    deleteColumn: () => void;
-    updateColumn: (id: number, data: PatchColumnDto) => void;
-    createTask: (dto: CreateTaskDto) => void;
-    updateTask: (id: number, data: PatchTaskDto) => void;
-    deleteTask: (id: number) => void;
+    deleteColumn?: () => void;
+    updateColumn?: (id: number, data: PatchColumnDto) => void;
+    createTask?: (dto: CreateTaskDto) => void;
+    updateTask?: (id: number, data: PatchTaskDto) => void;
+    deleteTask?: (id: number) => void;
     tasks: TaskLookupView[];
 };
 
@@ -90,13 +91,22 @@ const ColumnElement: FC<ColumnProps> = (
                 <ColumnForm onSubmit={onEditSubmit} column={column}/>
             </EditPopup>
             <div className={styles.header}>
-                <div className={styles.header__drag}
-                     {...attributes}
-                     {...listeners}
-                >
-                    <BarsIcon/>
-                </div>
-                <div onClick={reverseEditPopup} className={styles.header__title}>{column.columnName}</div>
+                {updateColumn ? <>
+                    <div className={styles.header__drag}
+                         {...attributes}
+                         {...listeners}
+                    >
+                        <BarsIcon/>
+                    </div>
+                    <div onClick={reverseEditPopup}
+                         className={styles.header__title}>
+                        <div>{column.columnName}</div>
+                        {column.isCompleted && <div style={{width: "30px", height: "30px"}}><CheckIcon/></div>}
+                    </div>
+                </> : <div>
+                    <div>{column.columnName}</div>
+                    {column.isCompleted && <div style={{width: "30px", height: "30px"}}><CheckIcon/></div>}
+                </div>}
                 {deleteColumn && mouseIsOver &&
                     <button className={styles.header__delete} onClick={deleteColumn}>
                         <TrashIcon/>
@@ -115,10 +125,10 @@ const ColumnElement: FC<ColumnProps> = (
                     ))}
                 </SortableContext>
             </div>
-            <button onClick={reverseCreatePopup} className={styles.create__task}>
+            {createTask && <button onClick={reverseCreatePopup} className={styles.create__task}>
                 <div>Create New Task</div>
                 <div style={{width: "30px", height: "30px"}}><PlusIcon/></div>
-            </button>
+            </button>}
         </div>
     );
 };

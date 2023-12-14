@@ -4,7 +4,7 @@ import LoginPage from "@/components/pages/auth/login/LoginPage.tsx";
 import RequireAuth from "@/components/ui/layout/auth/RequireAuth.tsx";
 import RootPage from "@/components/pages/RootPage.tsx";
 import RegisterPage from "@/components/pages/auth/register/RegisterPage.tsx";
-import ConfirmPage from "@/components/pages/ConfirmPage.tsx";
+import ConfirmPage from "@/components/pages/confirm/ConfirmPage.tsx";
 
 const router = createBrowserRouter(
     createRoutesFromElements(

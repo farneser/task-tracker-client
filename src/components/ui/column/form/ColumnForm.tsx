@@ -13,7 +13,8 @@ const ColumnForm: FC<PatchColumnFormProps> = ({onSubmit, column}) => {
     const {
         register,
         handleSubmit,
-        reset
+        reset,
+        formState: {errors}
     } = useForm<PatchColumnDto>({defaultValues: column});
 
     const [isChecked, setIsChecked] = useState(!column ? false : column.isCompleted);
@@ -35,9 +36,14 @@ const ColumnForm: FC<PatchColumnFormProps> = ({onSubmit, column}) => {
             <input
                 type="text"
                 placeholder="Column name"
-                {...register("columnName", {required: true})}
+                {...register("columnName", {
+                    required: "Column name is required",
+                    minLength: {value: 1, message: "Column name is too short"},
+                    maxLength: {value: 255, message: "Column name is too long. Max length is 255 characters"}
+                })}
                 className={styles.createColumnForm__form__field__input}
             />
+            {errors.columnName && <p className={styles.form__error}>{errors.columnName.message}</p>}
         </div>
         <div className={styles.createColumnForm__form__field}>
             <label className={styles.form__label}>Mark tasks in this list as completed</label>
@@ -47,7 +53,7 @@ const ColumnForm: FC<PatchColumnFormProps> = ({onSubmit, column}) => {
             />
         </div>
         <div>
-            <button type="submit" className="form__button">
+            <button type="submit" className={styles.form__button}>
                 {column ? "Update column" : "Add column"}
             </button>
         </div>

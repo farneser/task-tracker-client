@@ -13,7 +13,13 @@ const parseId = (id: string | number): number => {
         return id;
     }
 
-    return parseInt(id.split('-')[1])
+    const idParts = id.split('-');
+
+    if (idParts.length === 2) {
+        return parseInt(idParts[1]);
+    }
+
+    return -1;
 }
 
 export {getTaskId, getColumnId, parseId};

@@ -3,6 +3,7 @@ import useAuth from "@/hooks/useAuth.ts";
 import Footer from "@/components/ui/layout/footer/Footer.tsx";
 import Header from "@/components/ui/layout/header/Header.tsx";
 import {useEffect} from "react";
+import Loader from "@/components/ui/loader/Loader.tsx";
 
 const RequireAuth = () => {
     const location = useLocation();
@@ -14,10 +15,8 @@ const RequireAuth = () => {
         }
     }, [refreshAuth, user]);
 
-    // TODO loader
     if (loading) {
-        console.log('loading')
-        return <div>Loading...</div>;
+        return <Loader/>;
     }
 
     if (!getToken()) {

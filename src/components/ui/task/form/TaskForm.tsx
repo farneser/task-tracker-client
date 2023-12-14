@@ -13,7 +13,8 @@ const TaskForm: FC<PatchTaskFormProps> = ({onSubmit, task, columnId}) => {
     const {
         register,
         handleSubmit,
-        reset
+        reset,
+        formState: {errors}
     } = useForm<PatchTaskDto>({defaultValues: task});
 
     const submit = (data: PatchTaskDto) => {
@@ -28,15 +29,20 @@ const TaskForm: FC<PatchTaskFormProps> = ({onSubmit, task, columnId}) => {
         <div>
             <label className={styles.form__label}>Title</label>
             <textarea className={styles.form__input + " " + styles.form__input_area}
-                      placeholder="columnName" {...register("taskName")}/>
+                      placeholder="Task title" {...register("taskName", {
+                required: "Task title is required",
+                minLength: {value: 1, message: "Task title is too short"},
+                maxLength: {value: 255, message: "Task title is too long. Max length is 255 characters"}
+            })}/>
+            {errors.taskName && <p className={styles.form__error}>{errors.taskName.message}</p>}
         </div>
         <div>
             <label className={styles.form__label}>Description</label>
             <textarea className={styles.form__input + " " + styles.form__input_area}
-                      placeholder="description" {...register("description")} />
+                      placeholder="Description" {...register("description")} />
         </div>
         <div>
-            <button type="submit" className="form__button">
+            <button type="submit" className={styles.form__button}>
                 {task ? "Update task" : "Add task"}
             </button>
         </div>

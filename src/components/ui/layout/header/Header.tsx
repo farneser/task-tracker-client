@@ -12,7 +12,8 @@ const Header: FC = () => {
     const {user, logout, loading, patchUser} = useAuth();
     const {Popup, reversePopup, closePopup} = usePopup(false)
 
-    const {updateColumns} = useColumns()
+    const {updateColumns, setIsArchiveOpen, isArchiveOpen, columns} = useColumns()
+    const {archiveTasks} = useTasks()
     const {updateTasks} = useTasks()
 
     useEffect(() => {
@@ -27,7 +28,6 @@ const Header: FC = () => {
 
     const onSettingsSubmit = (data: UserView) => {
         patchUser(data)
-
         closePopup()
     }
 
@@ -35,14 +35,23 @@ const Header: FC = () => {
         {user && <Popup>
             <UserSettingsForm user={user} onSubmit={onSettingsSubmit}/>
         </Popup>}
+
         <div className={styles.header__container}>
-            <button className={styles.header__refresh} onClick={refresh}>Refresh tasks</button>
+            <button className={styles.header__button} onClick={refresh}>Refresh tasks</button>
+            <button className={styles.header__button} onClick={() => archiveTasks(
+                columns.filter(c => c.isCompleted).map(c => c.id))}>
+                Archive tasks
+            </button>
+            <button className={styles.header__button} onClick={() => setIsArchiveOpen(!isArchiveOpen)}>
+                {isArchiveOpen ? "Close archive" : "Open archive"}
+            </button>
+
             <div className={styles.header__user} onClick={reversePopup}>
                 <span>You are logged in as: <span className={styles.header__user_email}>{user?.email}</span></span>
                 <span className={styles.header__settings}><SettingsIcon/></span>
             </div>
 
-            <button className={styles.header__logout} onClick={logout}>Logout</button>
+            <button className={styles.header__button} onClick={logout}>Logout</button>
         </div>
     </header>
 }

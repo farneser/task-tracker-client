@@ -1,0 +1,30 @@
+@import "src/styles/constants";
+@import "src/styles/form";
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: $background-color;
+  color: #fff;
+  text-align: center;
+
+  &__container {
+    max-width: none;
+    width: auto;
+  }
+
+  .title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+  }
+
+  .message {
+    font-size: 1.8rem;
+    font-weight: 400;
+    margin-bottom: 2rem;
+  }
+}

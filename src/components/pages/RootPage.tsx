@@ -26,10 +26,20 @@ import {getColumnId, parseId} from "@/utils/id/id.utils.ts";
 import ColumnForm from "@/components/ui/column/form/ColumnForm.tsx";
 import useAuth from "@/hooks/useAuth.ts";
 import PlusIcon from "@/components/ui/icons/PlusIcon.tsx";
+import Loader from "@/components/ui/loader/Loader.tsx";
 
 const RootPage: FC = () => {
     const auth = useAuth();
-    const {columns, createColumn, removeColumn, updateColumn, setColumns, isLoading: isColumnsLoading} = useColumns();
+    const {
+        columns,
+        createColumn,
+        removeColumn,
+        updateColumn,
+        setColumns,
+        isLoading: isColumnsLoading,
+        isArchiveOpen,
+        archiveColumn
+    } = useColumns();
     const {tasks, createTask, setTasks, updateTask, removeTask, isLoading: isTasksLoading} = useTasks()
 
     const {reversePopup, closePopup, Popup} = usePopup(isColumnsLoading || columns.length === 0);
@@ -146,20 +156,16 @@ const RootPage: FC = () => {
         }
     }
 
-    // TODO: create preloader
     if (isColumnsLoading || isTasksLoading || auth.loading) {
-        console.log('loading in root page')
-        return <div>Loading...</div>
+        return <Loader/>
     }
 
     return (
         <div className={styles["kanban-container"]}>
-            <DndContext
-                onDragStart={onDragStart}
-                onDragEnd={onDragEnd}
-                onDragOver={onDragOver}
-                sensors={sensors}
-            >
+            <DndContext sensors={sensors}
+                        onDragStart={onDragStart}
+                        onDragEnd={onDragEnd}
+                        onDragOver={onDragOver}>
 
                 <Popup>
                     <ColumnForm onSubmit={onSubmit}/>
@@ -180,6 +186,11 @@ const RootPage: FC = () => {
                             />
                         ))}
                     </SortableContext>
+                    {isArchiveOpen && <ColumnElement
+                        column={archiveColumn}
+                        tasks={tasks.filter(task => task.columnId < 0)}
+                        deleteTask={removeTask}
+                    />}
                     <div className={styles["create-column-container"]}>
                         <button onClick={reversePopup}>
                             <div> Create New Column</div>
@@ -188,28 +199,29 @@ const RootPage: FC = () => {
                     </div>
                 </div>
 
-                {createPortal(<DragOverlay>
-                    {activeColumn && (
-                        <ColumnElement
-                            tasks={tasks.filter(task => task.columnId === activeColumn.id)}
-                            column={activeColumn}
-                            updateColumn={updateColumn}
-                            deleteColumn={() => removeColumn(activeColumn.id).then()}
-                            updateTask={updateTask}
-                            deleteTask={removeTask}
-                            createTask={createTask}
-                        />
-                    )}
-                    {activeTask && (
-                        <TaskElement task={activeTask} updateTask={updateTask} deleteTask={() => {
-                            removeTask(activeTask.id).then()
-                        }}/>
-                    )}
-                </DragOverlay>, document.body)}
+                {
+                    createPortal(<DragOverlay>
+                        {activeColumn && (
+                            <ColumnElement
+                                tasks={tasks.filter(task => task.columnId === activeColumn.id)}
+                                column={activeColumn}
+                                updateColumn={updateColumn}
+                                deleteColumn={() => removeColumn(activeColumn.id).then()}
+                                updateTask={updateTask}
+                                deleteTask={removeTask}
+                                createTask={createTask}
+                            />
+                        )}
+                        {activeTask && (
+                            <TaskElement task={activeTask} updateTask={updateTask} deleteTask={() => {
+                                removeTask(activeTask.id).then()
+                            }}/>
+                        )}
+                    </DragOverlay>, document.body)
+                }
             </DndContext>
         </div>
     );
 }
-
 
 export default RootPage;
