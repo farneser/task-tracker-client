@@ -1,9 +1,12 @@
-import {FC} from "react";
+import {FC, useState} from "react";
 import {ILogin} from "@/services/auth/auth.types.ts";
 import authService from "@/services/auth/auth.service.ts";
 import useAuth from "@/hooks/useAuth.ts";
 import {Link, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
+import {ErrorMessage} from "@/models/Message.ts";
+import {errorMessages} from "@/components/pages/auth/errors.ts";
+
 
 const LoginPage: FC = () => {
     const auth = useAuth();
@@ -13,6 +16,7 @@ const LoginPage: FC = () => {
         handleSubmit,
         formState: {errors},
     } = useForm<ILogin>();
+    const [error, setError] = useState<ErrorMessage | null>(null)
 
     const onSubmit = async (data: ILogin) => {
         auth.updateToken(null)
@@ -24,7 +28,9 @@ const LoginPage: FC = () => {
 
                 return data;
             })
-            .catch(e => console.log(e))
+            .catch(e => {
+                setError(e.response.data)
+            })
     }
 
     return (
@@ -34,6 +40,8 @@ const LoginPage: FC = () => {
                     <h1>Login page</h1>
                 </div>
                 <div>
+                    {error && <p className="form__error">
+                        {errorMessages[`${error.status}`] || error.message}</p>}
                     <label className="form__label">Email</label>
                     <input
                         type="text"

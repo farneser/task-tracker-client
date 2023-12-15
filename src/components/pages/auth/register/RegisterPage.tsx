@@ -1,10 +1,12 @@
-import {FC} from "react";
+import {FC, useState} from "react";
 import useAuth from "@/hooks/useAuth.ts";
 import {Link, useNavigate} from "react-router-dom";
 import {IRegister} from "@/services/auth/auth.types.ts";
 import authService from "@/services/auth/auth.service.ts";
 import "../auth.scss";
 import {useForm} from "react-hook-form";
+import {ErrorMessage} from "@/models/Message.ts";
+import {errorMessages} from "@/components/pages/auth/errors.ts";
 
 const RegisterPage: FC = () => {
     const auth = useAuth();
@@ -14,6 +16,7 @@ const RegisterPage: FC = () => {
         handleSubmit,
         formState: {errors},
     } = useForm<IRegister>();
+    const [error, setError] = useState<ErrorMessage | null>(null)
 
     const onSubmit = async (data: IRegister) => {
         auth.updateToken(null)
@@ -25,7 +28,7 @@ const RegisterPage: FC = () => {
 
                 return data;
             })
-            .catch(e => console.log(e))
+            .catch(e => setError(e.response.data))
     }
 
     return (
@@ -35,6 +38,8 @@ const RegisterPage: FC = () => {
                     <h1>Register page</h1>
                 </div>
                 <div>
+                    {error && <p className="form__error">
+                        {errorMessages[`${error.status}`] || error.message}</p>}
                     <label className="form__label">Email</label>
                     <input
                         type="text"

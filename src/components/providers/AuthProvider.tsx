@@ -32,7 +32,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({children}) => {
                 setUser(user);
             })
             .catch((e) => {
-                setError(e);
+                setError(e?.response?.data);
             })
             .finally(() => {
                 setLoading(false);
@@ -66,7 +66,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({children}) => {
                 setUser(user);
             })
             .catch((e) => {
-                setError(e);
+                setError(e?.response?.data);
             })
             .finally(() => {
                 setLoading(false);

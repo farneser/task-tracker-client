@@ -8,7 +8,7 @@ import {ILogin, IRegister} from "@/services/auth/auth.types.ts";
 import {setLocalStorage} from "@/utils/localStorage.utils.ts";
 
 const sendTokenRequest = async (data: Token | ILogin | IRegister, path: string): Promise<Token | null> => {
-    return await axios.post<Token | ErrorMessage>(`${constants.baseUrl}${path}`, {...data}, {
+    return await axios.post<Token>(`${constants.baseUrl}${path}`, {...data}, {
         headers: getContentType()
     }).then((response) => {
         if ((response.data as Token).accessToken) {
