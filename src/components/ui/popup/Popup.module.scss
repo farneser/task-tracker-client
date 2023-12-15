@@ -17,7 +17,7 @@
   &__container {
     position: relative;
     background: $background-color;
-    border-radius: 10px;
+    border-radius: $border-radius;
     max-width: 400px;
     width: 100%;
   }
@@ -34,10 +34,10 @@
   right: 0;
   margin: 10px 10px 0 0;
   background-color: lighten($background-color, 5%);
-  color: white;
+  color: $text-color;
   border: none;
   cursor: pointer;
-  border-radius: 10px;
+  border-radius: $border-radius;
 
   &:hover {
     background-color: lighten($background-color, 10%);

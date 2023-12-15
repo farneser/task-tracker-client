@@ -3,7 +3,7 @@
 .footer {
   bottom: 0;
   width: 100%;
-  color: #fff;
+  color: $text-color;
   text-align: center;
   display: flex;
   flex-wrap: wrap;
@@ -23,12 +23,12 @@
 
   & > div {
     opacity: 0.5;
-    transition: 400ms;
+    transition: $transition-speed;
     padding: 20px 15px;
 
     &:hover {
       opacity: 1;
-      transition: 400ms;
+      transition: $transition-speed;
     }
   }
 

@@ -3,7 +3,7 @@
 .column {
 
   &__container {
-    border-radius: 10px;
+    border-radius: $border-radius;
     background: darken($background-color, 5%);
     height: 100%;
     display: flex;
@@ -15,7 +15,7 @@
     &_overlay {
       background-color: rgba(darken($background-color, 5%), 0.3);
       width: 350px;
-      border-radius: 10px;
+      border-radius: $border-radius;
       border: 1px solid $accent-color;
     }
 
@@ -24,8 +24,8 @@
     }
 
     .header {
-      border-radius: 10px 10px 0 0;
-      color: white;
+      border-radius: $border-radius $border-radius 0 0;
+      color: $text-color;
       font-weight: bold;
       height: 30px;
       background: lighten($background-color, 5%);
@@ -45,12 +45,12 @@
       &__title {
         display: flex;
         cursor: pointer;
-        transition: 400ms;
+        transition: $transition-speed;
         align-items: center;
 
         &:hover {
           color: $accent-color;
-          transition: 100ms;
+          transition: $transition-out-speed;
         }
       }
 
@@ -58,10 +58,10 @@
         width: 30px;
         height: 30px;
         cursor: grab;
-        transition: 400ms;
+        transition: $transition-speed;
 
         &:hover {
-          transition: 100ms;
+          transition: $transition-out-speed;
           color: $accent-color;
         }
       }
@@ -70,15 +70,15 @@
         margin-left: auto;
         width: 30px;
         height: 30px;
-        color: white;
+        color: $text-color;
         border: none;
         cursor: pointer;
-        border-radius: 10px;
-        transition: 400ms;
+        border-radius: $border-radius;
+        transition: $transition-speed;
 
         &:hover {
           color: $accent-color;
-          transition: 100ms;
+          transition: $transition-out-speed;
         }
       }
     }
@@ -91,20 +91,20 @@
     }
 
     .create__task {
-      color: white;
+      color: $text-color;
       padding: 10px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       background: lighten($background-color, 5%);
-      border-radius: 0 0 10px 10px;
+      border-radius: 0 0 $border-radius $border-radius;
       cursor: pointer;
-      transition: 400ms;
+      transition: $transition-speed;
 
       &:hover {
         background: lighten($background-color, 10%);
         color: $accent-color;
-        transition: 100ms;
+        transition: $transition-out-speed;
       }
     }
   }

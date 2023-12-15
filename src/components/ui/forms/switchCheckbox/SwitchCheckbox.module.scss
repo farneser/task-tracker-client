@@ -40,11 +40,11 @@
   bottom: 0;
   background-color: lighten($background-color, 20%);
   border-radius: 15px;
-  transition: 400ms;
+  transition: $transition-speed;
 
   &:hover {
     background-color: lighten($background-color, 25%);
-    transition: 400ms;
+    transition: $transition-speed;
   }
 
   &:before {
@@ -56,6 +56,6 @@
     bottom: 5px;
     background-color: white;
     border-radius: 50%;
-    transition: 400ms;
+    transition: $transition-speed;
   }
 }

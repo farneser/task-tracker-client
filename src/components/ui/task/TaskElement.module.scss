@@ -6,7 +6,7 @@
     border-radius: 10px;
     margin: 10px 0;
     padding: 20px;
-    color: white;
+    color: $text-color;
     overflow-x: hidden;
     height: 70px;
     border: 1px solid lighten($background-color, 10%);
@@ -54,18 +54,18 @@
   &__date {
     margin-top: 8px;
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba($text-color, 0.7);
   }
 
   &__delete {
     width: 30px;
     height: 30px;
     cursor: pointer;
-    transition: 400ms;
+    transition: $transition-speed;
 
     &:hover {
       color: $accent-color;
-      transition: 100ms;
+      transition: $transition-out-speed;
     }
   }
 }

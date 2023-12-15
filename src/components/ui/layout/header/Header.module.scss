@@ -2,7 +2,7 @@
 
 .header {
   width: 100%;
-  color: white;
+  color: $text-color;
 
   &__container {
     display: flex;
@@ -35,7 +35,7 @@
     align-items: center;
     margin: auto 0 auto auto;
     cursor: pointer;
-    transition: 400ms;
+    transition: $transition-speed;
 
     &_email {
       padding: 5px;
@@ -52,7 +52,7 @@
 
     &:hover {
       color: $accent-color;
-      transition: 100ms;
+      transition: $transition-out-speed;
     }
   }
 
@@ -61,10 +61,10 @@
     border-radius: 5px;
     padding: 5px 10px;
     cursor: pointer;
-    transition: 400ms;
+    transition: $transition-speed;
 
     &:hover {
-      transition: 100ms;
+      transition: $transition-out-speed;
     }
   }
 }
