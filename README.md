@@ -47,8 +47,8 @@ You can get dist folder from docker image on `/app/dist`
 
 You can configure your environment by system environment or `.env`
 
-Example of `.env` you can see at `env.example` file
+Example of `.env` you can see at `example.env` file
 
-| Parameter | Default value           | Description        |
-|-----------|-------------------------|--------------------|
-| API_URL   | `http://localhost:8080` | Web api module url |
+| Parameter    | Default value           | Description        |
+|--------------|-------------------------|--------------------|
+| VITE_API_URL | `http://localhost:8080` | Web api module url |
