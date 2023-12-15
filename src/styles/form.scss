@@ -30,7 +30,6 @@
 
   &__error {
     color: #ff3333;
-    //margin-top: 4px;
   }
 
   &__input {
@@ -51,9 +50,11 @@
     border: none;
     border-radius: 4px;
     font-size: 16px;
+    transition: 400ms;
 
     &:hover {
       background-color: darken($accent-color, 10%);
+      transition: 100ms;
     }
   }
 

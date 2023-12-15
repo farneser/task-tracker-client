@@ -23,7 +23,7 @@
 
   button {
     background: lighten($background-color, 5%);
-    border: none;
+    border: 1px solid $background-color;
     border-radius: 10px;
     color: white;
     font-weight: bold;
@@ -41,6 +41,7 @@
       background: lighten($background-color, 10%);
       color: $accent-color;
       transition: 100ms;
+      border: 1px solid $accent-color;
     }
   }
 }

@@ -5,7 +5,8 @@ import {Link} from "react-router-dom";
 const Footer: FC = () => {
     return <footer className={styles.footer}>
         <div>
-            <p className={styles.footer__text}>&copy; 2023 MIT license</p>
+            <p className={styles.footer__text}>&copy; 2023 Made by <Link
+                to={"https://github.com/farneser"}>farneser</Link></p>
         </div>
 
         <div>

@@ -7,6 +7,7 @@ import usePopup from "@/hooks/usePopup.tsx";
 import SettingsIcon from "@/components/ui/icons/SettingsIcon.tsx";
 import UserSettingsForm from "@/components/ui/user/UserSettingsForm.tsx";
 import {UserView} from "@/services/user/user.types.ts";
+import Gravatar from "@/components/ui/gravatar/Gravatar.tsx";
 
 const Header: FC = () => {
     const {user, logout, loading, patchUser} = useAuth();
@@ -45,11 +46,11 @@ const Header: FC = () => {
             <button className={styles.header__button} onClick={() => setIsArchiveOpen(!isArchiveOpen)}>
                 {isArchiveOpen ? "Close archive" : "Open archive"}
             </button>
-
             <div className={styles.header__user} onClick={reversePopup}>
                 <span>You are logged in as: <span className={styles.header__user_email}>{user?.email}</span></span>
                 <span className={styles.header__settings}><SettingsIcon/></span>
             </div>
+            {user?.email && <Gravatar email={user.email} size={40} className="avatar"/>}
 
             <button className={styles.header__button} onClick={logout}>Logout</button>
         </div>

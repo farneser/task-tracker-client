@@ -14,6 +14,10 @@
 
       &:checked + .slider {
         background-color: $accent-color;
+
+        &:hover {
+          background-color: darken($accent-color, 10%);
+        }
       }
 
       &:focus + .slider {
@@ -37,6 +41,11 @@
   background-color: lighten($background-color, 20%);
   border-radius: 15px;
   transition: 400ms;
+
+  &:hover {
+    background-color: lighten($background-color, 25%);
+    transition: 400ms;
+  }
 
   &:before {
     position: absolute;
