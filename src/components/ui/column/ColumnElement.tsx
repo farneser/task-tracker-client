@@ -1,7 +1,6 @@
 import {FC, useMemo, useState} from "react";
 import {ColumnView, PatchColumnDto} from "@/services/column/column.types.ts";
 import usePopup from "@/hooks/usePopup.tsx";
-import ColumnForm from "@/components/ui/column/form/ColumnForm.tsx";
 import {CreateTaskDto, PatchTaskDto, TaskLookupView} from "@/services/task/task.types.ts";
 import TaskElement from "@/components/ui/task/TaskElement.tsx";
 import {CSS} from "@dnd-kit/utilities";
@@ -11,9 +10,10 @@ import {getColumnId, getTaskId} from "@/utils/id/id.utils.ts";
 import styles from "./ColumnElement.module.scss";
 import TrashIcon from "@/components/ui/icons/TrashIcon.tsx";
 import BarsIcon from "@/components/ui/icons/BarsIcon.tsx";
-import TaskForm from "@/components/ui/task/form/TaskForm.tsx";
 import PlusIcon from "@/components/ui/icons/PlusIcon.tsx";
 import CheckIcon from "@/components/ui/icons/CheckIcon.tsx";
+import TaskForm from "@/components/ui/task/form/TaskForm.tsx";
+import ColumnForm from "@/components/ui/column/form/ColumnForm.tsx";
 
 type ColumnProps = {
     column: ColumnView;
@@ -66,6 +66,7 @@ const ColumnElement: FC<ColumnProps> = (
 
     const onEditSubmit = async (data: PatchColumnDto) => {
         updateColumn && updateColumn(column.id, data);
+
         closeEditPopup();
     };
 
@@ -79,57 +80,58 @@ const ColumnElement: FC<ColumnProps> = (
         return <div ref={setNodeRef} style={style} className={styles.column__container_overlay}></div>
     }
 
-    return (
-        <div className={styles.column__container} ref={setNodeRef} style={style}
-             onMouseEnter={() => setMouseIsOver(true)}
-             onMouseLeave={() => setMouseIsOver(false)}
-        >
+    return (<>
             <CreatePopup>
                 <TaskForm onSubmit={onCreateSubmit} columnId={column.id}/>
             </CreatePopup>
             <EditPopup>
                 <ColumnForm onSubmit={onEditSubmit} column={column}/>
             </EditPopup>
-            <div className={styles.header}>
-                {updateColumn ? <>
-                    <div className={styles.header__drag}
-                         {...attributes}
-                         {...listeners}
-                    >
-                        <BarsIcon/>
-                    </div>
-                    <div onClick={reverseEditPopup}
-                         className={styles.header__title}>
+            <div className={styles.column__container} ref={setNodeRef} style={style}
+                 onMouseEnter={() => setMouseIsOver(true)}
+                 onMouseLeave={() => setMouseIsOver(false)}
+            >
+                <div className={styles.header}>
+                    {updateColumn ? <>
+                        <div className={styles.header__drag}
+                             {...attributes}
+                             {...listeners}
+                        >
+                            <BarsIcon/>
+                        </div>
+                        <div onClick={reverseEditPopup}
+                             className={styles.header__title}>
+                            <div>{column.columnName}</div>
+                            {column.isCompleted && <div style={{width: "30px", height: "30px"}}><CheckIcon/></div>}
+                        </div>
+                    </> : <div>
                         <div>{column.columnName}</div>
                         {column.isCompleted && <div style={{width: "30px", height: "30px"}}><CheckIcon/></div>}
-                    </div>
-                </> : <div>
-                    <div>{column.columnName}</div>
-                    {column.isCompleted && <div style={{width: "30px", height: "30px"}}><CheckIcon/></div>}
-                </div>}
-                {deleteColumn && mouseIsOver &&
-                    <button className={styles.header__delete} onClick={deleteColumn}>
-                        <TrashIcon/>
-                    </button>}
-            </div>
+                    </div>}
+                    {deleteColumn && mouseIsOver &&
+                        <button className={styles.header__delete} onClick={deleteColumn}>
+                            <TrashIcon/>
+                        </button>}
+                </div>
 
-            <div className={styles.tasks__container}>
-                <SortableContext items={tasksIds}>
-                    {tasks.map((task) => (
-                        <TaskElement
-                            key={getTaskId(task.id)}
-                            task={task}
-                            updateTask={updateTask}
-                            deleteTask={() => deleteTask && deleteTask(task.id)}
-                        />
-                    ))}
-                </SortableContext>
+                <div className={styles.tasks__container}>
+                    <SortableContext items={tasksIds}>
+                        {tasks.map((task) => (
+                            <TaskElement
+                                key={getTaskId(task.id)}
+                                task={task}
+                                updateTask={updateTask}
+                                deleteTask={() => deleteTask && deleteTask(task.id)}
+                            />
+                        ))}
+                    </SortableContext>
+                </div>
+                {createTask && <button onClick={reverseCreatePopup} className={styles.create__task}>
+                    <div>Create New Task</div>
+                    <div style={{width: "30px", height: "30px"}}><PlusIcon/></div>
+                </button>}
             </div>
-            {createTask && <button onClick={reverseCreatePopup} className={styles.create__task}>
-                <div>Create New Task</div>
-                <div style={{width: "30px", height: "30px"}}><PlusIcon/></div>
-            </button>}
-        </div>
+        </>
     );
 };
 

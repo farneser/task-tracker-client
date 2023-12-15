@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {ColumnView, PatchColumnDto} from "@/services/column/column.types.ts";
 import styles from "./ColumnForm.module.scss";
@@ -14,18 +14,23 @@ const ColumnForm: FC<PatchColumnFormProps> = ({onSubmit, column}) => {
         register,
         handleSubmit,
         reset,
-        formState: {errors}
+        formState: {errors},
+        setFocus
     } = useForm<PatchColumnDto>({defaultValues: column});
 
     const [isChecked, setIsChecked] = useState(!column ? false : column.isCompleted);
+
+    useEffect(() => {
+        setFocus("columnName");
+    }, [setFocus]);
 
     const handleCheckboxChange = () => {
         setIsChecked(!isChecked);
     };
 
     const submit = (data: PatchColumnDto) => {
-        onSubmit({...data, isCompleted: isChecked})
-        reset()
+        onSubmit({...data, isCompleted: isChecked});
+        reset();
     }
 
     return <form className={styles.form} onSubmit={handleSubmit(submit)}>

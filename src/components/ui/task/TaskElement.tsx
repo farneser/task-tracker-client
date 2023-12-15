@@ -30,10 +30,7 @@ const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask}) => {
         data: {
             type: ItemTypes.TASK,
             task,
-        },
-        // this can be used with a button to enable/disable dragging
-        // or when the user is editing the column title
-        // disabled: updateMode
+        }
     })
 
     const formattedDate = new Date(task.editDate || task.creationDate).toLocaleString('en-US', {

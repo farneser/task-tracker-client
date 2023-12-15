@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {FC, useEffect} from "react";
 import {PatchTaskDto, TaskLookupView} from "@/services/task/task.types.ts";
 import {useForm} from "react-hook-form";
 import styles from "./TaskForm.module.scss";
@@ -14,12 +14,17 @@ const TaskForm: FC<PatchTaskFormProps> = ({onSubmit, task, columnId}) => {
         register,
         handleSubmit,
         reset,
-        formState: {errors}
+        formState: {errors},
+        setFocus
     } = useForm<PatchTaskDto>({defaultValues: task});
 
+    useEffect(() => {
+        setFocus("taskName");
+    }, [setFocus]);
+
     const submit = (data: PatchTaskDto) => {
-        onSubmit({...data, columnId})
-        reset()
+        onSubmit({...data, columnId});
+        reset();
     }
 
     return <form className={styles.form} onSubmit={handleSubmit(submit)}>
@@ -28,8 +33,8 @@ const TaskForm: FC<PatchTaskFormProps> = ({onSubmit, task, columnId}) => {
         </div>
         <div>
             <label className={styles.form__label}>Title</label>
-            <textarea className={styles.form__input + " " + styles.form__input_area}
-                      placeholder="Task title" {...register("taskName", {
+            <input className={styles.form__input}
+                   placeholder="Task title" {...register("taskName", {
                 required: "Task title is required",
                 minLength: {value: 1, message: "Task title is too short"},
                 maxLength: {value: 255, message: "Task title is too long. Max length is 255 characters"}
