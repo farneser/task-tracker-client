@@ -10,7 +10,7 @@ COPY . .
 
 ENV VITE_APU_URL ${VITE_APU_URL}
 
-CMD ["npm", "run", "build"]
+RUN npm run build
 
 EXPOSE 3000
 
