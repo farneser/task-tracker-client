@@ -4,6 +4,17 @@ The Task Tracker Client Module, drawing inspiration from the simplicity of Kanba
 individual users seeking an intuitive and efficient solution for personal task management. This module offers a
 user-friendly interface to enhance personal workflows and boost overall organization.
 
+## Screenshots
+
+Create column form
+![img.png](assets/screenshot_1.png)
+
+Kanban board
+![img.png](assets/screenshot_2.png)
+
+Archive task and D&D
+![img.png](assets/screenshot_3.png)
+
 ## Build
 
 Clone the repository
@@ -36,7 +47,15 @@ yarn start
 ### Docker compose
 
 ```yml
-# here is a docker-compose example
+version: '3'
+services:
+  client:
+    image: farneser/task-tracker-client:latest
+    container_name: tt-client-container
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://localhost:8080
 ```
 
 ### Dockerfile
