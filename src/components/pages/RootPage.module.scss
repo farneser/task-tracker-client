@@ -12,14 +12,19 @@
   margin: auto 0;
   height: 90%;
 
-  & > div {
-    margin: 0 20px;
+  & > div{
+    &:first-child{
+      margin-left: 20px;
+    }
+    &:last-child{
+      margin-right: 20px;
+    }
   }
 }
 
 .create-column-container {
   height: 100%;
-  margin: 0 20px;
+  margin: 0 10px;
 
   button {
     background: lighten($background-color, 5%);
