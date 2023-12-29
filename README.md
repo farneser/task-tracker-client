@@ -1,5 +1,8 @@
 # Task tracker client module
 
+[![Build CI](https://github.com/farneser/task-tracker-client/actions/workflows/yarn.yml/badge.svg)](https://github.com/farneser/task-tracker-client/actions/workflows/yarn.yml)
+[![Docker Image build](https://github.com/farneser/task-tracker-client/actions/workflows/docker.yml/badge.svg)](https://github.com/farneser/task-tracker-client/actions/workflows/docker.yml)
+
 The Task Tracker Client Module, drawing inspiration from the simplicity of Kanban, is uniquely crafted for
 individual users seeking an intuitive and efficient solution for personal task management. This module offers a
 user-friendly interface to enhance personal workflows and boost overall organization.
