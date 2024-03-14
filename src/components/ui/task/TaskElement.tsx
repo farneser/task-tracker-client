@@ -43,7 +43,7 @@ const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask}) => {
         timeZone: 'UTC'
     });
 
-    const [mouseIsOver, setMouseIsOver] = useState(true);
+    const [mouseIsOver, setMouseIsOver] = useState(false);
 
     const style = {
         transition,
