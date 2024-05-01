@@ -1,12 +1,12 @@
 import {createContext, FC, PropsWithChildren, useEffect, useState} from "react";
 import {ColumnView, CreateColumnDto, PatchColumnDto} from "@/services/column/column.types.ts";
-import {ErrorMessage} from "@/models/Message.ts";
+import {Message} from "@/models/Message.ts";
 import {columnService} from "@/services/column/column.service.ts";
 
 interface ColumnServiceHook {
     columns: ColumnView[];
     isLoading: boolean;
-    error: ErrorMessage | null;
+    error: Message | null;
     updateColumns: () => Promise<void>;
     createColumn: (column: CreateColumnDto) => Promise<void>;
     updateColumn: (id: number, column: PatchColumnDto) => Promise<void>;
@@ -23,7 +23,7 @@ export const ColumnContext = createContext<ColumnServiceHook | null>(null);
 export const ColumnProvider: FC<PropsWithChildren> = ({children}) => {
     const [columns, setColumns] = useState<ColumnView[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<ErrorMessage | null>(null);
+    const [error, setError] = useState<Message | null>(null);
     const [isArchiveOpen, setIsArchiveOpen] = useState(false);
 
     useEffect(() => {

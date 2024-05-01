@@ -4,7 +4,7 @@ import authService from "@/services/auth/auth.service.ts";
 import useAuth from "@/hooks/useAuth.ts";
 import {Link, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
-import {ErrorMessage} from "@/models/Message.ts";
+import {Message} from "@/models/Message.ts";
 import {errorMessages} from "@/components/pages/auth/errors.ts";
 
 
@@ -16,7 +16,7 @@ const LoginPage: FC = () => {
         handleSubmit,
         formState: {errors},
     } = useForm<ILogin>();
-    const [error, setError] = useState<ErrorMessage | null>(null)
+    const [error, setError] = useState<Message | null>(null)
 
     const onSubmit = async (data: ILogin) => {
         auth.updateToken(null)
@@ -47,7 +47,7 @@ const LoginPage: FC = () => {
                         type="text"
                         placeholder="Email"
                         className="form__input"
-                        {...register('email', {
+                        {...register('login', {
                             required: 'Email is required',
                             pattern: {
                                 value: /^\S+@\S+$/i,
@@ -55,7 +55,7 @@ const LoginPage: FC = () => {
                             },
                         })}
                     />
-                    {errors.email && <p className="form__error">{errors.email.message}</p>}
+                    {errors.login && <p className="form__error">{errors.login.message}</p>}
                 </div>
 
                 <div>

@@ -5,7 +5,7 @@ import {IRegister} from "@/services/auth/auth.types.ts";
 import authService from "@/services/auth/auth.service.ts";
 import "../auth.scss";
 import {useForm} from "react-hook-form";
-import {ErrorMessage} from "@/models/Message.ts";
+import {Message} from "@/models/Message.ts";
 import {errorMessages} from "@/components/pages/auth/errors.ts";
 
 const RegisterPage: FC = () => {
@@ -16,7 +16,7 @@ const RegisterPage: FC = () => {
         handleSubmit,
         formState: {errors},
     } = useForm<IRegister>();
-    const [error, setError] = useState<ErrorMessage | null>(null)
+    const [error, setError] = useState<Message | null>(null)
 
     const onSubmit = async (data: IRegister) => {
         auth.updateToken(null)
@@ -36,6 +36,22 @@ const RegisterPage: FC = () => {
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <h1>Register page</h1>
+                </div>
+                <div>
+                    {error && <p className="form__error">
+                        {errorMessages[`${error.status}`] || error.message}</p>}
+                    <label className="form__label">Email</label>
+                    <input
+                        type="text"
+                        placeholder="Email"
+                        className="form__input"
+                        {...register('username', {
+                            required: 'Username is required',
+                            minLength: 1,
+                            maxLength: 255
+                        })}
+                    />
+                    {errors.username && <p className="form__error">{errors.username.message}</p>}
                 </div>
                 <div>
                     {error && <p className="form__error">

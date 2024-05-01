@@ -1,12 +1,12 @@
 import {createContext, FC, PropsWithChildren, useEffect, useState} from "react";
-import {ErrorMessage} from "@/models/Message.ts";
+import {Message} from "@/models/Message.ts";
 import {CreateTaskDto, PatchTaskDto, TaskLookupView} from "@/services/task/task.types.ts";
 import {taskService} from "@/services/task/task.service.ts";
 
 interface TaskSeriesHook {
     tasks: TaskLookupView[];
     isLoading: boolean;
-    error: ErrorMessage | null;
+    error: Message | null;
     createTask: (task: CreateTaskDto) => Promise<void>;
     updateTasks: () => Promise<void>;
     updateTask: (id: number, data: PatchTaskDto) => Promise<void>;
@@ -21,7 +21,7 @@ export const TaskContext = createContext<TaskSeriesHook | null>(null);
 export const TaskProvider: FC<PropsWithChildren> = ({children}) => {
     const [tasks, setTasks] = useState<TaskLookupView[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<ErrorMessage | null>(null);
+    const [error, setError] = useState<Message | null>(null);
 
     useEffect(() => {
         updateTasks().then();
