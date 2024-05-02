@@ -8,14 +8,17 @@ import SettingsIcon from "@/components/ui/icons/SettingsIcon.tsx";
 import UserSettingsForm from "@/components/ui/user/UserSettingsForm.tsx";
 import {UserView} from "@/services/user/user.types.ts";
 import Gravatar from "@/components/ui/gravatar/Gravatar.tsx";
+import {useParams} from "react-router-dom";
 
 const Header: FC = () => {
+
+    const {projectId} = useParams();
+
     const {user, logout, loading, patchUser} = useAuth();
     const {Popup, reversePopup, closePopup} = usePopup(false)
 
     const {updateColumns, setIsArchiveOpen, isArchiveOpen, columns} = useColumns()
-    const {archiveTasks} = useTasks()
-    const {updateTasks} = useTasks()
+    const {updateTasks, archiveTasks} = useTasks()
 
     useEffect(() => {
         refresh().then()
@@ -38,14 +41,16 @@ const Header: FC = () => {
         </Popup>}
 
         <div className={styles.header__container}>
-            <button className={styles.header__button} onClick={refresh}>Refresh tasks</button>
-            <button className={styles.header__button} onClick={() => archiveTasks(
-                columns.filter(c => c.isCompleted).map(c => c.id))}>
-                Archive tasks
-            </button>
-            <button className={styles.header__button} onClick={() => setIsArchiveOpen(!isArchiveOpen)}>
-                {isArchiveOpen ? "Close archive" : "Open archive"}
-            </button>
+            {projectId != undefined && <>
+                <button className={styles.header__button} onClick={refresh}>Refresh tasks</button>
+                <button className={styles.header__button} onClick={() => archiveTasks(
+                    columns.filter(c => c.isCompleted).map(c => c.id))}>
+                    Archive tasks
+                </button>
+                <button className={styles.header__button} onClick={() => setIsArchiveOpen(!isArchiveOpen)}>
+                    {isArchiveOpen ? "Close archive" : "Open archive"}
+                </button>
+            </>}
             <div className={styles.header__user} onClick={reversePopup}>
                 <span>You are logged in as: <span className={styles.header__user_email}>{user?.email}</span></span>
                 <span className={styles.header__settings}><SettingsIcon/></span>

@@ -21,15 +21,21 @@ import {ItemTypes} from "@/utils/id/ItemTypes.ts";
 import {TaskLookupView} from "@/services/task/task.types.ts";
 import TaskElement from "@/components/ui/task/TaskElement.tsx";
 import useTasks from "@/hooks/useTasks.ts";
-import styles from "./RootPage.module.scss";
+import styles from "./ProjectPage.module.scss";
 import {getColumnId, parseId} from "@/utils/id/id.utils.ts";
 import ColumnForm from "@/components/ui/column/form/ColumnForm.tsx";
 import useAuth from "@/hooks/useAuth.ts";
 import PlusIcon from "@/components/ui/icons/PlusIcon.tsx";
 import Loader from "@/components/ui/loader/Loader.tsx";
+import {useParams} from "react-router-dom";
 
-const RootPage: FC = () => {
+const ProjectPage: FC = () => {
     const auth = useAuth();
+
+    const {projectId} = useParams();
+
+    console.log(projectId)
+
     const {
         columns,
         createColumn,
@@ -224,4 +230,4 @@ const RootPage: FC = () => {
     );
 }
 
-export default RootPage;
+export default ProjectPage;
