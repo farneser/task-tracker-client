@@ -2,13 +2,15 @@ import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider,} f
 import Layout from "@/components/ui/layout/default/Layout.tsx";
 import LoginPage from "@/components/pages/auth/login/LoginPage.tsx";
 import RequireAuth from "@/components/ui/layout/auth/RequireAuth.tsx";
-import ProjectPage from "@/components/pages/project/id/ProjectPage.tsx";
 import RegisterPage from "@/components/pages/auth/register/RegisterPage.tsx";
 import ConfirmPage from "@/components/pages/confirm/ConfirmPage.tsx";
 import ProjectsPage from "@/components/pages/project/ProjectsPage.tsx";
 import WelcomePage from "@/components/pages/WelcomePage.tsx";
+import ProjectPage from "@/components/pages/project/id/ProjectPage.tsx";
+import type {Router} from "@remix-run/router/dist/router";
+import {FC} from "react";
 
-const router = createBrowserRouter(
+const router: Router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/" element={<Layout/>}>
             {/* public rotes */}
@@ -26,7 +28,7 @@ const router = createBrowserRouter(
     )
 );
 
-function App() {
+const App: FC = () => {
     return <RouterProvider router={router}></RouterProvider>;
 }
 
