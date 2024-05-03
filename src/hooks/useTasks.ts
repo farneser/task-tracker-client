@@ -5,7 +5,7 @@ const useTasks = () => {
     const context = useContext(TaskContext);
 
     if (!context) {
-        throw new Error('useAuth must be used within a AuthProvider');
+        throw new Error('useTasks must be used within a AuthProvider');
     }
 
     return context;

@@ -5,7 +5,7 @@ const useColumns = () => {
     const context = useContext(ColumnContext);
 
     if (!context) {
-        throw new Error('useAuth must be used within a AuthProvider');
+        throw new Error('useColumns must be used within a AuthProvider');
     }
 
     return context;
