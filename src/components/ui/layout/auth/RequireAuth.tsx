@@ -4,6 +4,8 @@ import Footer from "@/components/ui/layout/footer/Footer.tsx";
 import Header from "@/components/ui/layout/header/Header.tsx";
 import {useEffect} from "react";
 import Loader from "@/components/ui/loader/Loader.tsx";
+import SideBar from "@/components/ui/layout/sidebar/SideBar.tsx";
+import styles from "./RequireAuth.module.scss";
 
 const RequireAuth = () => {
     const location = useLocation();
@@ -24,9 +26,20 @@ const RequireAuth = () => {
     }
 
     return <>
-        <Header/>
-        <Outlet/>
-        <Footer/>
+        <header>
+            <Header/>
+        </header>
+        <main>
+            <div className={styles.main__sidebar__container}>
+                <SideBar/>
+            </div>
+            <div className={styles.main__content__container}>
+                <Outlet/>
+            </div>
+        </main>
+        <footer>
+            <Footer/>
+        </footer>
     </>;
 }
 

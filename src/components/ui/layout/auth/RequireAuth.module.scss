@@ -1,0 +1,19 @@
+header, footer {
+  flex: 0 0 auto;
+}
+
+main {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+
+  .main__content__container {
+    width: 80%;
+    overflow-y: auto;
+  }
+
+  .main__sidebar__container {
+    width: 20%;
+    overflow-y: auto;
+  }
+}

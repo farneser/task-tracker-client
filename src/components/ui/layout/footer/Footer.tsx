@@ -3,7 +3,7 @@ import styles from "./Footer.module.scss"
 import {Link} from "react-router-dom";
 
 const Footer: FC = () => {
-    return <footer className={styles.footer}>
+    return <div className={styles.footer}>
         <div>
             <p className={styles.footer__text}>&copy; 2023 Made by <Link
                 to={"https://github.com/farneser"}>farneser</Link></p>
@@ -22,7 +22,7 @@ const Footer: FC = () => {
                 to="https://heroicons.com/" target="_blank"
                 className={styles.footer__link}>heroicons.com</Link></p>
         </div>
-    </footer>
+    </div>
 }
 
 export default Footer;

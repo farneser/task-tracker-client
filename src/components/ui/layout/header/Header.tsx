@@ -35,7 +35,7 @@ const Header: FC = () => {
         closePopup()
     }
 
-    return <header className={styles.header}>
+    return <div className={styles.header}>
         {user && <Popup>
             <UserSettingsForm user={user} onSubmit={onSettingsSubmit}/>
         </Popup>}
@@ -59,7 +59,7 @@ const Header: FC = () => {
 
             <button className={styles.header__button} onClick={logout}>Logout</button>
         </div>
-    </header>
+    </div>
 }
 
 export default Header;
