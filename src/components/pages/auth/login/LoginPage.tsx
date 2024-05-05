@@ -1,8 +1,8 @@
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import {ILogin} from "@/services/auth/auth.types.ts";
 import authService from "@/services/auth/auth.service.ts";
 import useAuth from "@/hooks/useAuth.ts";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import {Message} from "@/models/Message.ts";
 import {errorMessages} from "@/components/pages/auth/errors.ts";
@@ -17,6 +17,17 @@ const LoginPage: FC = () => {
         formState: {errors},
     } = useForm<ILogin>();
     const [error, setError] = useState<Message | null>(null)
+    const [redirect, setRedirect] = useState<string>("/p")
+    const location = useLocation();
+
+    useEffect(() => {
+            const params = new URLSearchParams(location.search);
+
+            if (params.get('redirect') != undefined) {
+                setRedirect(`${params.get('redirect')}`)
+            }
+        }, [location.search]
+    );
 
     const onSubmit = async (data: ILogin) => {
         auth.updateToken(null)
@@ -24,7 +35,7 @@ const LoginPage: FC = () => {
         authService.login(data)
             .then(data => {
                 auth.updateToken(data)
-                navigate("/")
+                navigate(redirect ?? "/")
 
                 return data;
             })

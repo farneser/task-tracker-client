@@ -21,8 +21,12 @@ const RequireAuth = () => {
         return <Loader/>;
     }
 
+    const getNavigatePath = () => {
+        return `/auth/login?redirect=${location.pathname}`
+    }
+
     if (!getToken()) {
-        return <Navigate to="/auth/login" state={{from: location}} replace/>;
+        return <Navigate to={getNavigatePath()} state={{from: location}} replace/>;
     }
 
     return <>
