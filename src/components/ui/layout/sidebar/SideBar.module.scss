@@ -1,6 +1,8 @@
 @import "src/styles/constants";
 
 .sidebar__container {
+  overflow-wrap: unset;
+  text-wrap: unset;
 
   &__head {
   }
@@ -30,6 +32,9 @@
           cursor: pointer;
           transition: $transition-speed;
           background-color: lighten($background-color, 10%);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
 
           &:hover {
             transition: $transition-out-speed;

@@ -12,32 +12,34 @@ const SideBar: FC = () => {
     const {openPopup, closePopup, Popup} = usePopup();
 
     const onSubmit = async (data: PatchProjectDto) => {
-        const project = await createProject(data)
+        const project = await createProject(data);
 
         closePopup();
 
-        navigate(`p/${project.id}`)
+        navigate(`p/${project.id}`);
     };
 
-    return <div className={styles.sidebar__container}>
-        <Popup>
-            <ProjectForm onSubmit={onSubmit}/>
-        </Popup>
-        <div className={styles.sidebar__container__head}>
-            <ul>
-                <li><Link to="p">Dashboard</Link></li>
-                <li><Link to="#" onClick={openPopup}>Create new Project</Link></li>
-            </ul>
+    return (
+        <div className={styles.sidebar__container}>
+            <Popup>
+                <ProjectForm onSubmit={onSubmit}/>
+            </Popup>
+            <div className={styles.sidebar__container__head}>
+                <ul>
+                    <li><Link to="p">Dashboard</Link></li>
+                    <li><Link to="#" onClick={openPopup}>Create new Project</Link></li>
+                </ul>
+            </div>
+            <div className={styles.sidebar__container__sepatator}/>
+            <div className={styles.sidebar__container__list}>
+                <ul>
+                    {projects.map(p => (
+                        <li key={p.id}><Link to={`p/${p.id}`}>{p.projectName}</Link></li>
+                    ))}
+                </ul>
+            </div>
         </div>
-        <div className={styles.sidebar__container__sepatator}/>
-        <div className={styles.sidebar__container__list}>
-            <ul>
-                {projects.map(p => (
-                    <li><Link to={`p/${p.id}`}>{p.projectName}</Link></li>
-                ))}
-            </ul>
-        </div>
-    </div>
+    );
 }
 
 export default SideBar;

@@ -1,3 +1,5 @@
+@import "src/styles/constants";
+
 header, footer {
   flex: 0 0 auto;
 }
@@ -7,13 +9,52 @@ main {
   overflow-y: auto;
   display: flex;
 
-  .main__content__container {
-    width: 80%;
-    overflow-y: auto;
+  .main__sidebar__container {
+    max-width: 20%;
+    display: flex;
+    transition: max-width 0.5s ease;
+
+    .sidebar {
+      position: relative;
+      max-width: 90%;
+
+      &__switch {
+
+        margin: auto 0;
+        height: 50px;
+        display: flex;
+
+        &__container {
+          border: $text-color solid;
+          width: 10px;
+          height: 10px;
+          margin: auto 0;
+          border-width: 0 4px 4px 0;
+          padding: 1px;
+        }
+      }
+    }
   }
 
-  .main__sidebar__container {
-    width: 20%;
+  .main__content__container {
+    width: 100%;
     overflow-y: auto;
   }
+}
+
+.hide {
+  width: 0;
+  overflow: hidden;
+}
+
+.show {
+  width: 100%;
+}
+
+.right {
+  transform: rotate(-45deg);
+}
+
+.left {
+  transform: rotate(135deg);
 }
