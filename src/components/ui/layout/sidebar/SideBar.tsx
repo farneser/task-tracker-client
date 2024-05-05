@@ -1,17 +1,27 @@
 import {FC} from "react";
 import useProjects from "@/hooks/useProjects.ts";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import styles from "./SideBar.module.scss";
 import usePopup from "@/hooks/usePopup.tsx";
+import ProjectForm from "@/components/ui/project/form/ProjectForm.tsx";
+import {PatchProjectDto} from "@/services/project/project.types.ts";
 
 const SideBar: FC = () => {
-    const {projects} = useProjects();
+    const {projects, createProject} = useProjects();
+    const navigate = useNavigate();
+    const {openPopup, closePopup, Popup} = usePopup();
 
-    const {openPopup, Popup} = usePopup();
+    const onSubmit = async (data: PatchProjectDto) => {
+        const project = await createProject(data)
+
+        closePopup();
+
+        navigate(`p/${project.id}`)
+    };
 
     return <div className={styles.sidebar__container}>
         <Popup>
-            <div>help</div>
+            <ProjectForm onSubmit={onSubmit}/>
         </Popup>
         <div className={styles.sidebar__container__head}>
             <ul>

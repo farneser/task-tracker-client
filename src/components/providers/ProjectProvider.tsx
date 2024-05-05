@@ -8,7 +8,7 @@ interface ProjectServiceHook {
     isLoading: boolean;
     error: Message | null;
     updateProjects: () => Promise<void>;
-    createProject: (project: CreateProjectDto) => Promise<void>;
+    createProject: (project: CreateProjectDto) => Promise<ProjectView>;
     updateProject: (id: number, project: PatchProjectDto) => Promise<void>;
     removeProject: (projectId: number) => Promise<void>;
     setProjects: (projects: ProjectView[]) => void;
@@ -41,10 +41,12 @@ export const ProjectProvider: FC<PropsWithChildren> = ({children}) => {
             });
     };
 
-    const createProject = async (project: CreateProjectDto) => {
+    const createProject = async (project: CreateProjectDto): Promise<ProjectView> => {
         const response = await projectService.create(project)
 
         setProjects([...projects, response]);
+
+        return response
     }
 
     const removeProject = async (projectId: number) => {
