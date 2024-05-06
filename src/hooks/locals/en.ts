@@ -58,6 +58,33 @@ const en: Translations = {
         },
         submit: "Register",
         accountAlreadyExists: "Account already exists?"
+    },
+    statusForm: {
+        headingCreate: "Create a new status",
+        headingEdit: "Update status",
+        statusName: {
+            label: "Status name",
+            placeholder: "Enter status name",
+            required: "Status name is required",
+            invalid: "Invalid status name",
+            minLength: "Minimum length: 1 characters",
+            maxLength: "Maximum length: 255 characters"
+        },
+        statusColor: {
+            label: "Status color",
+            placeholder: "Enter status color",
+            required: "Status color is required",
+            invalid: "Invalid color",
+            minLength: "Minimum length: 4 characters",
+            maxLength: "Maximum length: 7 characters"
+        },
+        isCompleted: {
+            label: "Mark tasks in this list as completed",
+            required: "This field is required"
+        },
+        submitCreate: "Add status",
+        submitEdit: "Update status"
     }
 }
+
 export default en;

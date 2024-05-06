@@ -26,6 +26,18 @@ export type Translations = {
         password: Field,
         confirmPassword: Field,
         accountAlreadyExists: string
+    },
+    statusForm: {
+        headingCreate: string,
+        headingEdit: string,
+        statusName: Field,
+        statusColor: Field,
+        isCompleted: {
+            label: string,
+            required: string
+        },
+        submitCreate: string,
+        submitEdit: string,
     }
 };
 

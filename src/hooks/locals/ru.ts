@@ -58,7 +58,34 @@ const ru: Translations = {
         },
         submit: "Зарегистрироваться",
         accountAlreadyExists: "Аккаунт уже существует?"
+    },
+    statusForm: {
+        headingCreate: "Создать новый статус",
+        headingEdit: "Обновить статус",
+        statusName: {
+            label: "Название статуса",
+            placeholder: "Введите название статуса",
+            required: "Название статуса обязательно",
+            invalid: "Недопустимое название статуса",
+            minLength: "Минимальная длина: 1 символ",
+            maxLength: "Максимальная длина: 255 символов"
+        },
+        statusColor: {
+            label: "Цвет статуса",
+            placeholder: "Введите цвет статуса",
+            required: "Цвет статуса обязателен",
+            invalid: "Недопустимый цвет",
+            minLength: "Минимальная длина: 4 символов",
+            maxLength: "Максимальная длина: 7 символов"
+        },
+        isCompleted: {
+            label: "Отметить задачи в этом списке как выполненные",
+            required: "Это поле обязательно"
+        },
+        submitCreate: "Добавить статус",
+        submitEdit: "Обновить статус"
     }
+
 }
 
 export default ru;
