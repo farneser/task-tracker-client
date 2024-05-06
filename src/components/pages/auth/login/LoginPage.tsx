@@ -6,9 +6,11 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import {Message} from "@/models/Message.ts";
 import {errorMessages} from "@/components/pages/auth/errors.ts";
-
+import {useLocalization} from "@/hooks/locals/useLocalization.ts";
 
 const LoginPage: FC = () => {
+    const {translations} = useLocalization();
+
     const auth = useAuth();
     const navigate = useNavigate();
     const {
@@ -48,21 +50,21 @@ const LoginPage: FC = () => {
         <div className="page">
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
                 <div>
-                    <h1>Login page</h1>
+                    <h1>{translations.loginPage.heading}</h1>
                 </div>
                 <div>
                     {error && <p className="form__error">
                         {errorMessages[`${error.status}`] || error.message}</p>}
-                    <label className="form__label">Email</label>
+                    <label className="form__label">{translations.loginPage.login.label}</label>
                     <input
                         type="text"
-                        placeholder="Email"
+                        placeholder={translations.loginPage.login.placeholder}
                         className="form__input"
                         {...register('login', {
-                            required: 'Email is required',
+                            required: translations.loginPage.login.required,
                             pattern: {
                                 value: /^\S+@\S+$/i,
-                                message: 'Invalid email address',
+                                message: translations.loginPage.login.invalid,
                             },
                         })}
                     />
@@ -70,20 +72,20 @@ const LoginPage: FC = () => {
                 </div>
 
                 <div>
-                    <label className="form__label">Password</label>
+                    <label className="form__label">{translations.loginPage.password.label}</label>
                     <input
                         type="password"
-                        placeholder="Password"
+                        placeholder={translations.loginPage.password.placeholder}
                         className="form__input"
                         {...register('password', {
-                            required: 'Password is required',
+                            required: translations.loginPage.password.required,
                             maxLength: {
                                 value: 64,
-                                message: 'Password is too long',
+                                message: translations.loginPage.password.maxLength,
                             },
                             minLength: {
                                 value: 8,
-                                message: 'Password is too short',
+                                message: translations.loginPage.password.minLength,
                             },
                         })}
                     />
@@ -93,11 +95,11 @@ const LoginPage: FC = () => {
                 </div>
                 <div>
                     <button type="submit" className="form__button">
-                        Submit
+                        {translations.loginPage.submit}
                     </button>
                 </div>
                 <div className="form__link">
-                    <Link to={"/auth/register"}>Don't have an account?</Link>
+                    <Link to={"/auth/register"}>{translations.loginPage.accountNotExists}</Link>
                 </div>
             </form>
         </div>
