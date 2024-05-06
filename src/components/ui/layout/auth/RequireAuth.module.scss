@@ -13,6 +13,7 @@ main {
     .sidebar {
       position: relative;
       max-width: 90%;
+      overflow-y: auto;
 
       &__switch {
 

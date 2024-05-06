@@ -7,7 +7,7 @@ import {getContentType} from "@/api/api.helper.ts";
 import {ILogin, IRegister} from "@/services/auth/auth.types.ts";
 import {setLocalStorage} from "@/utils/localStorage.utils.ts";
 
-const sendTokenRequest = async (data: Token | ILogin | IRegister, path: string): Promise<Token | null> => {
+const sendTokenRequest = async (data: ILogin | IRegister | null, path: string): Promise<Token | null> => {
     return await axios.post<Token>(`${constants.baseUrl}${path}`, {...data}, {
         headers: getContentType(),
         withCredentials: true
@@ -37,10 +37,8 @@ export const authService = {
             confirmPassword: data.confirmPassword
         }, "/api/v1/auth/register")
     },
-    async refreshToken(token: Token): Promise<Token | null> {
-        return await sendTokenRequest({
-            accessToken: token.accessToken,
-        }, "/api/v1/auth/refresh")
+    async refreshToken(): Promise<Token | null> {
+        return await sendTokenRequest(null, "/api/v1/auth/refresh")
     },
     async confirm(id: string): Promise<Message | null> {
         const message = await axios.post<Message>(`${constants.baseUrl}/api/v1/auth/confirm?token=${id}`)

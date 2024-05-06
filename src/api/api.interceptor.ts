@@ -31,11 +31,7 @@ axiosInstance.interceptors.response.use(async res => res, async error => {
             request._isRetry = true;
 
             try {
-                const token = getLocalStorageItem<Token>(constants.authTokenKey);
-
-                if (token) {
-                    await authService.refreshToken(token)
-                }
+                await authService.refreshToken()
 
                 return axiosInstance.request(request);
             } catch (e) {
