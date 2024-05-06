@@ -1,4 +1,4 @@
-import {ColumnView} from "@/services/column/column.types.ts";
+import {StatusView} from "@/services/status/status.types.ts";
 
 export interface CreateTaskDto {
     columnId: number;
@@ -15,7 +15,7 @@ export interface PatchTaskDto extends CreateTaskDto {
 
 export interface TaskView extends Omit<PatchTaskDto, "columnId"> {
     id: number;
-    column: ColumnView | null;
+    column: StatusView | null;
     editDate: string;
     creationDate: string;
 }
