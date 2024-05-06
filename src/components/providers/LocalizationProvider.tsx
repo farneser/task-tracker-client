@@ -10,7 +10,7 @@ interface LocaleContextType {
 
 export const LocalizationContext = createContext<LocaleContextType | undefined>(undefined);
 
-const LocalizationProvider: FC<PropsWithChildren> = ({children}) => {
+export const LocalizationProvider: FC<PropsWithChildren> = ({children}) => {
     const [locale, setLocaleState] = useState<LocaleKey>(() => {
         return getLocalStorageItem<LocaleKey>('locale') || "en";
     });
@@ -39,5 +39,3 @@ const LocalizationProvider: FC<PropsWithChildren> = ({children}) => {
         </LocalizationContext.Provider>
     );
 };
-
-export default LocalizationProvider;

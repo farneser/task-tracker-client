@@ -14,7 +14,6 @@ interface ProjectServiceHook {
     setProjects: (projects: ProjectView[]) => void;
 }
 
-
 export const ProjectContext = createContext<ProjectServiceHook | null>(null);
 
 export const ProjectProvider: FC<PropsWithChildren> = ({children}) => {
