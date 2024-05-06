@@ -1,6 +1,5 @@
 import {Navigate, Outlet, useLocation} from "react-router-dom";
 import useAuth from "@/hooks/useAuth.ts";
-import Footer from "@/components/ui/layout/footer/Footer.tsx";
 import Header from "@/components/ui/layout/header/Header.tsx";
 import {useEffect, useState} from "react";
 import Loader from "@/components/ui/loader/Loader.tsx";
@@ -51,9 +50,6 @@ const RequireAuth = () => {
                 <Outlet/>
             </div>
         </main>
-        <footer>
-            <Footer/>
-        </footer>
     </>;
 }
 

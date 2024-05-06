@@ -5,9 +5,10 @@ import styles from "./SideBar.module.scss";
 import usePopup from "@/hooks/usePopup.tsx";
 import ProjectForm from "@/components/ui/project/form/ProjectForm.tsx";
 import {PatchProjectDto} from "@/services/project/project.types.ts";
+import Loader from "@/components/ui/loader/Loader.tsx";
 
 const SideBar: FC = () => {
-    const {projects, createProject} = useProjects();
+    const {projects, createProject, isLoading: isProjectsLoading} = useProjects();
     const navigate = useNavigate();
     const {openPopup, closePopup, Popup} = usePopup();
 
@@ -32,11 +33,11 @@ const SideBar: FC = () => {
             </div>
             <div className={styles.sidebar__container__sepatator}/>
             <div className={styles.sidebar__container__list}>
-                <ul>
+                {isProjectsLoading ? <Loader/> : <ul>
                     {projects.map(p => (
                         <li key={p.id}><Link to={`p/${p.id}`}>{p.projectName}</Link></li>
                     ))}
-                </ul>
+                </ul>}
             </div>
         </div>
     );

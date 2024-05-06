@@ -5,7 +5,7 @@ const useProjects = () => {
     const context = useContext(ProjectContext);
 
     if (!context) {
-        throw new Error('useProjects must be used within a AuthProvider');
+        throw new Error('useProjects must be used within a ProjectsProvider');
     }
 
     return context;

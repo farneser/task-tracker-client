@@ -1,5 +1,9 @@
 @import "src/styles/constants";
 
+header, footer {
+  flex: 0 0 auto;
+}
+
 .layout {
   &__container {
     display: flex;
