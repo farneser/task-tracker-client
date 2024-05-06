@@ -1,3 +1,6 @@
+import ru from "@/hooks/locals/ru.ts";
+import en from "@/hooks/locals/en.ts";
+
 type Field = {
     label: string,
     placeholder: string,
@@ -19,53 +22,6 @@ export type Translations = {
 
 export type LocaleKey = "en" | "ru";
 
-const locales: Record<LocaleKey, Translations> = {
-    en: {
-        loginPage: {
-            heading: "Log in to your account",
-            submit: "Log In",
-            login: {
-                label: "Login or Email",
-                placeholder: "Enter your login or Email",
-                required: "This field is required",
-                invalid: "Invalid format",
-                minLength: "Minimum length: 1 charterers",
-                maxLength: "Maximum length: 255 charterers"
-            },
-            password: {
-                label: "Password",
-                placeholder: "Enter your password",
-                required: "This field is required",
-                invalid: "Invalid password",
-                minLength: "Minimum length: 8 charterers",
-                maxLength: "Maximum length: 64 charterers"
-            },
-            accountNotExists: "Don't have an account?"
-        }
-    },
-    ru: {
-        loginPage: {
-            heading: "Вход на сайт",
-            submit: "Войти",
-            login: {
-                label: "Логин или Email",
-                placeholder: "Введите ваш логин или Email",
-                required: "Это поле обязательно для заполнения",
-                invalid: "Неверный формат",
-                minLength: "Минимальная длина: 1 символ",
-                maxLength: "Максимальная длина: 255 символов"
-            },
-            password: {
-                label: "Пароль",
-                placeholder: "Введите ваш пароль",
-                required: "Это поле обязательно для заполнения",
-                invalid: "Неверный пароль",
-                minLength: "Минимальная длина: 8 символов",
-                maxLength: "Максимальная длина: 255 символов"
-            },
-            accountNotExists: "Отсутсвует аккаунт?"
-        }
-    },
-};
+const locales: Record<LocaleKey, Translations> = {en, ru,};
 
 export default locales;

@@ -6,7 +6,7 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import {Message} from "@/models/Message.ts";
 import {errorMessages} from "@/components/pages/auth/errors.ts";
-import {useLocalization} from "@/hooks/locals/useLocalization.ts";
+import {useLocalization} from "@/hooks/useLocalization.ts";
 
 const LoginPage: FC = () => {
     const {translations} = useLocalization();
