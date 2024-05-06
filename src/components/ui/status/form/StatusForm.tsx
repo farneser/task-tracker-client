@@ -1,17 +1,16 @@
 import {FC, useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
-import {CreateStatusDto, PatchStatusDto, StatusView} from "@/services/status/status.types.ts";
+import {PatchStatusDto, StatusView} from "@/services/status/status.types.ts";
 import styles from "./StatusForm.module.scss";
 import SwitchCheckbox from "@/components/ui/forms/switchCheckbox/SwitchCheckbox.tsx";
 import {useLocalization} from "@/hooks/useLocalization.ts";
 
 type StatusFormProps = {
     status?: StatusView;
-    onSubmit: (data: PatchStatusDto | CreateStatusDto) => void;
-    projectId: number;
+    onSubmit: (data: PatchStatusDto) => void;
 }
 
-const StatusForm: FC<StatusFormProps> = ({onSubmit, status, projectId}) => {
+const StatusForm: FC<StatusFormProps> = ({onSubmit, status}) => {
     const {translations} = useLocalization();
 
     const {
@@ -33,7 +32,7 @@ const StatusForm: FC<StatusFormProps> = ({onSubmit, status, projectId}) => {
     };
 
     const submit = (data: PatchStatusDto) => {
-        onSubmit({...data, isCompleted: isChecked, projectId});
+        onSubmit({...data, isCompleted: isChecked});
         reset();
     }
 

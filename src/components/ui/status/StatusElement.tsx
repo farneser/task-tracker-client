@@ -1,43 +1,48 @@
 import {FC, useMemo, useState} from "react";
-import {ColumnView, PatchColumnDto} from "@/services/column/column.types.ts";
+import {PatchStatusDto, StatusView} from "@/services/status/status.types.ts";
 import usePopup from "@/hooks/usePopup.tsx";
 import {CreateTaskDto, PatchTaskDto, TaskLookupView} from "@/services/task/task.types.ts";
 import TaskElement from "@/components/ui/task/TaskElement.tsx";
 import {CSS} from "@dnd-kit/utilities";
 import {SortableContext, useSortable} from "@dnd-kit/sortable";
 import {ItemTypes} from "@/utils/id/ItemTypes.ts";
-import {getColumnId, getTaskId} from "@/utils/id/id.utils.ts";
-import styles from "./ColumnElement.module.scss";
+import {getStatusId, getTaskId} from "@/utils/id/id.utils.ts";
+import styles from "./StatusElement.module.scss";
 import TrashIcon from "@/components/ui/icons/TrashIcon.tsx";
 import BarsIcon from "@/components/ui/icons/BarsIcon.tsx";
 import PlusIcon from "@/components/ui/icons/PlusIcon.tsx";
 import CheckIcon from "@/components/ui/icons/CheckIcon.tsx";
 import TaskForm from "@/components/ui/task/form/TaskForm.tsx";
-import ColumnForm from "@/components/ui/column/form/ColumnForm.tsx";
+import StatusForm from "@/components/ui/status/form/StatusForm.tsx";
+import {useLocalization} from "@/hooks/useLocalization.ts";
 
-type ColumnProps = {
-    column: ColumnView;
-    deleteColumn?: () => void;
-    updateColumn?: (id: number, data: PatchColumnDto) => void;
+type StatusProps = {
+    status: StatusView;
+    deleteStatus?: () => void;
+    updateStatus?: (id: number, data: PatchStatusDto) => void;
     createTask?: (dto: CreateTaskDto) => void;
     updateTask?: (id: number, data: PatchTaskDto) => void;
     deleteTask?: (id: number) => void;
     tasks: TaskLookupView[];
 };
 
-const ColumnElement: FC<ColumnProps> = (
-    {column, tasks, updateTask, deleteTask, deleteColumn, updateColumn, createTask}
+const StatusElement: FC<StatusProps> = (
+    {status, tasks, updateTask, deleteTask, deleteStatus, updateStatus, createTask}
 ) => {
+    const {translations} = useLocalization();
+
     const {
         reversePopup: reverseEditPopup,
         closePopup: closeEditPopup,
         Popup: EditPopup
     } = usePopup();
+
     const {
         reversePopup: reverseCreatePopup,
         closePopup: closeCreatePopup,
         Popup: CreatePopup
     } = usePopup();
+
     const [mouseIsOver, setMouseIsOver] = useState(false);
 
     const {
@@ -48,10 +53,10 @@ const ColumnElement: FC<ColumnProps> = (
         transition,
         isDragging,
     } = useSortable({
-        id: getColumnId(column.id),
+        id: getStatusId(status.id),
         data: {
-            type: ItemTypes.COLUMN,
-            column,
+            type: ItemTypes.STATUS,
+            status: status,
         }
     })
 
@@ -64,8 +69,8 @@ const ColumnElement: FC<ColumnProps> = (
         transform: CSS.Transform.toString(transform)
     }
 
-    const onEditSubmit = async (data: PatchColumnDto) => {
-        updateColumn && updateColumn(column.id, data);
+    const onEditSubmit = async (data: PatchStatusDto) => {
+        updateStatus && updateStatus(status.id, data);
 
         closeEditPopup();
     };
@@ -77,22 +82,22 @@ const ColumnElement: FC<ColumnProps> = (
     };
 
     if (isDragging) {
-        return <div ref={setNodeRef} style={style} className={styles.column__container_overlay}></div>
+        return <div ref={setNodeRef} style={style} className={styles.status__container_overlay}></div>
     }
 
     return (<>
             <CreatePopup>
-                <TaskForm onSubmit={onCreateSubmit} columnId={column.id}/>
+                <TaskForm onSubmit={onCreateSubmit} statusId={status.id}/>
             </CreatePopup>
             <EditPopup>
-                <ColumnForm onSubmit={onEditSubmit} column={column}/>
+                <StatusForm onSubmit={onEditSubmit} status={status}/>
             </EditPopup>
-            <div className={styles.column__container} ref={setNodeRef} style={style}
+            <div className={styles.status__container} ref={setNodeRef} style={style}
                  onMouseEnter={() => setMouseIsOver(true)}
                  onMouseLeave={() => setMouseIsOver(false)}
             >
                 <div className={styles.header}>
-                    {updateColumn ? <>
+                    {updateStatus ? <>
                         <div className={styles.header__drag}
                              {...attributes}
                              {...listeners}
@@ -101,15 +106,15 @@ const ColumnElement: FC<ColumnProps> = (
                         </div>
                         <div onClick={reverseEditPopup}
                              className={styles.header__title}>
-                            <div>{column.columnName}</div>
-                            {column.isCompleted && <div style={{width: "30px", height: "30px"}}><CheckIcon/></div>}
+                            <div>{status.statusName}</div>
+                            {status.isCompleted && <div style={{width: "30px", height: "30px"}}><CheckIcon/></div>}
                         </div>
                     </> : <div>
-                        <div>{column.columnName}</div>
-                        {column.isCompleted && <div style={{width: "30px", height: "30px"}}><CheckIcon/></div>}
+                        <div>{status.statusName}</div>
+                        {status.isCompleted && <div style={{width: "30px", height: "30px"}}><CheckIcon/></div>}
                     </div>}
-                    {deleteColumn && mouseIsOver &&
-                        <button className={styles.header__delete} onClick={deleteColumn}>
+                    {deleteStatus && mouseIsOver &&
+                        <button className={styles.header__delete} onClick={deleteStatus}>
                             <TrashIcon/>
                         </button>}
                 </div>
@@ -127,7 +132,7 @@ const ColumnElement: FC<ColumnProps> = (
                     </SortableContext>
                 </div>
                 {createTask && <button onClick={reverseCreatePopup} className={styles.create__task}>
-                    <div>Create New Task</div>
+                    <div>{translations.statusElement.createTask}</div>
                     <div style={{width: "30px", height: "30px"}}><PlusIcon/></div>
                 </button>}
             </div>
@@ -135,4 +140,4 @@ const ColumnElement: FC<ColumnProps> = (
     );
 };
 
-export default ColumnElement;
+export default StatusElement;

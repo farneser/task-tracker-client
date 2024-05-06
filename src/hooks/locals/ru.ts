@@ -84,8 +84,10 @@ const ru: Translations = {
         },
         submitCreate: "Добавить статус",
         submitEdit: "Обновить статус"
+    },
+    statusElement: {
+        createTask: "Создать новую задачу"
     }
-
 }
 
 export default ru;

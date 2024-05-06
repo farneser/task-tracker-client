@@ -38,6 +38,9 @@ export type Translations = {
         },
         submitCreate: string,
         submitEdit: string,
+    },
+    statusElement: {
+        createTask: string
     }
 };
 

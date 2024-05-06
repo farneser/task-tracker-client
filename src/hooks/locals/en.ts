@@ -84,6 +84,9 @@ const en: Translations = {
         },
         submitCreate: "Add status",
         submitEdit: "Update status"
+    },
+    statusElement: {
+        createTask: "Create New Task"
     }
 }
 
