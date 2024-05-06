@@ -17,6 +17,15 @@ export type Translations = {
         login: Field,
         password: Field,
         accountNotExists: string
+    },
+    registerPage: {
+        heading: string,
+        submit: string,
+        username: Field,
+        email: Field,
+        password: Field,
+        confirmPassword: Field,
+        accountAlreadyExists: string
     }
 };
 

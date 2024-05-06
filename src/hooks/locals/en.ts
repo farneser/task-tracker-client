@@ -21,6 +21,43 @@ const en: Translations = {
             maxLength: "Maximum length: 64 charterers"
         },
         accountNotExists: "Don't have an account?"
+    },
+    registerPage: {
+        heading: "Register page",
+        username: {
+            label: "Username",
+            placeholder: "Enter your username",
+            required: "This field is required",
+            invalid: "Invalid format",
+            minLength: "Minimum length: 4 character",
+            maxLength: "Maximum length: 64 characters"
+        },
+        email: {
+            label: "Email",
+            placeholder: "Enter your Email",
+            required: "This field is required",
+            invalid: "Invalid format",
+            minLength: "Email is too short",
+            maxLength: "Email is too long"
+        },
+        password: {
+            label: "Password",
+            placeholder: "Enter your password",
+            required: "This field is required",
+            invalid: "Invalid password",
+            minLength: "Minimum length: 8 characters",
+            maxLength: "Maximum length: 64 characters"
+        },
+        confirmPassword: {
+            label: "Confirm Password",
+            placeholder: "Confirm your password",
+            required: "This field is required",
+            invalid: "Passwords do not match",
+            minLength: "Minimum length: 8 characters",
+            maxLength: "Maximum length: 64 characters"
+        },
+        submit: "Register",
+        accountAlreadyExists: "Account already exists?"
     }
 }
 export default en;
