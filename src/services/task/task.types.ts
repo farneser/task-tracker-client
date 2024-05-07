@@ -1,21 +1,22 @@
 import {StatusView} from "@/services/status/status.types.ts";
 
 export interface CreateTaskDto {
-    columnId: number;
-    taskName: string
-    description: string
+    statusId: number;
+    taskName: string;
+    description: string;
+    assignedFor?: number;
 }
 
 export interface PatchTaskDto extends CreateTaskDto {
     taskName: string;
     description: string;
-    columnId: number;
+    statusId: number;
     orderNumber: number;
 }
 
-export interface TaskView extends Omit<PatchTaskDto, "columnId"> {
+export interface TaskView extends Omit<PatchTaskDto, "statusId"> {
     id: number;
-    column: StatusView | null;
+    status: StatusView | null;
     editDate: string;
     creationDate: string;
 }
