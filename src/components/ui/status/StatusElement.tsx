@@ -66,7 +66,15 @@ const StatusElement: FC<StatusProps> = (
 
     const style = {
         transition,
-        transform: CSS.Transform.toString(transform)
+        transform: CSS.Transform.toString(transform),
+    }
+
+    const borderColorStyle = {
+        borderColor: ""
+    }
+
+    if (mouseIsOver) {
+        borderColorStyle.borderColor = status.statusColor
     }
 
     const onEditSubmit = async (data: PatchStatusDto) => {
@@ -82,7 +90,8 @@ const StatusElement: FC<StatusProps> = (
     };
 
     if (isDragging) {
-        return <div ref={setNodeRef} style={style} className={styles.status__container_overlay}></div>
+        return <div ref={setNodeRef} style={{...style, ...borderColorStyle}}
+                    className={styles.status__container_overlay}></div>
     }
 
     return (<>
@@ -92,7 +101,7 @@ const StatusElement: FC<StatusProps> = (
             <EditPopup>
                 <StatusForm onSubmit={onEditSubmit} status={status}/>
             </EditPopup>
-            <div className={styles.status__container} ref={setNodeRef} style={style}
+            <div className={styles.status__container} ref={setNodeRef} style={{...style, ...borderColorStyle}}
                  onMouseEnter={() => setMouseIsOver(true)}
                  onMouseLeave={() => setMouseIsOver(false)}
             >
