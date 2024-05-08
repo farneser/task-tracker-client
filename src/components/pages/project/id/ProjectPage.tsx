@@ -28,10 +28,11 @@ import useAuth from "@/hooks/useAuth.ts";
 import PlusIcon from "@/components/ui/icons/PlusIcon.tsx";
 import Loader from "@/components/ui/loader/Loader.tsx";
 import {useNavigate, useParams} from "react-router-dom";
+import {useLocalization} from "@/hooks/useLocalization.ts";
 
 const ProjectPage: FC = () => {
     const auth = useAuth();
-
+    const {translations} = useLocalization();
     const {projectId} = useParams();
 
     const {
@@ -205,7 +206,7 @@ const ProjectPage: FC = () => {
                     />}
                     <div className={styles.create__status__container}>
                         <button onClick={reversePopup}>
-                            <div>Create New Column</div>
+                            <div>{translations.projectPage.createStatus}</div>
                             <div style={{width: "30px", height: "30px"}}><PlusIcon/></div>
                         </button>
                     </div>

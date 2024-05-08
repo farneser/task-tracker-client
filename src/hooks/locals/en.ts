@@ -112,6 +112,15 @@ const en: Translations = {
     },
     projectPage: {
         createStatus: "Create a new Status"
+    },
+    credentials: {
+        author: "© 2024 Made by",
+        repo: "Explore code on GitHub",
+        icons: "Icons sourced from"
+    },
+    sideBar: {
+        dashboard: "Dashboard",
+        createNewProject: "Create a new Project"
     }
 }
 

@@ -1,4 +1,4 @@
-import locales, {LocaleKey, Translations} from "@/hooks/locals/locales.ts";
+import locales, {LocaleKey, localeKeys, Translations} from "@/hooks/locals/locales.ts";
 import {createContext, FC, PropsWithChildren, useEffect, useState} from "react";
 import {getLocalStorageItem, setLocalStorage} from "@/utils/localStorage.utils.ts";
 
@@ -6,6 +6,7 @@ interface LocaleContextType {
     locale: LocaleKey;
     translations: Translations;
     setLocale: (locale: LocaleKey) => void;
+    locales: LocaleKey[];
 }
 
 export const LocalizationContext = createContext<LocaleContextType | undefined>(undefined);
@@ -16,15 +17,10 @@ export const LocalizationProvider: FC<PropsWithChildren> = ({children}) => {
     });
 
     const setLocale = (newLocale: LocaleKey) => {
-        setLocaleState(newLocale);
 
         setLocalStorage('locale', newLocale)
-    };
 
-    const contextValue: LocaleContextType = {
-        locale,
-        translations: locales[locale],
-        setLocale,
+        setLocaleState(newLocale);
     };
 
     useEffect(() => {
@@ -34,7 +30,12 @@ export const LocalizationProvider: FC<PropsWithChildren> = ({children}) => {
     }, [locale]);
 
     return (
-        <LocalizationContext.Provider value={contextValue}>
+        <LocalizationContext.Provider value={{
+            locale,
+            translations: locales[locale],
+            setLocale,
+            locales: localeKeys
+        }}>
             {children}
         </LocalizationContext.Provider>
     );

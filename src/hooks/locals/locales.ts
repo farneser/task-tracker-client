@@ -53,10 +53,21 @@ export type Translations = {
     projectPage: {
         createStatus: string
     },
+    credentials: {
+        author: string,
+        repo: string,
+        icons: string,
+    },
+    sideBar: {
+        dashboard: string,
+        createNewProject: string
+    }
 };
 
 export type LocaleKey = "en" | "ru";
 
 const locales: Record<LocaleKey, Translations> = {en, ru,};
+
+export const localeKeys: LocaleKey[] = Object.keys(locales) as LocaleKey[];
 
 export default locales;

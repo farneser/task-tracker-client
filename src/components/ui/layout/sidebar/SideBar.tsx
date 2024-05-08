@@ -7,12 +7,14 @@ import ProjectForm from "@/components/ui/project/form/ProjectForm.tsx";
 import {PatchProjectDto} from "@/services/project/project.types.ts";
 import Loader from "@/components/ui/loader/Loader.tsx";
 import useAuth from "@/hooks/useAuth.ts";
+import {useLocalization} from "@/hooks/useLocalization.ts";
 
 const SideBar: FC = () => {
     const {projects, createProject, isLoading: isProjectsLoading, updateProjects} = useProjects();
     const {user} = useAuth();
     const navigate = useNavigate();
     const {openPopup, closePopup, Popup} = usePopup();
+    const {translations} = useLocalization();
 
     useEffect(() => {
         updateProjects().then()
@@ -33,8 +35,8 @@ const SideBar: FC = () => {
             </Popup>
             <div className={styles.sidebar__container__head}>
                 <ul>
-                    <li><Link to="p">Dashboard</Link></li>
-                    <li><Link to="#" onClick={openPopup}>Create new Project</Link></li>
+                    <li><Link to="p">{translations.sideBar.dashboard}</Link></li>
+                    <li><Link to="#" onClick={openPopup}>{translations.sideBar.createNewProject}</Link></li>
                 </ul>
             </div>
             <div className={styles.sidebar__container__sepatator}/>

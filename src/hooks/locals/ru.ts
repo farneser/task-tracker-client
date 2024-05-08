@@ -112,6 +112,15 @@ const ru: Translations = {
     },
     projectPage: {
         createStatus: "Создать новый статус"
+    },
+    credentials: {
+        author: "© 2024 Сделано",
+        repo: "Изучить код на GitHub",
+        icons: "Иконки взяты с сайта"
+    },
+    sideBar: {
+        dashboard: "Главная",
+        createNewProject: "Создать новый проект"
     }
 }
 

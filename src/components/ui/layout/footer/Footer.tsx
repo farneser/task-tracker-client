@@ -1,26 +1,38 @@
 import {FC} from "react";
 import styles from "./Footer.module.scss"
 import {Link} from "react-router-dom";
+import {useLocalization} from "@/hooks/useLocalization.ts";
 
 const Footer: FC = () => {
+    const {locales, setLocale, translations} = useLocalization();
+
     return <div className={styles.footer}>
-        <div>
-            <p className={styles.footer__text}>&copy; 2023 Made by <Link
-                to={"https://github.com/farneser"}>farneser</Link></p>
-        </div>
+        <div className={styles.footer__info}>
+            <div>
+                <p className={styles.footer__text}>{translations.credentials.author} <Link
+                    to={"https://github.com/farneser"}>farneser</Link></p>
+            </div>
 
-        <div>
-            <p className={styles.footer__text}>Explore code on GitHub: <Link
-                to="https://github.com/farneser/task-tracker"
-                target="_blank"
-                className="footer__link">farneser/task-tracker</Link>
-            </p>
-        </div>
+            <div>
+                <p className={styles.footer__text}>{translations.credentials.repo} <Link
+                    to="https://github.com/farneser/task-tracker"
+                    target="_blank"
+                    className="footer__link">farneser/task-tracker</Link>
+                </p>
+            </div>
 
-        <div>
-            <p className={styles.footer__text}>Icons sourced from: <Link
-                to="https://heroicons.com/" target="_blank"
-                className={styles.footer__link}>heroicons.com</Link></p>
+            <div>
+                <p className={styles.footer__text}>{translations.credentials.icons} <Link
+                    to="https://heroicons.com/" target="_blank"
+                    className={styles.footer__link}>heroicons.com</Link></p>
+            </div>
+        </div>
+        <div className={styles.footer__locals}>
+            {locales.map(localeKey => (
+                <div key={localeKey} onClick={() => setLocale(localeKey)}>
+                    {localeKey}
+                </div>
+            ))}
         </div>
     </div>
 }
