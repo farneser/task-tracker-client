@@ -37,7 +37,7 @@ export const projectService = {
 
         return data.data;
     }, async getStatuses(id: number): Promise<StatusView[]> {
-        const data = await axiosInstance.get<StatusView[]>(`/api/v1/project/${id}/statuses`);
+        const data = await axiosInstance.get<StatusView[]>(`/api/v1/project/${id}/statuses?retrieveTasks=false`);
 
         return data.data;
     }

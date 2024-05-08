@@ -1,7 +1,7 @@
 import {FC, useEffect} from "react";
 import styles from "./Header.module.scss";
 import useAuth from "@/hooks/useAuth.ts";
-import useColumns from "@/hooks/useColumns.ts";
+import useStatuses from "@/hooks/useStatuses.ts";
 import useTasks from "@/hooks/useTasks.ts";
 import usePopup from "@/hooks/usePopup.tsx";
 import SettingsIcon from "@/components/ui/icons/SettingsIcon.tsx";
@@ -17,7 +17,7 @@ const Header: FC = () => {
     const {user, logout, loading, patchUser} = useAuth();
     const {Popup, reversePopup, closePopup} = usePopup(false)
 
-    const {updateColumns, setIsArchiveOpen, isArchiveOpen, columns} = useColumns()
+    const {updateStatuses, setIsArchiveOpen, isArchiveOpen, statuses} = useStatuses()
     const {updateTasks, archiveTasks} = useTasks()
 
     useEffect(() => {
@@ -26,7 +26,7 @@ const Header: FC = () => {
     }, [loading, user]);
 
     const refresh = async () => {
-        await updateColumns().then()
+        await updateStatuses().then()
         await updateTasks().then()
     }
 
@@ -44,7 +44,7 @@ const Header: FC = () => {
             {projectId != undefined && <>
                 <button className={styles.header__button} onClick={refresh}>Refresh tasks</button>
                 <button className={styles.header__button} onClick={() => archiveTasks(
-                    columns.filter(c => c.isCompleted).map(c => c.id))}>
+                    statuses.filter(c => c.isCompleted).map(c => c.id))}>
                     Archive tasks
                 </button>
                 <button className={styles.header__button} onClick={() => setIsArchiveOpen(!isArchiveOpen)}>
