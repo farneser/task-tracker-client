@@ -2,6 +2,7 @@ import {createContext, FC, PropsWithChildren, useEffect, useState} from "react";
 import {CreateStatusDto, PatchStatusDto, StatusView} from "@/services/status/status.types.ts";
 import {Message} from "@/models/Message.ts";
 import {statusService} from "@/services/status/status.service.ts";
+import {projectService} from "@/services/project/project.service.ts";
 
 interface StatusServiceHook {
     statuses: StatusView[];
@@ -15,6 +16,7 @@ interface StatusServiceHook {
     isArchiveOpen: boolean;
     setIsArchiveOpen: (value: boolean) => void;
     archiveStatus: StatusView;
+    setProjectId: (projectId: number | null) => void;
 }
 
 export const StatusContext = createContext<StatusServiceHook | null>(null);
@@ -24,17 +26,19 @@ export const StatusProvider: FC<PropsWithChildren> = ({children}) => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<Message | null>(null);
     const [isArchiveOpen, setIsArchiveOpen] = useState(false);
+    const [projectId, setProjectId] = useState<number | null>();
 
     useEffect(() => {
         updateStatuses().then();
-    }, []);
+    }, [projectId]);
 
     const updateStatuses = async () => {
         setIsLoading(true);
-        statusService
-            .get()
+
+        (projectId ? projectService.getStatuses(projectId) : statusService.get())
             .then((statusesData) => {
                 setStatuses(statusesData);
+                setError(null)
             })
             .catch((error) => {
                 setError(error);
@@ -74,6 +78,10 @@ export const StatusProvider: FC<PropsWithChildren> = ({children}) => {
         setStatuses(statuses);
     }
 
+    const setProjectIdHandler = (id: number | null) => {
+        setProjectId(id);
+    }
+
     const archiveStatus: StatusView = {
         id: -1,
         statusName: "Archive",
@@ -91,7 +99,7 @@ export const StatusProvider: FC<PropsWithChildren> = ({children}) => {
             removeStatus, updateStatus,
             setStatuses: setStatusesHandler,
             isArchiveOpen, setIsArchiveOpen,
-            archiveStatus
+            archiveStatus, setProjectId: setProjectIdHandler
         }}>
             {children}
         </StatusContext.Provider>

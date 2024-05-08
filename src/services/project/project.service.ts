@@ -1,6 +1,7 @@
 import axiosInstance from "@/api/api.interceptor.ts";
 import {TaskView} from "@/services/task/task.types.ts";
 import {CreateProjectDto, PatchProjectDto, ProjectView} from "@/services/project/project.types.ts";
+import {StatusView} from "@/services/status/status.types.ts";
 
 export const projectService = {
     async get(): Promise<ProjectView[]> {
@@ -33,6 +34,10 @@ export const projectService = {
         return data.data;
     }, async getTasks(id: number): Promise<TaskView[]> {
         const data = await axiosInstance.get<TaskView[]>(`/api/v1/project/${id}/tasks`);
+
+        return data.data;
+    }, async getStatuses(id: number): Promise<StatusView[]> {
+        const data = await axiosInstance.get<StatusView[]>(`/api/v1/project/${id}/statuses`);
 
         return data.data;
     }

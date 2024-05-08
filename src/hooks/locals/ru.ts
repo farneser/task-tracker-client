@@ -109,6 +109,9 @@ const ru: Translations = {
         },
         submitCreate: "Добавить задачу",
         submitEdit: "Обновить задачу"
+    },
+    projectPage: {
+        createStatus: "Создать новый статус"
     }
 }
 

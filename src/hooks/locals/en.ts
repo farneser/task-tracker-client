@@ -110,6 +110,9 @@ const en: Translations = {
         submitCreate: "Add task",
         submitEdit: "Update task"
     },
+    projectPage: {
+        createStatus: "Create a new Status"
+    }
 }
 
 export default en;

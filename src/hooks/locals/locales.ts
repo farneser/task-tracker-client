@@ -49,7 +49,10 @@ export type Translations = {
         description: Field,
         submitCreate: string,
         submitEdit: string,
-    }
+    },
+    projectPage: {
+        createStatus: string
+    },
 };
 
 export type LocaleKey = "en" | "ru";
