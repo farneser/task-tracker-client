@@ -9,7 +9,7 @@ const en: Translations = {
             placeholder: "Enter your login or Email",
             required: "This field is required",
             invalid: "Invalid format",
-            minLength: "Minimum length: 1 charterers",
+            minLength: "Minimum length: 1 charterer",
             maxLength: "Maximum length: 255 charterers"
         },
         password: {
@@ -29,7 +29,7 @@ const en: Translations = {
             placeholder: "Enter your username",
             required: "This field is required",
             invalid: "Invalid format",
-            minLength: "Minimum length: 4 character",
+            minLength: "Minimum length: 4 characters",
             maxLength: "Maximum length: 64 characters"
         },
         email: {
@@ -67,7 +67,7 @@ const en: Translations = {
             placeholder: "Enter status name",
             required: "Status name is required",
             invalid: "Invalid status name",
-            minLength: "Minimum length: 1 characters",
+            minLength: "Minimum length: 1 character",
             maxLength: "Maximum length: 255 characters"
         },
         statusColor: {
@@ -87,7 +87,29 @@ const en: Translations = {
     },
     statusElement: {
         createTask: "Create New Task"
-    }
+    },
+    taskForm: {
+        headingCreate: "Create a new task",
+        headingEdit: "Update task",
+        title: {
+            label: "Task title",
+            placeholder: "Enter task title",
+            required: "Task title is required",
+            invalid: "Invalid title name",
+            minLength: "Minimum length: 1 character",
+            maxLength: "Maximum length: 255 characters"
+        },
+        description: {
+            label: "Task description",
+            placeholder: "Enter task description",
+            required: "Task description is required",
+            invalid: "Invalid task description",
+            minLength: "Minimum length: 1 character",
+            maxLength: "Maximum length: 255 characters"
+        },
+        submitCreate: "Add task",
+        submitEdit: "Update task"
+    },
 }
 
 export default en;

@@ -136,6 +136,7 @@ const StatusElement: FC<StatusProps> = (
                                 task={task}
                                 updateTask={updateTask}
                                 deleteTask={() => deleteTask && deleteTask(task.id)}
+                                statusColor={status.statusColor}
                             />
                         ))}
                     </SortableContext>

@@ -29,7 +29,7 @@ const ru: Translations = {
             placeholder: "Введите ваше имя пользователя",
             required: "Это поле обязательно для заполнения",
             invalid: "Неверный формат",
-            minLength: "Минимальная длина: 4 символ",
+            minLength: "Минимальная длина: 4 символа",
             maxLength: "Максимальная длина: 64 символов"
         },
         email: {
@@ -75,7 +75,7 @@ const ru: Translations = {
             placeholder: "Введите цвет статуса",
             required: "Цвет статуса обязателен",
             invalid: "Недопустимый цвет",
-            minLength: "Минимальная длина: 4 символов",
+            minLength: "Минимальная длина: 4 символа",
             maxLength: "Максимальная длина: 7 символов"
         },
         isCompleted: {
@@ -87,6 +87,28 @@ const ru: Translations = {
     },
     statusElement: {
         createTask: "Создать новую задачу"
+    },
+    taskForm: {
+        headingCreate: "Создать новую задачу",
+        headingEdit: "Обновить задачу",
+        title: {
+            label: "Заголовок задачи",
+            placeholder: "Введите заголовок задачи",
+            required: "Заголовок задачи обязателен",
+            invalid: "Недопустимое название заголовка",
+            minLength: "Минимальная длина: 1 символ",
+            maxLength: "Максимальная длина: 255 символов"
+        },
+        description: {
+            label: "Описание задачи",
+            placeholder: "Введите описание задачи",
+            required: "Описание задачи обязательно",
+            invalid: "Недопустимое описание задачи",
+            minLength: "Минимальная длина: 1 символ",
+            maxLength: "Максимальная длина: 255 символов"
+        },
+        submitCreate: "Добавить задачу",
+        submitEdit: "Обновить задачу"
     }
 }
 
