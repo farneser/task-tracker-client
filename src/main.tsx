@@ -6,16 +6,19 @@ import {StatusProvider} from "@/components/providers/StatusProvider.tsx";
 import {TaskProvider} from "@/components/providers/TaskProvider.tsx";
 import {ProjectProvider} from "@/components/providers/ProjectProvider.tsx";
 import {LocalizationProvider} from "@/components/providers/LocalizationProvider.tsx";
+import {ProjectMemberProvider} from "@/components/providers/ProjectMemberProvider.tsx";
 
 createRoot(document.getElementById('root')!).render(
     <LocalizationProvider>
         <AuthProvider>
             <ProjectProvider>
-                <StatusProvider>
-                    <TaskProvider>
-                        <App/>
-                    </TaskProvider>
-                </StatusProvider>
+                <ProjectMemberProvider>
+                    <StatusProvider>
+                        <TaskProvider>
+                            <App/>
+                        </TaskProvider>
+                    </StatusProvider>
+                </ProjectMemberProvider>
             </ProjectProvider>
         </AuthProvider>
     </LocalizationProvider>
