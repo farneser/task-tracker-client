@@ -139,6 +139,18 @@ const en: Translations = {
                 creator: "Owner",
             }
         }
+    },
+    header: {
+        members: (id) => `Project members count: ${id}`,
+        archive: {
+            open: "Open archive",
+            close: "Close archive",
+        },
+        tasks: {
+            archive: "Archive tasks",
+            refresh: "Refresh tasks",
+        },
+        loginAs: (e) => `${e}`,
     }
 }
 

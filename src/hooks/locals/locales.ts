@@ -79,6 +79,18 @@ export type Translations = {
                 creator: string;
             }
         }
+    },
+    header: {
+        members: (id: number) => string;
+        archive: {
+            open: string;
+            close: string;
+        },
+        tasks: {
+            archive: string;
+            refresh: string
+        },
+        loginAs: (email: string) => string
     }
 };
 

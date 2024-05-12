@@ -139,6 +139,18 @@ const ru: Translations = {
                 creator: "Владелец",
             }
         }
+    },
+    header: {
+        members: (id) => `Участников проекта: ${id}`,
+        archive: {
+            open: "Открыть архив",
+            close: "Закрыть архив",
+        },
+        tasks: {
+            archive: "Архивировать задачи",
+            refresh: "Обновить задачи",
+        },
+        loginAs: (e) => `${e}`,
     }
 }
 
