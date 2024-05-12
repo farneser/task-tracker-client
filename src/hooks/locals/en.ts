@@ -151,6 +151,14 @@ const en: Translations = {
             refresh: "Refresh tasks",
         },
         loginAs: (e) => `${e}`,
+    },
+    confirmEmailPage: {
+        successfullyConfirm: "Email confirmation successful!",
+        error: {
+            title: "Email confirmation error",
+            message: "Perhaps the link has expired or the token is invalid."
+        },
+        home: "Return to Home"
     }
 }
 

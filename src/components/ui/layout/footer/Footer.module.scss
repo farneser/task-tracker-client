@@ -22,6 +22,14 @@
   &__locals {
     margin-left: auto;
     display: flex;
+
+    & > div {
+      margin: 0 10px;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
   }
 
   &__info > div, &__locals > div {

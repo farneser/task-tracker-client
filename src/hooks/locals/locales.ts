@@ -88,9 +88,17 @@ export type Translations = {
         },
         tasks: {
             archive: string;
-            refresh: string
+            refresh: string;
         },
-        loginAs: (email: string) => string
+        loginAs: (email: string) => string;
+    },
+    confirmEmailPage: {
+        successfullyConfirm: string;
+        error: {
+            title: string;
+            message: string;
+        },
+        home: string;
     }
 };
 
