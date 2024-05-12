@@ -32,7 +32,7 @@ const ProjectMemberElement: FC<ProjectMemberElementProps> = ({member, user, dele
             display: "flex",
             alignItems: "center",
             margin: "10px"
-        }}>{member.username == user.username ? "YOU" : member.username}</div>
+        }}>{member.username == user.username ? translations.members.member.you : member.username}</div>
         <select
             disabled={user.role === "MEMBER" || member.role == "CREATOR" || member.userId == user.userId}
             value={selectedRole}

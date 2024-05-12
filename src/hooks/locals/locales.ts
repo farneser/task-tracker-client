@@ -72,6 +72,7 @@ export type Translations = {
         member: {
             delete: string;
             changeRole: string;
+            you: string;
             role: {
                 member: string;
                 admin: string;

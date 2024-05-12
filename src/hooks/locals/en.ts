@@ -132,6 +132,7 @@ const en: Translations = {
         member: {
             delete: "Delete user",
             changeRole: "Save role",
+            you: "You",
             role: {
                 member: "Member",
                 admin: "Admin",
