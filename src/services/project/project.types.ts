@@ -9,7 +9,7 @@ export interface ProjectView extends PatchProjectDto {
     id: number;
 }
 
-type ProjectMemberRole = "MEMBER" | "ADMIN" | "CREATOR";
+export type ProjectMemberRole = "MEMBER" | "ADMIN" | "CREATOR";
 
 export interface PatchProjectMemberDto {
     memberId: number;

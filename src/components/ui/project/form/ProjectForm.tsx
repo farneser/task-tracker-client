@@ -3,12 +3,12 @@ import {useForm} from "react-hook-form";
 import styles from "./ProjectForm.module.scss";
 import {PatchProjectDto, ProjectView} from "@/services/project/project.types.ts";
 
-type PatchTaskFormProps = {
+type ProjectFormProps = {
     project?: ProjectView;
     onSubmit: (data: PatchProjectDto) => void;
 }
 
-const ProjectForm: FC<PatchTaskFormProps> = ({onSubmit, project}) => {
+const ProjectForm: FC<ProjectFormProps> = ({onSubmit, project}) => {
     const {
         register,
         handleSubmit,
