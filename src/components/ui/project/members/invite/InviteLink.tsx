@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {FC, useState} from "react";
 import {ProjectInviteToken} from "@/services/project/invite/invite.types.ts";
 import styles from "./InviteLink.module.scss";
 import {useLocalization} from "@/hooks/useLocalization.ts";
@@ -16,6 +16,8 @@ const InviteLink: FC<InviteLinkProps> = ({token, member, deleteHandler, createHa
 
     const {translations} = useLocalization();
 
+    const [copied, setCopied] = useState(false);
+
     if (!member || member.role == "MEMBER") {
         return <></>
     }
@@ -25,7 +27,12 @@ const InviteLink: FC<InviteLinkProps> = ({token, member, deleteHandler, createHa
     }
 
     const copyToClip = async () => {
-        await navigator.clipboard.writeText(getInviteLink());
+        await navigator.clipboard.writeText(getInviteLink())
+            .then(() => {
+                setCopied(true);
+                setTimeout(() => setCopied(false), 1500);
+            })
+            .catch(err => console.error('Failed to copy:', err));
     }
 
     return <div className={styles.form}>
@@ -33,14 +40,22 @@ const InviteLink: FC<InviteLinkProps> = ({token, member, deleteHandler, createHa
             <div style={{display: "flex"}}>
                 <input className={styles.form__input} placeholder={translations.members.inviteLink.placeholder}
                        value={getInviteLink()} readOnly={true}/>
-                <button className={styles.form__button} onClick={() => copyToClip()}>
+                <button
+                    className={styles.form__button}
+                    onClick={() => copyToClip()}
+                    style={{marginLeft: "10px"}}
+                >
                     <div style={{width: "15px", height: "15px"}}><CopyIcon/></div>
                 </button>
             </div>
-            <div>
-                <button className={styles.form__button}
-                        onClick={() => deleteHandler()}
-                >{translations.members.inviteLink.delete}</button>
+            <div style={{display: "flex", justifyContent: "space-between"}}>
+                <div>
+                    <button className={styles.form__button}
+                            onClick={() => deleteHandler()}
+                    >{translations.members.inviteLink.delete}</button>
+                </div>
+                {copied &&
+                    <div style={{display: "flex", alignItems: "center"}}>{translations.members.inviteLink.copied}</div>}
             </div>
         </> : <>
             <div>

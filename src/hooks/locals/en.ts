@@ -127,10 +127,16 @@ const en: Translations = {
             create: "Create invitation",
             delete: "Delete invitation",
             placeholder: "Invitation link",
+            copied: "Link successfully copied",
         },
         member: {
             delete: "Delete user",
-            changeRole: "Save role"
+            changeRole: "Save role",
+            role: {
+                member: "Member",
+                admin: "Admin",
+                creator: "Owner",
+            }
         }
     }
 }

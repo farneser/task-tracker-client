@@ -127,10 +127,16 @@ const ru: Translations = {
             create: "Создать приглашение",
             delete: "Удалить приглашение",
             placeholder: "Ссылка приглашения",
+            copied: "Ссылка успешно скопирована",
         },
         member: {
             delete: "Удалить пользователя",
-            changeRole: "Сохранить роль"
+            changeRole: "Сохранить роль",
+            role: {
+                member: "Участник",
+                admin: "Адмнистратор",
+                creator: "Владелец",
+            }
         }
     }
 }

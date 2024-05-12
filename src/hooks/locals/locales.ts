@@ -67,10 +67,16 @@ export type Translations = {
             create: string;
             delete: string;
             placeholder: string;
+            copied: string;
         },
         member: {
             delete: string;
             changeRole: string;
+            role: {
+                member: string;
+                admin: string;
+                creator: string;
+            }
         }
     }
 };

@@ -1,9 +1,10 @@
-import {createContext, FC, PropsWithChildren, useEffect, useState} from "react";
+import {createContext, FC, PropsWithChildren, useCallback, useEffect, useState} from "react";
 import {Message} from "@/models/Message.ts";
 import {projectService} from "@/services/project/project.service.ts";
 import {ProjectMember} from "@/services/project/project.types.ts";
 import {ProjectInviteToken} from "@/services/project/invite/invite.types.ts";
 import {inviteService} from "@/services/project/invite/invite.service.ts";
+import useAuth from "@/hooks/useAuth.ts";
 
 interface ProjectMemberServiceHook {
     members: ProjectMember[];
@@ -14,26 +15,24 @@ interface ProjectMemberServiceHook {
     inviteToken: {
         token: ProjectInviteToken | null;
         create: () => Promise<ProjectInviteToken | null>;
-        delete: () => void;
+        delete: () => Promise<void>;
         update: () => Promise<void>;
-    }
+    },
+    userMember: ProjectMember | null;
 }
 
 export const ProjectMemberContext = createContext<ProjectMemberServiceHook | null>(null);
 
 export const ProjectMemberProvider: FC<PropsWithChildren> = ({children}) => {
+    const {user} = useAuth();
     const [members, setMembers] = useState<ProjectMember[]>([]);
+    const [userMember, setUserMember] = useState<ProjectMember | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<Message | null>(null);
     const [projectId, setProjectId] = useState<number | null>();
     const [token, setToken] = useState<ProjectInviteToken | null>(null);
 
-    useEffect(() => {
-        updateMembers().then();
-        updateInviteToken().then()
-    }, [projectId]);
-
-    const updateMembers = async () => {
+    const updateMembers = useCallback(async () => {
         setIsLoading(true);
         if (projectId) {
             projectService.getMembers(projectId)
@@ -50,13 +49,14 @@ export const ProjectMemberProvider: FC<PropsWithChildren> = ({children}) => {
         } else {
             setMembers([])
         }
-    };
+    }, [projectId]);
 
     const setProjectIdHandler = (id: number | null) => {
         setProjectId(id);
+        setUserMember(members.find(item => item.userId === user?.id) || null)
     }
 
-    const updateInviteToken = async (): Promise<void> => {
+    const updateInviteToken = useCallback(async () => {
         try {
             if (projectId) {
                 const response = await inviteService.get(projectId.toString());
@@ -70,7 +70,16 @@ export const ProjectMemberProvider: FC<PropsWithChildren> = ({children}) => {
 
             console.log(error)
         }
-    }
+    }, [projectId]);
+
+    useEffect(() => {
+        const updateMembersAndInviteToken = async () => {
+            await updateMembers();
+            await updateInviteToken();
+        };
+
+        updateMembersAndInviteToken().then();
+    }, [projectId, updateMembers, updateInviteToken]);
 
     const createInviteToken = async (): Promise<ProjectInviteToken | null> => {
         try {
@@ -111,7 +120,7 @@ export const ProjectMemberProvider: FC<PropsWithChildren> = ({children}) => {
                 create: createInviteToken,
                 delete: deleteInviteToken,
                 update: updateInviteToken,
-            }
+            }, userMember
         }}>
             {children}
         </ProjectMemberContext.Provider>
