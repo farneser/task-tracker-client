@@ -1,13 +1,17 @@
 import {createContext, FC, PropsWithChildren, useCallback, useEffect, useState} from "react";
 import {Message} from "@/models/Message.ts";
 import {projectService} from "@/services/project/project.service.ts";
-import {ProjectMember} from "@/services/project/project.types.ts";
+import {ProjectMember, ProjectMemberRole} from "@/services/project/project.types.ts";
 import {ProjectInviteToken} from "@/services/project/invite/invite.types.ts";
 import {inviteService} from "@/services/project/invite/invite.service.ts";
 import useAuth from "@/hooks/useAuth.ts";
 
 interface ProjectMemberServiceHook {
-    members: ProjectMember[];
+    members: {
+        list: ProjectMember[];
+        patch: (userId: number, role: ProjectMemberRole) => Promise<void>;
+        delete: (userId: number) => Promise<void>;
+    };
     isLoading: boolean;
     error: Message | null;
     updateMembers: () => Promise<void>;
@@ -110,9 +114,32 @@ export const ProjectMemberProvider: FC<PropsWithChildren> = ({children}) => {
         }
     }
 
+    const patchMember = async (userId: number, role: ProjectMemberRole): Promise<void> => {
+        try {
+            if (projectId) {
+                await projectService.patchMember(projectId, {
+                    memberId: userId,
+                    role: role
+                });
+            }
+        } catch (error) {
+            console.error("Error patching member:", error);
+        }
+    }
+
+    const deleteMember = async (userId: number): Promise<void> => {
+        try {
+            if (projectId) {
+                await projectService.deleteMember(projectId, userId);
+            }
+        } catch (error) {
+            console.error("Error deleting member:", error);
+        }
+    }
+
     return (
         <ProjectMemberContext.Provider value={{
-            members, isLoading, error,
+            isLoading, error,
             updateMembers,
             setProjectId: setProjectIdHandler,
             inviteToken: {
@@ -120,7 +147,13 @@ export const ProjectMemberProvider: FC<PropsWithChildren> = ({children}) => {
                 create: createInviteToken,
                 delete: deleteInviteToken,
                 update: updateInviteToken,
-            }, userMember
+            },
+            members: {
+                list: members,
+                patch: patchMember,
+                delete: deleteMember,
+            },
+            userMember
         }}>
             {children}
         </ProjectMemberContext.Provider>
