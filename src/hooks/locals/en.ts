@@ -121,6 +121,17 @@ const en: Translations = {
     sideBar: {
         dashboard: "Dashboard",
         createNewProject: "Create a new Project"
+    },
+    members: {
+        inviteLink: {
+            create: "Create invitation",
+            delete: "Delete invitation",
+            placeholder: "Invitation link",
+        },
+        member: {
+            delete: "Delete user",
+            changeRole: "Save role"
+        }
     }
 }
 

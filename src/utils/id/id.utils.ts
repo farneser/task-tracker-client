@@ -22,4 +22,8 @@ const parseId = (id: string | number): number => {
     return -1;
 }
 
-export {getTaskId, getStatusId, parseId};
+const isIdValid = (id: string | null | undefined): boolean => {
+    return id !== null && id !== undefined && id.trim() !== '' && !isNaN(Number(id));
+};
+
+export {getTaskId, getStatusId, parseId, isIdValid};

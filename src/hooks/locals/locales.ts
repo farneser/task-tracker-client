@@ -61,6 +61,17 @@ export type Translations = {
     sideBar: {
         dashboard: string,
         createNewProject: string
+    },
+    members: {
+        inviteLink: {
+            create: string;
+            delete: string;
+            placeholder: string;
+        },
+        member: {
+            delete: string;
+            changeRole: string;
+        }
     }
 };
 

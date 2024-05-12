@@ -121,6 +121,17 @@ const ru: Translations = {
     sideBar: {
         dashboard: "Главная",
         createNewProject: "Создать новый проект"
+    },
+    members: {
+        inviteLink: {
+            create: "Создать приглашение",
+            delete: "Удалить приглашение",
+            placeholder: "Ссылка приглашения",
+        },
+        member: {
+            delete: "Удалить пользователя",
+            changeRole: "Сохранить роль"
+        }
     }
 }
 
