@@ -28,27 +28,25 @@ const SideBar: FC = () => {
         navigate(`p/${project.id}`);
     };
 
-    return (
-        <div className={styles.sidebar__container}>
-            <Popup>
-                <ProjectForm onSubmit={onSubmit}/>
-            </Popup>
-            <div className={styles.sidebar__container__head}>
-                <ul>
-                    <li><Link to="p">{translations.sideBar.dashboard}</Link></li>
-                    <li><Link to="#" onClick={openPopup}>{translations.sideBar.createNewProject}</Link></li>
-                </ul>
-            </div>
-            <div className={styles.sidebar__container__sepatator}/>
-            <div className={styles.sidebar__container__list}>
-                {isProjectsLoading ? <Loader/> : <ul>
-                    {projects.map(p => (
-                        <li key={p.id}><Link to={`p/${p.id}`}>{p.projectName}</Link></li>
-                    ))}
-                </ul>}
-            </div>
+    return (<div className={styles.sidebar__container}>
+        <Popup>
+            <ProjectForm onSubmit={onSubmit}/>
+        </Popup>
+        <div className={styles.sidebar__container__head}>
+            <ul>
+                <li><Link to="p">{translations.sideBar.dashboard}</Link></li>
+                <li><Link to="#" onClick={openPopup}>{translations.sideBar.createNewProject}</Link></li>
+            </ul>
         </div>
-    );
+        <div className={styles.sidebar__container__sepatator}/>
+        <div className={styles.sidebar__container__list}>
+            {isProjectsLoading ? <Loader/> : <ul>
+                {projects.sort((p1, p2) => (p1.id < p2.id) ? 0 : 1).map(p => (
+                    <li key={p.id}><Link to={`p/${p.id}`}>{p.projectName}</Link></li>
+                ))}
+            </ul>}
+        </div>
+    </div>);
 }
 
 export default SideBar;
