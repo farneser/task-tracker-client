@@ -151,6 +151,7 @@ const en: Translations = {
             refresh: "Refresh tasks",
         },
         loginAs: (e) => `${e}`,
+        logout: "Logout",
     },
     confirmEmailPage: {
         successfullyConfirm: "Email confirmation successful!",

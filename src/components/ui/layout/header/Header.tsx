@@ -79,7 +79,7 @@ const Header: FC = () => {
                 <Gravatar email={user.email} size={40} className="avatar"/>
             </>}
 
-            <button className={styles.header__button} onClick={logout}>Logout</button>
+            <button className={styles.header__button} onClick={logout}>{translations.header.logout}</button>
         </div>
     </div>
 }

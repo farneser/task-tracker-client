@@ -151,6 +151,7 @@ const ru: Translations = {
             refresh: "Обновить задачи",
         },
         loginAs: (e) => `${e}`,
+        logout: "Выход",
     },
     confirmEmailPage: {
         successfullyConfirm: "Подтверждение электронной почты успешно!",

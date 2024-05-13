@@ -91,6 +91,7 @@ export type Translations = {
             refresh: string;
         },
         loginAs: (email: string) => string;
+        logout: string;
     },
     confirmEmailPage: {
         successfullyConfirm: string;
