@@ -1,7 +1,7 @@
 import {FC, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import authService from "@/services/auth/auth.service.ts";
-import styles from "./ConfirmPage.module.scss"
+import styles from "./ConfirmPage.module.scss";
 import {useLocalization} from "@/hooks/useLocalization.ts";
 
 const ConfirmPage: FC = () => {

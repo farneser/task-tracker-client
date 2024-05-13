@@ -97,8 +97,17 @@ export type Translations = {
         error: {
             title: string;
             message: string;
-        },
+        };
         home: string;
+    },
+    acceptInvitePage: {
+        title: string;
+        invite: (email: string, projectName: string) => string;
+        error: {
+            title: string;
+            message: string;
+        };
+        accept: string;
     }
 };
 

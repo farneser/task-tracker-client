@@ -159,6 +159,15 @@ const en: Translations = {
             message: "Perhaps the link has expired or the token is invalid."
         },
         home: "Return to Home"
+    },
+    acceptInvitePage: {
+        title: "Connect to the project",
+        invite: (e, p) => `${e} invites you to the ${p}`,
+        error: {
+            title: "Failed to accept invite",
+            message: "Project invite token is invalid or expired."
+        },
+        accept: "Accept invite"
     }
 }
 
