@@ -11,6 +11,7 @@ interface ProjectMemberServiceHook {
         list: ProjectMember[];
         patch: (userId: number, role: ProjectMemberRole) => Promise<void>;
         delete: (userId: number) => Promise<void>;
+        leave: () => Promise<void>
     };
     isLoading: boolean;
     error: Message | null;
@@ -137,6 +138,16 @@ export const ProjectMemberProvider: FC<PropsWithChildren> = ({children}) => {
         }
     }
 
+    const leaveProject = async ():Promise<void> => {
+        try {
+            if (projectId) {
+                await projectService.leave(projectId);
+            }
+        } catch (error) {
+            console.error("Error deleting member:", error);
+        }
+    }
+
     return (
         <ProjectMemberContext.Provider value={{
             isLoading, error,
@@ -152,6 +163,7 @@ export const ProjectMemberProvider: FC<PropsWithChildren> = ({children}) => {
                 list: members,
                 patch: patchMember,
                 delete: deleteMember,
+                leave: leaveProject
             },
             userMember
         }}>

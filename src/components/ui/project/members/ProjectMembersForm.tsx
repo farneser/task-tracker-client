@@ -35,7 +35,12 @@ const ProjectMembersForm: FC<ProjectMembersFormProps> = ({token, projectId}) => 
     }
 
     const deleteProjectMemberHandler = async (id: number) => {
-        await members.delete(id);
+
+        if (id == userMember?.userId) {
+            await members.leave()
+        } else {
+            await members.delete(id);
+        }
         await updateMembers()
     }
 

@@ -44,11 +44,11 @@ const ProjectMemberElement: FC<ProjectMemberElementProps> = ({member, user, dele
             <option disabled={user.role != "CREATOR"}
                     value="CREATOR">{translations.members.member.role.creator}</option>
         </select>
-        {user.role != "MEMBER" && member.role != "CREATOR" && member.userId != user.userId &&
+        {((user.userId == member.userId && member.role != "CREATOR") || (member.role != "ADMIN" && member.userId != user.userId) && member.role != "CREATOR") &&
             <button
                 className={styles.form__button}
                 onClick={() => handleDelete()}
-            >{translations.members.member.delete}</button>}
+            >{user.userId == member.userId ? translations.members.member.leave : translations.members.member.delete}</button>}
     </div>
 }
 

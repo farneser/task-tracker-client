@@ -132,6 +132,7 @@ const ru: Translations = {
         member: {
             delete: "Удалить пользователя",
             changeRole: "Сохранить роль",
+            leave: "Покинуть проект",
             you: "Вы",
             role: {
                 member: "Участник",

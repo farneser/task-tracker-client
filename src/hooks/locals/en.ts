@@ -131,6 +131,7 @@ const en: Translations = {
         },
         member: {
             delete: "Delete user",
+            leave: "Leave project",
             changeRole: "Save role",
             you: "You",
             role: {
