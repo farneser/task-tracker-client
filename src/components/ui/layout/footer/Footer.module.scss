@@ -56,8 +56,31 @@
     }
   }
 
+  @media (max-width: 1024px) {
+    &__info {
+      flex-wrap: wrap;
+      & {
+        justify-content: center;
+        text-align: left;
+      }
+      & > div{
+        flex: 33.33%;
+      }
+    }
+
+    &__locals {
+      margin-left: auto;
+      flex-direction: column;
+
+      & > div {
+        margin: 0;
+      }
+    }
+  }
+
   @media (max-width: 768px) {
     &__info {
+      flex-wrap: nowrap;
       & {
         flex-direction: column;
         justify-content: left;
