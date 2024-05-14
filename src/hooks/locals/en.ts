@@ -174,7 +174,21 @@ const en: Translations = {
     project: {
         delete: "Delete project",
         leave: "Leave project",
-    }
+    },
+    projectForm: {
+        headingCreate: "Create a new project",
+        headingEdit: "Update project",
+        projectName: {
+            label: "Project name",
+            placeholder: "Enter project name",
+            required: "Project name is required",
+            invalid: "Invalid project name",
+            minLength: "Minimum length: 1 character",
+            maxLength: "Maximum length: 255 characters"
+        },
+        submitCreate: "Create project",
+        submitEdit: "Update project"
+    },
 }
 
 export default en;

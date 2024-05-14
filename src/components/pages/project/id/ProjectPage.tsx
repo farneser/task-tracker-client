@@ -180,7 +180,7 @@ const ProjectPage: FC = () => {
     if (error || isNaN(Number(projectId))) {
         navigate("/p")
     }
-    console.log("is not member", userMember?.role != "MEMBER")
+
     return (
         <div className={styles["kanban-container"]}>
             <DndContext sensors={sensors}

@@ -174,7 +174,22 @@ const ru: Translations = {
     project: {
         delete: "Удалить проект",
         leave: "Выйти из проекта",
+    },
+    projectForm: {
+        headingCreate: "Создать новый проект",
+        headingEdit: "Обновить проект",
+        projectName: {
+            label: "Название проекта",
+            placeholder: "Введите название проекта",
+            required: "Название проекта обязательно",
+            invalid: "Недопустимое название проекта",
+            minLength: "Минимальная длина: 1 символ",
+            maxLength: "Максимальная длина: 255 символов"
+        },
+        submitCreate: "Создать проект",
+        submitEdit: "Обновить проект"
     }
+
 }
 
 export default ru;

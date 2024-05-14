@@ -114,7 +114,14 @@ export type Translations = {
     project: {
         leave: string;
         delete: string;
-    }
+    },
+    projectForm: {
+        headingCreate: string,
+        headingEdit: string,
+        projectName: Field,
+        submitCreate: string,
+        submitEdit: string,
+    },
 };
 
 export type LocaleKey = "en" | "ru";

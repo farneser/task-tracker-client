@@ -69,7 +69,7 @@ const StatusElement: FC<StatusProps> = (
             status: status,
         }
     })
-    console.log({draggable})
+
     const tasksIds = useMemo(() => {
         return tasks.map((task) => getTaskId(task.id)) || [];
     }, [tasks]);
