@@ -22,18 +22,20 @@ import {TaskLookupView} from "@/services/task/task.types.ts";
 import TaskElement from "@/components/ui/task/TaskElement.tsx";
 import useTasks from "@/hooks/useTasks.ts";
 import styles from "./ProjectPage.module.scss";
-import {getStatusId, parseId} from "@/utils/id/id.utils.ts";
+import {getStatusId, isIdValid, parseId} from "@/utils/id/id.utils.ts";
 import StatusForm from "@/components/ui/status/form/StatusForm.tsx";
 import useAuth from "@/hooks/useAuth.ts";
 import PlusIcon from "@/components/ui/icons/PlusIcon.tsx";
 import Loader from "@/components/ui/loader/Loader.tsx";
 import {useNavigate, useParams} from "react-router-dom";
 import {useLocalization} from "@/hooks/useLocalization.ts";
+import useMembers from "@/hooks/useMembers.ts";
 
 const ProjectPage: FC = () => {
     const auth = useAuth();
     const {translations} = useLocalization();
-    const {projectId} = useParams();
+    const {projectId: projectIdParam} = useParams();
+    const [projectId, setProjectId] = useState<number | null>(null);
 
     const {
         statuses,
@@ -47,6 +49,8 @@ const ProjectPage: FC = () => {
         error
     } = useStatuses(Number(projectId));
 
+    const {userMember} = useMembers(Number(projectId));
+
     const navigate = useNavigate();
 
     const {tasks, createTask, setTasks, updateTask, removeTask, isLoading: isTasksLoading} = useTasks()
@@ -56,6 +60,10 @@ const ProjectPage: FC = () => {
 
     const [activeStatus, setActiveStatus] = useState<StatusView | null>(null);
     const [activeTask, setActiveTask] = useState<TaskLookupView | null>(null);
+
+    useEffect(() => {
+        setProjectId(isIdValid(projectIdParam) ? Number(projectIdParam) : null)
+    }, [projectIdParam]);
 
     useEffect(() => {
         if (!isStatusesLoading && statuses.length !== 0) {
@@ -172,7 +180,7 @@ const ProjectPage: FC = () => {
     if (error || isNaN(Number(projectId))) {
         navigate("/p")
     }
-
+    console.log("is not member", userMember?.role != "MEMBER")
     return (
         <div className={styles["kanban-container"]}>
             <DndContext sensors={sensors}
@@ -196,6 +204,7 @@ const ProjectPage: FC = () => {
                                 updateTask={updateTask}
                                 deleteTask={removeTask}
                                 createTask={createTask}
+                                draggable={userMember?.role != "MEMBER"}
                             />
                         ))}
                     </SortableContext>
@@ -204,12 +213,12 @@ const ProjectPage: FC = () => {
                         tasks={tasks.filter(task => task.statusId < 0)}
                         deleteTask={removeTask}
                     />}
-                    <div className={styles.create__status__container}>
+                    {userMember?.role != "MEMBER" && <div className={styles.create__status__container}>
                         <button onClick={reversePopup}>
                             <div>{translations.projectPage.createStatus}</div>
                             <div style={{width: "30px", height: "30px"}}><PlusIcon/></div>
                         </button>
-                    </div>
+                    </div>}
                 </div>
 
                 {

@@ -55,7 +55,6 @@ const Header: FC = () => {
         </MembersPopup>}
 
         <div className={styles.header__container}>
-            {projectId}
             {projectId != null && <>
                 <button className={styles.header__button} onClick={refresh}>{translations.header.tasks.refresh}</button>
                 <button className={styles.header__button} onClick={() => archiveTasks(

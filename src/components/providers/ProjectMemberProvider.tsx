@@ -118,10 +118,18 @@ export const ProjectMemberProvider: FC<PropsWithChildren> = ({children}) => {
     const patchMember = async (userId: number, role: ProjectMemberRole): Promise<void> => {
         try {
             if (projectId) {
-                await projectService.patchMember(projectId, {
+                const response = await projectService.patchMember(projectId, {
                     memberId: userId,
                     role: role
                 });
+
+                setMembers(members.map((member) => {
+                    if (member.userId === response.userId) {
+                        return {...member, ...response};
+                    }
+
+                    return member;
+                }));
             }
         } catch (error) {
             console.error("Error patching member:", error);
@@ -132,13 +140,17 @@ export const ProjectMemberProvider: FC<PropsWithChildren> = ({children}) => {
         try {
             if (projectId) {
                 await projectService.deleteMember(projectId, userId);
+
+                setMembers((members) => {
+                    return members.filter((m) => m.userId !== userId);
+                })
             }
         } catch (error) {
             console.error("Error deleting member:", error);
         }
     }
 
-    const leaveProject = async ():Promise<void> => {
+    const leaveProject = async (): Promise<void> => {
         try {
             if (projectId) {
                 await projectService.leave(projectId);

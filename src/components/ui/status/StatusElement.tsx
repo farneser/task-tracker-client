@@ -24,10 +24,20 @@ type StatusProps = {
     updateTask?: (id: number, data: PatchTaskDto) => void;
     deleteTask?: (id: number) => void;
     tasks: TaskLookupView[];
+    draggable?: boolean;
 };
 
 const StatusElement: FC<StatusProps> = (
-    {status, tasks, updateTask, deleteTask, deleteStatus, updateStatus, createTask}
+    {
+        status,
+        tasks,
+        updateTask,
+        deleteTask,
+        deleteStatus,
+        updateStatus,
+        createTask,
+        draggable
+    }
 ) => {
     const {translations} = useLocalization();
 
@@ -59,7 +69,7 @@ const StatusElement: FC<StatusProps> = (
             status: status,
         }
     })
-
+    console.log({draggable})
     const tasksIds = useMemo(() => {
         return tasks.map((task) => getTaskId(task.id)) || [];
     }, [tasks]);
@@ -107,12 +117,13 @@ const StatusElement: FC<StatusProps> = (
             >
                 <div className={styles.header}>
                     {updateStatus ? <>
-                        <div className={styles.header__drag}
-                             {...attributes}
-                             {...listeners}
-                        >
-                            <BarsIcon/>
-                        </div>
+                        {draggable &&
+                            <div className={styles.header__drag}
+                                 {...attributes}
+                                 {...listeners}
+                            >
+                                <BarsIcon/>
+                            </div>}
                         <div onClick={reverseEditPopup}
                              className={styles.header__title}>
                             <div>{status.statusName}</div>
