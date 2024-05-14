@@ -110,6 +110,10 @@ export type Translations = {
             message: string;
         };
         accept: string;
+    },
+    project: {
+        leave: string;
+        delete: string;
     }
 };
 

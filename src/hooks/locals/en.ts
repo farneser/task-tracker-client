@@ -170,6 +170,10 @@ const en: Translations = {
             message: "Project invite token is invalid or expired."
         },
         accept: "Accept invite"
+    },
+    project: {
+        delete: "Delete project",
+        leave: "Leave project",
     }
 }
 

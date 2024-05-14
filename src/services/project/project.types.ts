@@ -7,6 +7,7 @@ export interface PatchProjectDto extends CreateProjectDto {
 
 export interface ProjectView extends PatchProjectDto {
     id: number;
+    role: ProjectMemberRole
 }
 
 export type ProjectMemberRole = "MEMBER" | "ADMIN" | "CREATOR";
