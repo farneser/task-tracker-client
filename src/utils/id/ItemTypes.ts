@@ -1,4 +1,4 @@
 export enum ItemTypes {
-    COLUMN = 'column',
+    STATUS = 'status',
     TASK = 'task'
 }

@@ -1,0 +1,56 @@
+@import "src/styles/constants";
+
+.sidebar__container {
+  overflow-wrap: unset;
+  text-wrap: unset;
+
+  &__head {
+  }
+
+  &__list {
+  }
+
+  &__sepatator {
+    background: lighten($background-color, 10%);
+    height: 2px;
+    width: 50%;
+    margin: 0 auto;
+  }
+
+  &__head, &__list {
+    ul {
+      list-style: none;
+
+      li {
+        a {
+          color: $text-color;
+          border: none;
+          border-radius: 5px;
+          padding: 10px 20px;
+          margin: 10px;
+          display: block;
+          cursor: pointer;
+          transition: $transition-speed;
+          background-color: lighten($background-color, 10%);
+
+          & > div:first-child {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+          }
+
+          & > div:last-child {
+            display: flex;
+            align-content: center;
+          }
+
+          &:hover {
+            transition: $transition-out-speed;
+            background-color: lighten($background-color, 15%);
+          }
+        }
+      }
+    }
+  }
+}

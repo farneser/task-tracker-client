@@ -1,28 +1,28 @@
-@import "src/styles/constants";
+@import "../../../../styles/constants";
 
 .kanban-container {
   justify-content: space-between;
   display: flex;
-  height: 100vh;
+  height: 100%;
   overflow-y: hidden;
 }
 
-.column-container {
+.status__container {
   display: flex;
   margin: auto 0;
   height: 90%;
 
   & > div{
     &:first-child{
-      margin-left: 20px;
+      //margin-left: 20px;
     }
     &:last-child{
-      margin-right: 20px;
+      //margin-right: 20px;
     }
   }
 }
 
-.create-column-container {
+.create__status__container {
   height: 100%;
   margin: 0 10px;
 

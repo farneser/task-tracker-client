@@ -1,60 +1,93 @@
-import {FC, useEffect} from "react";
+import {FC, useEffect, useState} from "react";
 import styles from "./Header.module.scss";
 import useAuth from "@/hooks/useAuth.ts";
-import useColumns from "@/hooks/useColumns.ts";
+import useStatuses from "@/hooks/useStatuses.ts";
 import useTasks from "@/hooks/useTasks.ts";
 import usePopup from "@/hooks/usePopup.tsx";
 import SettingsIcon from "@/components/ui/icons/SettingsIcon.tsx";
 import UserSettingsForm from "@/components/ui/user/UserSettingsForm.tsx";
 import {UserView} from "@/services/user/user.types.ts";
 import Gravatar from "@/components/ui/gravatar/Gravatar.tsx";
+import {useNavigate, useParams} from "react-router-dom";
+import useMembers from "@/hooks/useMembers.ts";
+import ProjectMembersForm from "@/components/ui/project/members/ProjectMembersForm.tsx";
+import {useLocalization} from "@/hooks/useLocalization.ts";
+import {isIdValid} from "@/utils/id/id.utils.ts";
+import useProjects from "@/hooks/useProjects.ts";
 
 const Header: FC = () => {
-    const {user, logout, loading, patchUser} = useAuth();
-    const {Popup, reversePopup, closePopup} = usePopup(false)
 
-    const {updateColumns, setIsArchiveOpen, isArchiveOpen, columns} = useColumns()
-    const {archiveTasks} = useTasks()
-    const {updateTasks} = useTasks()
+    const {projectId: projectIdParam} = useParams();
+    const [projectId, setProjectId] = useState<number | null>(null);
+    const {members, updateMembers, inviteToken: {token}} = useMembers(Number(projectId));
+    const {translations} = useLocalization();
+    const {user, logout, loading, patchUser} = useAuth();
+    const {Popup: UserPopup, reversePopup: reverseUserPopup, closePopup: closeUserPopup} = usePopup(false)
+    const {Popup: MembersPopup, reversePopup: reverseMembersPopup} = usePopup(false)
+    const navigate = useNavigate();
+    const {updateStatuses, setIsArchiveOpen, isArchiveOpen, statuses} = useStatuses()
+    const {updateTasks, archiveTasks} = useTasks()
+    const {updateProjects} = useProjects();
 
     useEffect(() => {
+        setProjectId(isIdValid(projectIdParam) ? Number(projectIdParam) : null)
+
         refresh().then()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [loading, user]);
+    }, [loading, user, projectIdParam]);
 
     const refresh = async () => {
-        await updateColumns().then()
+        await updateStatuses().then()
         await updateTasks().then()
+        await updateMembers().then()
     }
 
     const onSettingsSubmit = (data: UserView) => {
         patchUser(data)
-        closePopup()
+        closeUserPopup()
     }
 
-    return <header className={styles.header}>
-        {user && <Popup>
+    const leaveHandler = async () => {
+        await members.leave()
+        navigate("/p")
+        await updateProjects()
+    }
+
+    return <div className={styles.header}>
+        {user && <UserPopup>
             <UserSettingsForm user={user} onSubmit={onSettingsSubmit}/>
-        </Popup>}
+        </UserPopup>}
+
+        {projectId != null && <MembersPopup extended={true}>
+            <ProjectMembersForm token={token} projectId={projectId} leaveHandler={leaveHandler}/>
+        </MembersPopup>}
 
         <div className={styles.header__container}>
-            <button className={styles.header__button} onClick={refresh}>Refresh tasks</button>
-            <button className={styles.header__button} onClick={() => archiveTasks(
-                columns.filter(c => c.isCompleted).map(c => c.id))}>
-                Archive tasks
-            </button>
-            <button className={styles.header__button} onClick={() => setIsArchiveOpen(!isArchiveOpen)}>
-                {isArchiveOpen ? "Close archive" : "Open archive"}
-            </button>
-            <div className={styles.header__user} onClick={reversePopup}>
-                <span>You are logged in as: <span className={styles.header__user_email}>{user?.email}</span></span>
-                <span className={styles.header__settings}><SettingsIcon/></span>
-            </div>
-            {user?.email && <Gravatar email={user.email} size={40} className="avatar"/>}
+            {projectId != null && <>
+                <button className={styles.header__button} onClick={refresh}>{translations.header.tasks.refresh}</button>
+                <button className={styles.header__button} onClick={() => archiveTasks(
+                    statuses.filter(c => c.isCompleted).map(c => c.id))}>
+                    {translations.header.tasks.archive}
+                </button>
+                <button className={styles.header__button} onClick={() => setIsArchiveOpen(!isArchiveOpen)}>
+                    {isArchiveOpen ? translations.header.archive.close : translations.header.archive.open}
+                </button>
+                <button
+                    onClick={() => reverseMembersPopup()}
+                    className={styles.header__button}
+                >{translations.header.members(members.list.length)}</button>
+            </>}
+            {user?.email && <>
+                <div className={styles.header__user} onClick={reverseUserPopup}>
+                    <span>{translations.header.loginAs(user.email)}</span>
+                    <span className={styles.header__settings}><SettingsIcon/></span>
+                </div>
+                <Gravatar email={user.email} size={40} className="avatar"/>
+            </>}
 
-            <button className={styles.header__button} onClick={logout}>Logout</button>
+            <button className={styles.header__button} onClick={logout}>{translations.header.logout}</button>
         </div>
-    </header>
+    </div>
 }
 
 export default Header;

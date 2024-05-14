@@ -23,15 +23,15 @@ axiosInstance.interceptors.response.use(async res => res, async error => {
 
     const request = error.config;
 
-    if (error.response.status == 401) {
-        if ((error.response.data.status == constants.statuses.ACCESS_TOKEN_EXPIRED) && !error.config._isRetry) {
-            error.config._isRetry = true;
-            try {
-                const token = getLocalStorageItem<Token>(constants.authTokenKey);
+    if (error.response == undefined) {
+        removeLocalStorage(constants.authTokenKey)
+    } else if (error.response.status == 401) {
+        if ((error.response.data.status == constants.statuses.ACCESS_TOKEN_EXPIRED) && !request._isRetry) {
 
-                if (token) {
-                    await authService.refreshToken(token)
-                }
+            request._isRetry = true;
+
+            try {
+                await authService.refreshToken()
 
                 return axiosInstance.request(request);
             } catch (e) {
@@ -41,7 +41,6 @@ axiosInstance.interceptors.response.use(async res => res, async error => {
             removeLocalStorage(constants.authTokenKey)
         }
     }
-
 })
 
 export default axiosInstance;

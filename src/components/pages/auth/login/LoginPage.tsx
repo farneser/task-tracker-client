@@ -1,14 +1,16 @@
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import {ILogin} from "@/services/auth/auth.types.ts";
 import authService from "@/services/auth/auth.service.ts";
 import useAuth from "@/hooks/useAuth.ts";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
-import {ErrorMessage} from "@/models/Message.ts";
+import {Message} from "@/models/Message.ts";
 import {errorMessages} from "@/components/pages/auth/errors.ts";
-
+import {useLocalization} from "@/hooks/useLocalization.ts";
 
 const LoginPage: FC = () => {
+    const {translations} = useLocalization();
+
     const auth = useAuth();
     const navigate = useNavigate();
     const {
@@ -16,7 +18,18 @@ const LoginPage: FC = () => {
         handleSubmit,
         formState: {errors},
     } = useForm<ILogin>();
-    const [error, setError] = useState<ErrorMessage | null>(null)
+    const [error, setError] = useState<Message | null>(null)
+    const [redirect, setRedirect] = useState<string>("/p")
+    const location = useLocation();
+
+    useEffect(() => {
+            const params = new URLSearchParams(location.search);
+
+            if (params.get('redirect') != undefined) {
+                setRedirect(`${params.get('redirect')}`)
+            }
+        }, [location.search]
+    );
 
     const onSubmit = async (data: ILogin) => {
         auth.updateToken(null)
@@ -24,7 +37,7 @@ const LoginPage: FC = () => {
         authService.login(data)
             .then(data => {
                 auth.updateToken(data)
-                navigate("/")
+                navigate(redirect ?? "/")
 
                 return data;
             })
@@ -37,42 +50,42 @@ const LoginPage: FC = () => {
         <div className="page">
             <form className="form" onSubmit={handleSubmit(onSubmit)}>
                 <div>
-                    <h1>Login page</h1>
+                    <h1>{translations.loginPage.heading}</h1>
                 </div>
                 <div>
                     {error && <p className="form__error">
                         {errorMessages[`${error.status}`] || error.message}</p>}
-                    <label className="form__label">Email</label>
+                    <label className="form__label">{translations.loginPage.login.label}</label>
                     <input
                         type="text"
-                        placeholder="Email"
+                        placeholder={translations.loginPage.login.placeholder}
                         className="form__input"
-                        {...register('email', {
-                            required: 'Email is required',
+                        {...register('login', {
+                            required: translations.loginPage.login.required,
                             pattern: {
                                 value: /^\S+@\S+$/i,
-                                message: 'Invalid email address',
+                                message: translations.loginPage.login.invalid,
                             },
                         })}
                     />
-                    {errors.email && <p className="form__error">{errors.email.message}</p>}
+                    {errors.login && <p className="form__error">{errors.login.message}</p>}
                 </div>
 
                 <div>
-                    <label className="form__label">Password</label>
+                    <label className="form__label">{translations.loginPage.password.label}</label>
                     <input
                         type="password"
-                        placeholder="Password"
+                        placeholder={translations.loginPage.password.placeholder}
                         className="form__input"
                         {...register('password', {
-                            required: 'Password is required',
+                            required: translations.loginPage.password.required,
                             maxLength: {
                                 value: 64,
-                                message: 'Password is too long',
+                                message: translations.loginPage.password.maxLength,
                             },
                             minLength: {
                                 value: 8,
-                                message: 'Password is too short',
+                                message: translations.loginPage.password.minLength,
                             },
                         })}
                     />
@@ -82,11 +95,11 @@ const LoginPage: FC = () => {
                 </div>
                 <div>
                     <button type="submit" className="form__button">
-                        Submit
+                        {translations.loginPage.submit}
                     </button>
                 </div>
                 <div className="form__link">
-                    <Link to={"/auth/register"}>Don't have an account?</Link>
+                    <Link to={"/auth/register"}>{translations.loginPage.accountNotExists}</Link>
                 </div>
             </form>
         </div>

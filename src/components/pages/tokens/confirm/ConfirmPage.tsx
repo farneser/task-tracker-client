@@ -1,9 +1,11 @@
 import {FC, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import authService from "@/services/auth/auth.service.ts";
-import styles from "./ConfirmPage.module.scss"
+import styles from "./ConfirmPage.module.scss";
+import {useLocalization} from "@/hooks/useLocalization.ts";
 
 const ConfirmPage: FC = () => {
+    const {translations} = useLocalization();
     const navigate = useNavigate();
     const [isValidToken, setIsValidToken] = useState(false);
 
@@ -34,22 +36,25 @@ const ConfirmPage: FC = () => {
     }, []);
 
     const handleReturnHome = () => {
-        navigate('/');
+        navigate('/p');
     };
 
     return <div className={styles.page}>
         <div className={styles.form + " " + styles.page__container}>
             {isValidToken ? (
                 <div>
-                    <h1 className={styles.title}>Email confirmation successful!</h1>
+                    <h1 className={styles.title}>{translations.confirmEmailPage.successfullyConfirm}</h1>
                 </div>
             ) : (
                 <div>
-                    <h1 className={styles.title}>Email confirmation error</h1>
-                    <p className={styles.message}>Perhaps the link has expired or the token is invalid.</p>
+                    <h1 className={styles.title}>{translations.confirmEmailPage.error.title}</h1>
+                    <p className={styles.message}>{translations.confirmEmailPage.error.message}</p>
                 </div>
             )}
-            <button className={styles.form__button} onClick={handleReturnHome}>Return to Home</button>
+            <button
+                className={styles.form__button}
+                onClick={handleReturnHome}
+            >{translations.confirmEmailPage.home}</button>
         </div>
     </div>
 };

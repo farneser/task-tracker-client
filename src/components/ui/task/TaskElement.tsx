@@ -9,15 +9,20 @@ import {ItemTypes} from "@/utils/id/ItemTypes.ts";
 import {CSS} from "@dnd-kit/utilities";
 import {getTaskId} from "@/utils/id/id.utils.ts";
 import TrashIcon from "@/components/ui/icons/TrashIcon.tsx";
+import {useLocalization} from "@/hooks/useLocalization.ts";
 
 type TaskElementProps = {
     task: TaskLookupView;
     deleteTask?: () => void;
     updateTask?: (id: number, data: PatchTaskDto) => void;
+    statusColor?: string;
 };
 
-const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask}) => {
+const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask, statusColor}) => {
     const {reversePopup, closePopup, Popup} = usePopup();
+
+    const {locale} = useLocalization();
+
     const {
         setNodeRef,
         attributes,
@@ -33,7 +38,7 @@ const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask}) => {
         }
     })
 
-    const formattedDate = new Date(task.editDate || task.creationDate).toLocaleString('en-US', {
+    const formattedDate = new Date(task.editDate || task.creationDate).toLocaleString(locale, {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -43,7 +48,7 @@ const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask}) => {
         timeZone: 'UTC'
     });
 
-    const [mouseIsOver, setMouseIsOver] = useState(true);
+    const [mouseIsOver, setMouseIsOver] = useState(false);
 
     const style = {
         transition,
@@ -56,6 +61,14 @@ const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask}) => {
         closePopup();
     };
 
+    const borderColorStyle = {
+        borderColor: ""
+    }
+
+    if (mouseIsOver && statusColor) {
+        borderColorStyle.borderColor = statusColor
+    }
+
     if (isDragging) {
         return <div className={styles.task__container + " " + styles.task__container_overlay} style={style}
                     ref={setNodeRef}>
@@ -67,7 +80,7 @@ const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask}) => {
                  {...attributes}
                  {...listeners}
                  className={styles.task__container}
-                 style={style}
+                 style={{...style, ...borderColorStyle}}
                  onMouseEnter={() => setMouseIsOver(true)}
                  onMouseLeave={() => setMouseIsOver(false)}
             >
@@ -85,7 +98,7 @@ const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask}) => {
                 <div className={styles.task__date}>{formattedDate}</div>
             </div>
             <Popup>
-                <TaskForm onSubmit={onSubmit} task={task} columnId={task.columnId}/>
+                <TaskForm onSubmit={onSubmit} task={task} statusId={task.statusId}/>
             </Popup>
         </>
     );

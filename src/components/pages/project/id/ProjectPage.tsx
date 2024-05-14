@@ -1,7 +1,7 @@
 import {FC, useEffect, useMemo, useState} from "react";
-import useColumns from "@/hooks/useColumns.ts";
-import ColumnElement from "@/components/ui/column/ColumnElement.tsx";
-import {ColumnView, CreateColumnDto} from "@/services/column/column.types.ts";
+import useStatuses from "@/hooks/useStatuses.ts";
+import StatusElement from "@/components/ui/status/StatusElement.tsx";
+import {PatchStatusDto, StatusView} from "@/services/status/status.types.ts";
 import usePopup from "@/hooks/usePopup.tsx";
 
 import {
@@ -21,39 +21,56 @@ import {ItemTypes} from "@/utils/id/ItemTypes.ts";
 import {TaskLookupView} from "@/services/task/task.types.ts";
 import TaskElement from "@/components/ui/task/TaskElement.tsx";
 import useTasks from "@/hooks/useTasks.ts";
-import styles from "./RootPage.module.scss";
-import {getColumnId, parseId} from "@/utils/id/id.utils.ts";
-import ColumnForm from "@/components/ui/column/form/ColumnForm.tsx";
+import styles from "./ProjectPage.module.scss";
+import {getStatusId, isIdValid, parseId} from "@/utils/id/id.utils.ts";
+import StatusForm from "@/components/ui/status/form/StatusForm.tsx";
 import useAuth from "@/hooks/useAuth.ts";
 import PlusIcon from "@/components/ui/icons/PlusIcon.tsx";
 import Loader from "@/components/ui/loader/Loader.tsx";
+import {useNavigate, useParams} from "react-router-dom";
+import {useLocalization} from "@/hooks/useLocalization.ts";
+import useMembers from "@/hooks/useMembers.ts";
 
-const RootPage: FC = () => {
+const ProjectPage: FC = () => {
     const auth = useAuth();
+    const {translations} = useLocalization();
+    const {projectId: projectIdParam} = useParams();
+    const [projectId, setProjectId] = useState<number | null>(null);
+
     const {
-        columns,
-        createColumn,
-        removeColumn,
-        updateColumn,
-        setColumns,
-        isLoading: isColumnsLoading,
+        statuses,
+        createStatus,
+        removeStatus,
+        updateStatus,
+        setStatuses,
+        isLoading: isStatusesLoading,
         isArchiveOpen,
-        archiveColumn
-    } = useColumns();
+        archiveStatus,
+        error
+    } = useStatuses(Number(projectId));
+
+    const {userMember} = useMembers(Number(projectId));
+
+    const navigate = useNavigate();
+
     const {tasks, createTask, setTasks, updateTask, removeTask, isLoading: isTasksLoading} = useTasks()
 
-    const {reversePopup, closePopup, Popup} = usePopup(isColumnsLoading || columns.length === 0);
-    const columnsId = useMemo(() => columns.map((col) => getColumnId(col.id)), [columns]);
+    const {reversePopup, closePopup, Popup} = usePopup(isStatusesLoading || statuses.length === 0);
+    const statusesIds = useMemo(() => statuses.map((status) => getStatusId(status.id)), [statuses]);
 
-    const [activeColumn, setActiveColumn] = useState<ColumnView | null>(null);
+    const [activeStatus, setActiveStatus] = useState<StatusView | null>(null);
     const [activeTask, setActiveTask] = useState<TaskLookupView | null>(null);
 
     useEffect(() => {
-        if (!isColumnsLoading && columns.length !== 0) {
+        setProjectId(isIdValid(projectIdParam) ? Number(projectIdParam) : null)
+    }, [projectIdParam]);
+
+    useEffect(() => {
+        if (!isStatusesLoading && statuses.length !== 0) {
             closePopup();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isColumnsLoading, columns])
+    }, [isStatusesLoading, statuses])
 
     const sensors = useSensors(useSensor(PointerSensor, {
         activationConstraint: {
@@ -61,15 +78,15 @@ const RootPage: FC = () => {
         },
     }))
 
-    const onSubmit = async (data: CreateColumnDto) => {
-        await createColumn(data)
+    const onSubmit = async (data: PatchStatusDto) => {
+        await createStatus({...data, projectId: Number(projectId)})
 
         closePopup();
     };
 
     const onDragStart = (event: DragStartEvent) => {
-        if (event.active.data.current?.type === ItemTypes.COLUMN) {
-            setActiveColumn(event.active.data.current.column);
+        if (event.active.data.current?.type === ItemTypes.STATUS) {
+            setActiveStatus(event.active.data.current.status);
             return;
         }
 
@@ -80,7 +97,7 @@ const RootPage: FC = () => {
     }
 
     const onDragEnd = async (event: DragEndEvent) => {
-        setActiveColumn(null);
+        setActiveStatus(null);
         setActiveTask(null);
 
         const {active, over} = event;
@@ -88,20 +105,20 @@ const RootPage: FC = () => {
 
         if (active.id === over.id) return;
 
-        const isActiveAColumn = active.data.current?.type === ItemTypes.COLUMN;
-        if (!isActiveAColumn) return;
+        const isActiveAStatus = active.data.current?.type === ItemTypes.STATUS;
+        if (!isActiveAStatus) return;
 
-        setColumns(((columns) => {
-            const activeColumnIndex = columns.findIndex((col) => col.id === parseId(active.id));
+        setStatuses(((statuses) => {
+            const activeStatusIndex = statuses.findIndex((status) => status.id === parseId(active.id));
 
-            const overColumnIndex = columns.findIndex((col) => col.id === parseId(over.id));
+            const overStatusIndex = statuses.findIndex((status) => status.id === parseId(over.id));
 
-            columns[activeColumnIndex].orderNumber = overColumnIndex;
+            statuses[activeStatusIndex].orderNumber = overStatusIndex;
 
-            updateColumn(columns[activeColumnIndex].id, columns[activeColumnIndex]).then();
+            updateStatus(statuses[activeStatusIndex].id, statuses[activeStatusIndex]).then();
 
-            return arrayMove(columns, activeColumnIndex, overColumnIndex);
-        })(columns))
+            return arrayMove(statuses, activeStatusIndex, overStatusIndex);
+        })(statuses))
     }
 
     const onDragOver = (event: DragOverEvent) => {
@@ -126,8 +143,8 @@ const RootPage: FC = () => {
 
                 tasks[activeIndex].orderNumber = overIndex;
 
-                if (tasks[activeIndex].columnId != tasks[overIndex].columnId) {
-                    tasks[activeIndex].columnId = tasks[overIndex].columnId;
+                if (tasks[activeIndex].statusId != tasks[overIndex].statusId) {
+                    tasks[activeIndex].statusId = tasks[overIndex].statusId;
 
                     updateTask(tasks[activeIndex].id, tasks[activeIndex]).then();
 
@@ -140,14 +157,14 @@ const RootPage: FC = () => {
             })(tasks));
         }
 
-        const isOverAColumn = over.data.current?.type === ItemTypes.COLUMN;
+        const isOverAStatus = over.data.current?.type === ItemTypes.STATUS;
 
-        if (isActiveATask && isOverAColumn) {
+        if (isActiveATask && isOverAStatus) {
             setTasks(((tasks) => {
                 const activeIndex = tasks.findIndex((t) => t.id === parseId(activeId));
 
-                tasks[activeIndex].columnId = parseId(overId);
-                tasks[activeIndex].orderNumber = tasks.filter((t) => t.columnId === parseId(overId)).length;
+                tasks[activeIndex].statusId = parseId(overId);
+                tasks[activeIndex].orderNumber = tasks.filter((t) => t.statusId === parseId(overId)).length;
 
                 updateTask(tasks[activeIndex].id, tasks[activeIndex]).then();
 
@@ -156,8 +173,12 @@ const RootPage: FC = () => {
         }
     }
 
-    if (isColumnsLoading || isTasksLoading || auth.loading) {
+    if (isStatusesLoading || isTasksLoading || auth.loading) {
         return <Loader/>
+    }
+
+    if (error || isNaN(Number(projectId))) {
+        navigate("/p")
     }
 
     return (
@@ -168,45 +189,46 @@ const RootPage: FC = () => {
                         onDragOver={onDragOver}>
 
                 <Popup>
-                    <ColumnForm onSubmit={onSubmit}/>
+                    <StatusForm onSubmit={onSubmit}/>
                 </Popup>
 
-                <div className={styles["column-container"]}>
-                    <SortableContext items={columnsId}>
-                        {columns.map((column) => (
-                            <ColumnElement
-                                key={getColumnId(column.id)}
-                                column={column}
-                                deleteColumn={() => removeColumn(column.id).then()}
-                                tasks={tasks.filter((task) => task.columnId === column.id)}
-                                updateColumn={updateColumn}
+                <div className={styles.status__container}>
+                    <SortableContext items={statusesIds}>
+                        {statuses.map((status) => (
+                            <StatusElement
+                                key={getStatusId(status.id)}
+                                status={status}
+                                deleteStatus={() => removeStatus(status.id).then()}
+                                tasks={tasks.filter((task) => task.statusId === status.id)}
+                                updateStatus={updateStatus}
                                 updateTask={updateTask}
                                 deleteTask={removeTask}
                                 createTask={createTask}
+                                draggable={userMember?.role != "MEMBER"}
                             />
                         ))}
                     </SortableContext>
-                    {isArchiveOpen && <ColumnElement
-                        column={archiveColumn}
-                        tasks={tasks.filter(task => task.columnId < 0)}
+                    {isArchiveOpen && <StatusElement
+                        status={archiveStatus}
+                        tasks={tasks.filter(task => task.statusId < 0)}
                         deleteTask={removeTask}
                     />}
-                    <div className={styles["create-column-container"]}>
+                    {userMember?.role != "MEMBER" && <div className={styles.create__status__container}>
                         <button onClick={reversePopup}>
-                            <div> Create New Column</div>
+                            <div>{translations.projectPage.createStatus}</div>
                             <div style={{width: "30px", height: "30px"}}><PlusIcon/></div>
                         </button>
-                    </div>
+                    </div>}
                 </div>
 
                 {
                     createPortal(<DragOverlay>
-                        {activeColumn && (
-                            <ColumnElement
-                                tasks={tasks.filter(task => task.columnId === activeColumn.id)}
-                                column={activeColumn}
-                                updateColumn={updateColumn}
-                                deleteColumn={() => removeColumn(activeColumn.id).then()}
+                        {activeStatus && (
+                            <StatusElement
+                                tasks={tasks.filter(task => task.statusId === activeStatus.id)}
+                                status={activeStatus}
+                                updateStatus={updateStatus}
+                                deleteStatus={() => removeStatus(activeStatus.id).then()}
                                 updateTask={updateTask}
                                 deleteTask={removeTask}
                                 createTask={createTask}
@@ -224,4 +246,4 @@ const RootPage: FC = () => {
     );
 }
 
-export default RootPage;
+export default ProjectPage;

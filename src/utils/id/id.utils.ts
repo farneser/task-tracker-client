@@ -4,8 +4,8 @@ const getTaskId = (id: number): string => {
     return `${ItemTypes.TASK}-${id}`
 }
 
-const getColumnId = (id: number): string => {
-    return `${ItemTypes.COLUMN}-${id}`
+const getStatusId = (id: number): string => {
+    return `${ItemTypes.STATUS}-${id}`
 }
 
 const parseId = (id: string | number): number => {
@@ -22,4 +22,8 @@ const parseId = (id: string | number): number => {
     return -1;
 }
 
-export {getTaskId, getColumnId, parseId};
+const isIdValid = (id: string | null | undefined): boolean => {
+    return id !== null && id !== undefined && id.trim() !== '' && !isNaN(Number(id));
+};
+
+export {getTaskId, getStatusId, parseId, isIdValid};

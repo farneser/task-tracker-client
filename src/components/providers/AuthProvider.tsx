@@ -4,7 +4,7 @@ import {userService} from "@/services/user/user.service.ts";
 import {Token} from "@/models/token.ts";
 import {getLocalStorageItem, removeLocalStorage, setLocalStorage} from "@/utils/localStorage.utils.ts";
 import constants from "@/constants.ts";
-import {ErrorMessage} from "@/models/Message.ts";
+import {Message} from "@/models/Message.ts";
 
 export interface IAuthContext {
     updateToken: (token: Token | null) => void;
@@ -13,7 +13,7 @@ export interface IAuthContext {
     user: UserView | null;
     loading: boolean;
     logout: () => void;
-    error: ErrorMessage | null;
+    error: Message | null;
     patchUser: (user: UserView) => void;
 }
 
@@ -22,7 +22,7 @@ export const AuthContext = createContext<IAuthContext | null>(null);
 export const AuthProvider: FC<PropsWithChildren> = ({children}) => {
     const [user, setUser] = useState<UserView | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<ErrorMessage | null>(null);
+    const [error, setError] = useState<Message | null>(null);
 
     const refreshAuth = async () => {
         setLoading(true);

@@ -5,9 +5,44 @@
   width: 100%;
   color: $text-color;
   text-align: center;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr repeat(1, auto) 1fr;
+  grid-column-gap: 5px;
+  justify-items: center;
+
+  &__info {
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-left: auto;
+    grid-column-start: 2;
+  }
+
+  &__locals {
+    margin-left: auto;
+    display: flex;
+
+    & > div {
+      margin: 0 10px;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  &__info > div, &__locals > div {
+    opacity: 0.5;
+    transition: $transition-speed;
+    padding: 20px 15px;
+
+    &:hover {
+      opacity: 1;
+      transition: $transition-speed;
+    }
+  }
+
 
   &__text {
     font-size: 1em;
@@ -21,33 +56,53 @@
     }
   }
 
-  & > div {
-    opacity: 0.5;
-    transition: $transition-speed;
-    padding: 20px 15px;
+  @media (max-width: 1024px) {
+    &__info {
+      flex-wrap: wrap;
 
-    &:hover {
-      opacity: 1;
-      transition: $transition-speed;
+      & {
+        justify-content: center;
+        text-align: left;
+      }
+
+      & > div {
+        padding: 10px;
+        flex: 33.33%;
+      }
+    }
+
+    &__locals {
+      margin-left: auto;
+      flex-direction: column;
+      justify-content: space-around;
+
+      & > div {
+        margin: 0;
+        padding: 10px;
+      }
     }
   }
 
   @media (max-width: 768px) {
-    & {
-      flex-direction: column;
-      justify-content: left;
-      text-align: left;
-    }
+    &__info {
+      flex-wrap: nowrap;
 
-    & > div {
-      padding: 5px 10px;
-
-      &:first-child {
-        padding-top: 10px;
+      & {
+        flex-direction: column;
+        justify-content: left;
+        text-align: left;
       }
 
-      &:last-child {
-        padding-bottom: 10px;
+      & > div {
+        padding: 5px 10px;
+
+        &:first-child {
+          padding-top: 10px;
+        }
+
+        &:last-child {
+          padding-bottom: 10px;
+        }
       }
     }
   }
