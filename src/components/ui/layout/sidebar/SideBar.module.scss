@@ -32,9 +32,18 @@
           cursor: pointer;
           transition: $transition-speed;
           background-color: lighten($background-color, 10%);
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+
+          & > div:first-child {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+          }
+
+          & > div:last-child {
+            display: flex;
+            align-content: center;
+          }
 
           &:hover {
             transition: $transition-out-speed;
