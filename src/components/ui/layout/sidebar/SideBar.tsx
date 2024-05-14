@@ -9,8 +9,10 @@ import Loader from "@/components/ui/loader/Loader.tsx";
 import useAuth from "@/hooks/useAuth.ts";
 import {useLocalization} from "@/hooks/useLocalization.ts";
 
+import ProjectElement from "@/components/ui/project/element/ProjectElement.tsx";
+
 const SideBar: FC = () => {
-    const {projects, createProject, isLoading: isProjectsLoading, updateProjects} = useProjects();
+    const {projects, createProject, isLoading: isProjectsLoading, updateProjects, removeProject, updateProject} = useProjects();
     const {user} = useAuth();
     const navigate = useNavigate();
     const {openPopup, closePopup, Popup} = usePopup();
@@ -28,6 +30,15 @@ const SideBar: FC = () => {
         navigate(`p/${project.id}`);
     };
 
+    const deleteProjectHandler = async (id: number) => {
+        await removeProject(id);
+        navigate("/p");
+    }
+
+    const patchProjectHandler = async (projectId: number, data: PatchProjectDto) => {
+        await updateProject(projectId, data);
+    }
+
     return (<div className={styles.sidebar__container}>
         <Popup>
             <ProjectForm onSubmit={onSubmit}/>
@@ -42,7 +53,13 @@ const SideBar: FC = () => {
         <div className={styles.sidebar__container__list}>
             {isProjectsLoading ? <Loader/> : <ul>
                 {projects.sort((p1, p2) => (p1.id < p2.id) ? 0 : 1).map(p => (
-                    <li key={p.id}><Link to={`p/${p.id}`}>{p.projectName}</Link></li>
+                    <li key={p.id}>
+                        <ProjectElement
+                            project={p}
+                            deleteHandler={() => deleteProjectHandler(p.id)}
+                            patchHandler={(data) => patchProjectHandler(p.id, data)}
+                        />
+                    </li>
                 ))}
             </ul>}
         </div>
