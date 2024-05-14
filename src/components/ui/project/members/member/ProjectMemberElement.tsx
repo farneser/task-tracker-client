@@ -44,7 +44,7 @@ const ProjectMemberElement: FC<ProjectMemberElementProps> = ({member, user, dele
             <option disabled={user.role != "CREATOR"}
                     value="CREATOR">{translations.members.member.role.creator}</option>
         </select>
-        {((user.userId == member.userId && member.role != "CREATOR") || (member.role != "ADMIN" && member.userId != user.userId) && member.role != "CREATOR") &&
+        {(((user.userId == member.userId) || (member.role != "ADMIN" && member.userId != user.userId)) && member.role != "CREATOR") &&
             <button
                 className={styles.form__button}
                 onClick={() => handleDelete()}

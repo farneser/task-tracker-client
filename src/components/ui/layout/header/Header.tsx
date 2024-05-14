@@ -8,11 +8,12 @@ import SettingsIcon from "@/components/ui/icons/SettingsIcon.tsx";
 import UserSettingsForm from "@/components/ui/user/UserSettingsForm.tsx";
 import {UserView} from "@/services/user/user.types.ts";
 import Gravatar from "@/components/ui/gravatar/Gravatar.tsx";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import useMembers from "@/hooks/useMembers.ts";
 import ProjectMembersForm from "@/components/ui/project/members/ProjectMembersForm.tsx";
 import {useLocalization} from "@/hooks/useLocalization.ts";
 import {isIdValid} from "@/utils/id/id.utils.ts";
+import useProjects from "@/hooks/useProjects.ts";
 
 const Header: FC = () => {
 
@@ -23,9 +24,10 @@ const Header: FC = () => {
     const {user, logout, loading, patchUser} = useAuth();
     const {Popup: UserPopup, reversePopup: reverseUserPopup, closePopup: closeUserPopup} = usePopup(false)
     const {Popup: MembersPopup, reversePopup: reverseMembersPopup} = usePopup(false)
-
+    const navigate = useNavigate();
     const {updateStatuses, setIsArchiveOpen, isArchiveOpen, statuses} = useStatuses()
     const {updateTasks, archiveTasks} = useTasks()
+    const {updateProjects} = useProjects();
 
     useEffect(() => {
         setProjectId(isIdValid(projectIdParam) ? Number(projectIdParam) : null)
@@ -45,13 +47,19 @@ const Header: FC = () => {
         closeUserPopup()
     }
 
+    const leaveHandler = async () => {
+        await members.leave()
+        navigate("/p")
+        await updateProjects()
+    }
+
     return <div className={styles.header}>
         {user && <UserPopup>
             <UserSettingsForm user={user} onSubmit={onSettingsSubmit}/>
         </UserPopup>}
 
         {projectId != null && <MembersPopup extended={true}>
-            <ProjectMembersForm token={token} projectId={projectId}/>
+            <ProjectMembersForm token={token} projectId={projectId} leaveHandler={leaveHandler}/>
         </MembersPopup>}
 
         <div className={styles.header__container}>

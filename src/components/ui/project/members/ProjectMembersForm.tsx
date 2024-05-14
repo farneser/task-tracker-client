@@ -9,9 +9,10 @@ import styles from "./ProjectMembersForm.module.scss";
 type ProjectMembersFormProps = {
     token: ProjectInviteToken | null;
     projectId: number;
+    leaveHandler: () => void;
 }
 
-const ProjectMembersForm: FC<ProjectMembersFormProps> = ({token, projectId}) => {
+const ProjectMembersForm: FC<ProjectMembersFormProps> = ({token, projectId, leaveHandler}) => {
     const {
         userMember,
         members,
@@ -21,12 +22,10 @@ const ProjectMembersForm: FC<ProjectMembersFormProps> = ({token, projectId}) => 
 
     const createInviteTokenHandler = async () => {
         await createInviteToken();
-        await updateMembers()
     }
 
     const deleteInviteTokenHandler = async () => {
         await deleteInviteToken();
-        await updateMembers()
     }
 
     const patchProjectMemberHandler = async (id: number, role: ProjectMemberRole) => {
@@ -35,13 +34,11 @@ const ProjectMembersForm: FC<ProjectMembersFormProps> = ({token, projectId}) => 
     }
 
     const deleteProjectMemberHandler = async (id: number) => {
-
         if (id == userMember?.userId) {
-            await members.leave()
+            leaveHandler()
         } else {
             await members.delete(id);
         }
-        await updateMembers()
     }
 
     return userMember ? <div>
