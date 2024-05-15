@@ -131,6 +131,11 @@ export type Translations = {
         select: string;
         hex: string;
         error: string;
+    },
+    userSettings: {
+        header: string;
+        emailNotifications: string;
+        save: string;
     }
 };
 

@@ -198,6 +198,11 @@ const en: Translations = {
         select: "Select color",
         hex: "Hex color",
         error: "Length only 3 or 6 characters",
+    },
+    userSettings: {
+        header: "User settings",
+        emailNotifications: "Subscribe for email notifications",
+        save: "Save settings",
     }
 }
 

@@ -62,10 +62,14 @@ const LoginPage: FC = () => {
                         className="form__input"
                         {...register('login', {
                             required: translations.loginPage.login.required,
-                            pattern: {
-                                value: /^\S+@\S+$/i,
-                                message: translations.loginPage.login.invalid,
+                            minLength: {
+                                value: 1,
+                                message: translations.loginPage.login.minLength
                             },
+                            maxLength: {
+                                value: 255,
+                                message: translations.loginPage.login.maxLength
+                            }
                         })}
                     />
                     {errors.login && <p className="form__error">{errors.login.message}</p>}
