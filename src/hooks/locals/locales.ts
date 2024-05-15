@@ -136,6 +136,13 @@ export type Translations = {
         header: string;
         emailNotifications: string;
         save: string;
+    },
+    welcomePage: {
+        title: string;
+        message: string;
+        login: string;
+        register: string;
+        dashboard: string;
     }
 };
 

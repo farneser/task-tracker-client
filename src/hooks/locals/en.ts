@@ -203,6 +203,13 @@ const en: Translations = {
         header: "User settings",
         emailNotifications: "Subscribe for email notifications",
         save: "Save settings",
+    },
+    welcomePage: {
+        title: "Welcome!",
+        message: "Welcome to the main page of our website - your unique project management tool. Here you can easily create and organize projects, effectively monitor task completion, interact with friends and colleagues, and optimize your time to the fullest while managing project processes.",
+        login: "Log In",
+        register: "Free Registration",
+        dashboard: "Go to Dashboard"
     }
 }
 
