@@ -10,6 +10,7 @@ interface Color {
 
 type ColorPickerProps = {
     setColor: (color: string) => void;
+    error?: boolean;
 }
 
 const rgbToHex = (r: number, g: number, b: number): string => {
@@ -63,8 +64,7 @@ function hexToRgb(hex: string): Color | null {
     return {red, green, blue};
 }
 
-
-const ColorPicker: React.FC<ColorPickerProps> = ({setColor}) => {
+const ColorPicker: React.FC<ColorPickerProps> = ({setColor, error:formError}) => {
     const [hexColor, setHexColor] = useState<string>(randomLightColor());
     const {control, watch, setValue} = useForm<Color>({defaultValues: {...hexToRgb(hexColor)}});
     const [error, setError] = useState(false);
@@ -178,7 +178,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({setColor}) => {
                 <input type="text" value={hexColor} onChange={handleHexInputChange}/>
             </div>
             <div className={styles.form__error_placeholder} style={{visibility: error ? "visible" : "hidden"}}>
-                <div className={styles.form__error}> {error && "Length only 3 or 6 characters"}</div>
+                <div className={styles.form__error}> {(error || formError) && "Length only 3 or 6 characters"}</div>
             </div>
         </div>
     </div>);
