@@ -47,9 +47,9 @@ const ProjectPage: FC = () => {
         isArchiveOpen,
         archiveStatus,
         error
-    } = useStatuses(Number(projectId));
+    } = useStatuses(projectId);
 
-    const {userMember} = useMembers(Number(projectId));
+    const {userMember} = useMembers(projectId);
 
     const navigate = useNavigate();
 
@@ -181,69 +181,67 @@ const ProjectPage: FC = () => {
         navigate("/p")
     }
 
-    return (
-        <div className={styles["kanban-container"]}>
-            <DndContext sensors={sensors}
-                        onDragStart={onDragStart}
-                        onDragEnd={onDragEnd}
-                        onDragOver={onDragOver}>
+    return (<div className={styles["kanban-container"]}>
+        <DndContext sensors={sensors}
+                    onDragStart={onDragStart}
+                    onDragEnd={onDragEnd}
+                    onDragOver={onDragOver}>
 
-                <Popup>
-                    <StatusForm onSubmit={onSubmit}/>
-                </Popup>
+            <Popup>
+                <StatusForm onSubmit={onSubmit}/>
+            </Popup>
 
-                <div className={styles.status__container}>
-                    <SortableContext items={statusesIds}>
-                        {statuses.map((status) => (
-                            <StatusElement
-                                key={getStatusId(status.id)}
-                                status={status}
-                                deleteStatus={() => removeStatus(status.id).then()}
-                                tasks={tasks.filter((task) => task.statusId === status.id)}
-                                updateStatus={updateStatus}
-                                updateTask={updateTask}
-                                deleteTask={removeTask}
-                                createTask={createTask}
-                                draggable={userMember?.role != "MEMBER"}
-                            />
-                        ))}
-                    </SortableContext>
-                    {isArchiveOpen && <StatusElement
-                        status={archiveStatus}
-                        tasks={tasks.filter(task => task.statusId < 0)}
-                        deleteTask={removeTask}
-                    />}
-                    {userMember?.role != "MEMBER" && <div className={styles.create__status__container}>
-                        <button onClick={reversePopup}>
-                            <div>{translations.projectPage.createStatus}</div>
-                            <div style={{width: "30px", height: "30px"}}><PlusIcon/></div>
-                        </button>
-                    </div>}
-                </div>
+            <div className={styles.status__container}>
+                <SortableContext items={statusesIds}>
+                    {statuses.map((status) => (
+                        <StatusElement
+                            key={getStatusId(status.id)}
+                            status={status}
+                            deleteStatus={() => removeStatus(status.id).then()}
+                            tasks={tasks.filter((task) => task.statusId === status.id)}
+                            updateStatus={updateStatus}
+                            updateTask={updateTask}
+                            deleteTask={removeTask}
+                            createTask={createTask}
+                            draggable={userMember?.role != "MEMBER"}
+                        />
+                    ))}
+                </SortableContext>
+                {isArchiveOpen && <StatusElement
+                    status={archiveStatus}
+                    tasks={tasks.filter(task => task.statusId < 0)}
+                    deleteTask={removeTask}
+                />}
+                {userMember?.role != "MEMBER" && <div className={styles.create__status__container}>
+                    <button onClick={reversePopup}>
+                        <div>{translations.projectPage.createStatus}</div>
+                        <div style={{width: "30px", height: "30px"}}><PlusIcon/></div>
+                    </button>
+                </div>}
+            </div>
 
-                {
-                    createPortal(<DragOverlay>
-                        {activeStatus && (
-                            <StatusElement
-                                tasks={tasks.filter(task => task.statusId === activeStatus.id)}
-                                status={activeStatus}
-                                updateStatus={updateStatus}
-                                deleteStatus={() => removeStatus(activeStatus.id).then()}
-                                updateTask={updateTask}
-                                deleteTask={removeTask}
-                                createTask={createTask}
-                            />
-                        )}
-                        {activeTask && (
-                            <TaskElement task={activeTask} updateTask={updateTask} deleteTask={() => {
-                                removeTask(activeTask.id).then()
-                            }}/>
-                        )}
-                    </DragOverlay>, document.body)
-                }
-            </DndContext>
-        </div>
-    );
+            {createPortal(
+                <DragOverlay>
+                    {activeStatus && (
+                        <StatusElement
+                            tasks={tasks.filter(task => task.statusId === activeStatus.id)}
+                            status={activeStatus}
+                            updateStatus={updateStatus}
+                            deleteStatus={() => removeStatus(activeStatus.id).then()}
+                            updateTask={updateTask}
+                            deleteTask={removeTask}
+                            createTask={createTask}
+                        />
+                    )}
+                    {activeTask && (
+                        <TaskElement task={activeTask} updateTask={updateTask} deleteTask={() => {
+                            removeTask(activeTask.id).then()
+                        }}/>
+                    )}
+                </DragOverlay>,
+                document.body)}
+        </DndContext>
+    </div>);
 }
 
 export default ProjectPage;

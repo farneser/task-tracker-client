@@ -3,8 +3,8 @@ import {CreateStatusDto, PatchStatusDto, StatusView} from "@/services/status/sta
 import {TaskLookupView} from "@/services/task/task.types.ts";
 
 export const statusService = {
-    async get(): Promise<StatusView[]> {
-        const response = await axiosInstance.get<StatusView[]>("/api/v1/status?retrieveTasks=false");
+    async get(getTasks = false): Promise<StatusView[]> {
+        const response = await axiosInstance.get<StatusView[]>(`/api/v1/status?retrieveTasks=${getTasks}`);
 
         return response.data;
     }, async getById(id: number): Promise<StatusView> {

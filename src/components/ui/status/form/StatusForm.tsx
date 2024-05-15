@@ -4,6 +4,7 @@ import {PatchStatusDto, StatusView} from "@/services/status/status.types.ts";
 import styles from "./StatusForm.module.scss";
 import SwitchCheckbox from "@/components/ui/forms/switchCheckbox/SwitchCheckbox.tsx";
 import {useLocalization} from "@/hooks/useLocalization.ts";
+import ColorPicker from "@/components/ui/forms/colorPicker/ColorPicker.tsx";
 
 type StatusFormProps = {
     status?: StatusView;
@@ -13,12 +14,15 @@ type StatusFormProps = {
 const StatusForm: FC<StatusFormProps> = ({onSubmit, status}) => {
     const {translations} = useLocalization();
 
+    const [colorError, setColorError] = useState(false);
+
     const {
         register,
         handleSubmit,
         reset,
         formState: {errors},
-        setFocus
+        setFocus,
+        setValue
     } = useForm<PatchStatusDto>({defaultValues: status});
 
     const [isChecked, setIsChecked] = useState(!status ? false : status.isCompleted);
@@ -32,7 +36,17 @@ const StatusForm: FC<StatusFormProps> = ({onSubmit, status}) => {
     };
 
     const submit = (data: PatchStatusDto) => {
-        onSubmit({...data, isCompleted: isChecked});
+        let color = data.statusColor.trim();
+
+        if (color.length === 4) {
+            color = "#" + color[1] + color[1] + color[2] + color[2] + color[3] + color[3];
+        } else if (color.length !== 7) {
+            setColorError(true)
+            return;
+        }
+
+        // Далее обрабатываем остальную часть submit
+        onSubmit({...data, statusColor: color, isCompleted: isChecked});
         reset();
     }
 
@@ -54,21 +68,9 @@ const StatusForm: FC<StatusFormProps> = ({onSubmit, status}) => {
             {errors.statusName && <p className={styles.form__error}>{errors.statusName.message}</p>}
         </div>
         <div>
-            <input
-                type="text"
-                placeholder={translations.statusForm.statusColor.placeholder}
-                {...register("statusColor", {
-                    required: translations.statusForm.statusColor.required,
-                    minLength: {value: 4, message: translations.statusForm.statusColor.minLength},
-                    maxLength: {value: 7, message: translations.statusForm.statusColor.maxLength},
-                    pattern: {
-                        value: /^#(?:[0-9a-fA-F]{3}){1,2}$/,
-                        message: translations.statusForm.statusColor.invalid
-                    }
-                })}
-                className={styles.createColumnForm__form__field__input}
-            />
-            {errors.statusName && <p className={styles.form__error}>{errors.statusName.message}</p>}
+            <ColorPicker error={colorError} setColor={(color) => {
+                setValue("statusColor", color)
+            }}/>
         </div>
         <div className={styles.createColumnForm__form__field}>
             <label className={styles.form__label}>{translations.statusForm.isCompleted.label}</label>

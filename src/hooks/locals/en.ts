@@ -189,6 +189,34 @@ const en: Translations = {
         submitCreate: "Create project",
         submitEdit: "Update project"
     },
+    colorPicker: {
+        color: {
+            red: "Red",
+            green: "Green",
+            blue: "Blue",
+        },
+        select: "Select color",
+        hex: "Hex color",
+        error: "Length only 3 or 6 characters",
+    },
+    userSettings: {
+        header: "User settings",
+        emailNotifications: "Subscribe for email notifications",
+        save: "Save settings",
+    },
+    welcomePage: {
+        title: "Welcome!",
+        message: "Welcome to the main page of our website - your unique project management tool. Here you can easily create and organize projects, effectively monitor task completion, interact with friends and colleagues, and optimize your time to the fullest while managing project processes.",
+        login: "Log In",
+        register: "Free Registration",
+        dashboard: "Go to Dashboard"
+    },
+    projectsPage: {
+        uncompletedTasks: (num) => `Count of uncompleted tasks in your projects: ${num}`,
+        assignedTasks: (num) => `Count of assigned for you tasks: ${num}`,
+        members: (num) => `Count of members in your projects: ${num}`,
+        statistics: "Statistics of your projects"
+    }
 }
 
 export default en;
