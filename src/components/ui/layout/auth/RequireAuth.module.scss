@@ -6,17 +6,15 @@ main {
   display: flex;
 
   .main__sidebar__container {
-    max-width: 20%;
+    max-width: 25%;
     display: flex;
     transition: max-width 0.5s ease;
 
     .sidebar {
       position: relative;
-      max-width: 90%;
       overflow-y: auto;
 
       &__switch {
-
         margin: auto 0;
         height: 50px;
         display: flex;

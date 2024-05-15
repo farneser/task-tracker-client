@@ -143,6 +143,12 @@ export type Translations = {
         login: string;
         register: string;
         dashboard: string;
+    },
+    projectsPage: {
+        uncompletedTasks: (num: number) => string;
+        assignedTasks: (num: number) => string;
+        members: (num: number) => string;
+        statistics: string;
     }
 };
 

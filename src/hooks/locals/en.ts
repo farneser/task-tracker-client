@@ -210,6 +210,12 @@ const en: Translations = {
         login: "Log In",
         register: "Free Registration",
         dashboard: "Go to Dashboard"
+    },
+    projectsPage: {
+        uncompletedTasks: (num) => `Count of uncompleted tasks in your projects: ${num}`,
+        assignedTasks: (num) => `Count of assigned for you tasks: ${num}`,
+        members: (num) => `Count of members in your projects: ${num}`,
+        statistics: "Statistics of your projects"
     }
 }
 

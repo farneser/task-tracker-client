@@ -210,6 +210,12 @@ const ru: Translations = {
         login: "Войти в аккаунт",
         register: "Бесплатная регистрация",
         dashboard: "Переход на главную",
+    },
+    projectsPage: {
+        uncompletedTasks: (num) => `Количество невыполненных задач в ваших проектах: ${num}`,
+        assignedTasks: (num) => `Количество назначенных вам задач: ${num}`,
+        members: (num) => `Количество участников в ваших проектах: ${num}`,
+        statistics: "Статистика ваших проектов"
     }
 }
 
