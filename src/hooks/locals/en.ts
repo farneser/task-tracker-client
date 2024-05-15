@@ -189,6 +189,16 @@ const en: Translations = {
         submitCreate: "Create project",
         submitEdit: "Update project"
     },
+    colorPicker: {
+        color: {
+            red: "Red",
+            green: "Green",
+            blue: "Blue",
+        },
+        select: "Select color",
+        hex: "Hex color",
+        error: "Length only 3 or 6 characters",
+    }
 }
 
 export default en;

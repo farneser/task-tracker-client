@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import styles from "./ColorPicker.module.scss";
+import {useLocalization} from "@/hooks/useLocalization.ts";
 
 interface Color {
     red: number;
@@ -64,10 +65,12 @@ function hexToRgb(hex: string): Color | null {
     return {red, green, blue};
 }
 
-const ColorPicker: React.FC<ColorPickerProps> = ({setColor, error:formError}) => {
+const ColorPicker: React.FC<ColorPickerProps> = ({setColor, error: formError}) => {
     const [hexColor, setHexColor] = useState<string>(randomLightColor());
     const {control, watch, setValue} = useForm<Color>({defaultValues: {...hexToRgb(hexColor)}});
     const [error, setError] = useState(false);
+
+    const {translations} = useLocalization();
 
     const updateHexColor = () => {
         const [r, g, b] = watch(["red", "green", "blue"]);
@@ -104,9 +107,9 @@ const ColorPicker: React.FC<ColorPickerProps> = ({setColor, error:formError}) =>
     };
 
     return (<div>
-        <h1 className={styles.form__label}>Select color</h1>
+        <h1 className={styles.form__label} style={{marginBottom: "16px"}}>{translations.colorPicker.select}</h1>
         <div>
-            <div className={styles.form__label}>Red</div>
+            <div className={`${styles.form__label} ${styles.color__input}`}>{translations.colorPicker.color.red}</div>
             <div className={styles.color__slider}>
                 <Controller
                     name="red"
@@ -128,7 +131,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({setColor, error:formError}) =>
             </div>
         </div>
         <div>
-            <div className={styles.form__label}>Green</div>
+            <div className={`${styles.form__label} ${styles.color__input}`}>{translations.colorPicker.color.green}</div>
             <div className={styles.color__slider}>
                 <Controller
                     name="green"
@@ -150,7 +153,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({setColor, error:formError}) =>
             </div>
         </div>
         <div>
-            <div className={styles.form__label}>Blue</div>
+            <div className={`${styles.form__label} ${styles.color__input}`}>{translations.colorPicker.color.blue}</div>
             <div className={styles.color__slider}>
                 <Controller
                     name="blue"
@@ -172,13 +175,13 @@ const ColorPicker: React.FC<ColorPickerProps> = ({setColor, error:formError}) =>
             </div>
         </div>
         <div>
-            <div className={styles.form__label}>Hex Color</div>
+            <div className={styles.form__label}>{translations.colorPicker.hex}</div>
             <div style={{display: "flex", alignItems: "center"}}>
                 <div style={{width: "30px", height: "30px", backgroundColor: hexColor, marginRight: "10px"}}/>
                 <input type="text" value={hexColor} onChange={handleHexInputChange}/>
             </div>
             <div className={styles.form__error_placeholder} style={{visibility: error ? "visible" : "hidden"}}>
-                <div className={styles.form__error}> {(error || formError) && "Length only 3 or 6 characters"}</div>
+                <div className={styles.form__error}> {(error || formError) && translations.colorPicker.error}</div>
             </div>
         </div>
     </div>);

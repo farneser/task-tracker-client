@@ -188,8 +188,17 @@ const ru: Translations = {
         },
         submitCreate: "Создать проект",
         submitEdit: "Обновить проект"
+    },
+    colorPicker: {
+        color: {
+            red: "Красный",
+            green: "Зеленый",
+            blue: "Синий",
+        },
+        select: "Выберите цвет",
+        hex: "Цвет в формате HEX",
+        error: "Длина должна быть только 3 или 6 символоа",
     }
-
 }
 
 export default ru;
