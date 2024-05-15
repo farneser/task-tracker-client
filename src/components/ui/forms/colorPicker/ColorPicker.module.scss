@@ -1,0 +1,12 @@
+@import "src/styles/form";
+
+.color {
+  &__slider {
+    display: flex;
+    justify-content: center;
+
+    input[type=range] {
+      width: 90%;
+    }
+  }
+}
