@@ -8,7 +8,7 @@ interface StatusServiceHook {
     statuses: StatusView[];
     isLoading: boolean;
     error: Message | null;
-    updateStatuses: () => Promise<void>;
+    updateStatuses: () => void;
     createStatus: (status: CreateStatusDto) => Promise<void>;
     updateStatus: (id: number, status: PatchStatusDto) => Promise<void>;
     removeStatus: (statusId: number) => Promise<void>;
@@ -27,33 +27,34 @@ export const StatusProvider: FC<PropsWithChildren> = ({children}) => {
     const [error, setError] = useState<Message | null>(null);
     const [isArchiveOpen, setIsArchiveOpen] = useState(false);
     const [projectId, setProjectId] = useState<number | null>(null);
-    const [currentRequestId, setCurrentRequestId] = useState(0);
 
     const updateStatuses = useCallback(async () => {
         setIsLoading(true);
-        const requestId = Date.now();
-        setCurrentRequestId(requestId);
+        let isRequestRelevant = true;
 
         try {
             const statusesData = projectId
                 ? await projectService.getStatuses(projectId)
                 : await statusService.get();
-
-            if (currentRequestId === requestId) {
+            console.log(projectId + " update statuses");
+            if (isRequestRelevant) {
                 setStatuses(statusesData);
                 setError(null);
             }
         } catch (error) {
-            if (currentRequestId === requestId) {
-                // FIXME 26.05.2024
+            if (isRequestRelevant) {
                 setError({message: "ERROR", status: 1});
             }
         } finally {
-            if (currentRequestId === requestId) {
+            if (isRequestRelevant) {
                 setIsLoading(false);
             }
         }
-    }, [projectId, currentRequestId]);
+
+        return () => {
+            isRequestRelevant = false;
+        };
+    }, [projectId]);
 
     useEffect(() => {
         updateStatuses().then();
@@ -75,9 +76,7 @@ export const StatusProvider: FC<PropsWithChildren> = ({children}) => {
         await statusService.patch(id, {...dto, orderNumber: dto.orderNumber + 1});
 
         setStatuses((prevStatuses) =>
-            prevStatuses.map((status) =>
-                status.id === id ? {...status, ...dto} : status
-            )
+            prevStatuses.map((status) => (status.id === id ? {...status, ...dto} : status))
         );
     };
 
