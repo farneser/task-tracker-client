@@ -152,6 +152,8 @@ export type Translations = {
     }
 };
 
+export const DEFAULT_LOCALE: LocaleKey = "en";
+
 export type LocaleKey = "en" | "ru";
 
 const locales: Record<LocaleKey, Translations> = {en, ru,};
