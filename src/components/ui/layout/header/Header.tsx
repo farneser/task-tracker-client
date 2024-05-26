@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from "react";
+import {FC, useEffect} from "react";
 import styles from "./Header.module.scss";
 import useAuth from "@/hooks/useAuth.ts";
 import useStatuses from "@/hooks/useStatuses.ts";
@@ -8,17 +8,16 @@ import SettingsIcon from "@/components/ui/icons/SettingsIcon.tsx";
 import UserSettingsForm from "@/components/ui/user/UserSettingsForm.tsx";
 import {UserView} from "@/services/user/user.types.ts";
 import Gravatar from "@/components/ui/gravatar/Gravatar.tsx";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import useMembers from "@/hooks/useMembers.ts";
 import ProjectMembersForm from "@/components/ui/project/members/ProjectMembersForm.tsx";
 import {useLocalization} from "@/hooks/useLocalization.ts";
-import {isIdValid} from "@/utils/id/id.utils.ts";
 import useProjects from "@/hooks/useProjects.ts";
+import useProjectId from "@/hooks/useProjectId.ts";
 
 const Header: FC = () => {
 
-    const {projectId: projectIdParam} = useParams();
-    const [projectId, setProjectId] = useState<number | null>(null);
+    const {projectId} = useProjectId();
     const {members, updateMembers, inviteToken: {token}} = useMembers(Number(projectId));
     const {translations} = useLocalization();
     const {user, logout, loading, patchUser} = useAuth();
@@ -30,11 +29,9 @@ const Header: FC = () => {
     const {updateProjects} = useProjects();
 
     useEffect(() => {
-        setProjectId(isIdValid(projectIdParam) ? Number(projectIdParam) : null)
-
         refresh().then()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [loading, user, projectIdParam]);
+    }, [loading, user, projectId]);
 
     const refresh = async () => {
         await updateStatuses().then()

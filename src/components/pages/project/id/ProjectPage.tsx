@@ -22,20 +22,21 @@ import {TaskLookupView} from "@/services/task/task.types.ts";
 import TaskElement from "@/components/ui/task/TaskElement.tsx";
 import useTasks from "@/hooks/useTasks.ts";
 import styles from "./ProjectPage.module.scss";
-import {getStatusId, isIdValid, parseId} from "@/utils/id/id.utils.ts";
+import {getStatusId, parseId} from "@/utils/id/id.utils.ts";
 import StatusForm from "@/components/ui/status/form/StatusForm.tsx";
 import useAuth from "@/hooks/useAuth.ts";
 import PlusIcon from "@/components/ui/icons/PlusIcon.tsx";
 import Loader from "@/components/ui/loader/Loader.tsx";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {useLocalization} from "@/hooks/useLocalization.ts";
 import useMembers from "@/hooks/useMembers.ts";
+import useProjectId from "@/hooks/useProjectId.ts";
+import useIsMobile from "@/hooks/is-mobile-phone-hooks.ts";
 
 const ProjectPage: FC = () => {
     const auth = useAuth();
     const {translations} = useLocalization();
-    const {projectId: projectIdParam} = useParams();
-    const [projectId, setProjectId] = useState<number | null>(null);
+    const {projectId} = useProjectId();
 
     const {
         statuses,
@@ -60,10 +61,6 @@ const ProjectPage: FC = () => {
 
     const [activeStatus, setActiveStatus] = useState<StatusView | null>(null);
     const [activeTask, setActiveTask] = useState<TaskLookupView | null>(null);
-
-    useEffect(() => {
-        setProjectId(isIdValid(projectIdParam) ? Number(projectIdParam) : null)
-    }, [projectIdParam]);
 
     useEffect(() => {
         if (!isStatusesLoading && statuses.length !== 0) {
@@ -173,6 +170,8 @@ const ProjectPage: FC = () => {
         }
     }
 
+    const {isMobile} = useIsMobile();
+
     if (isStatusesLoading || isTasksLoading || auth.loading) {
         return <Loader/>
     }
@@ -180,6 +179,7 @@ const ProjectPage: FC = () => {
     if (error || isNaN(Number(projectId))) {
         navigate("/p")
     }
+
 
     return (<div className={styles["kanban-container"]}>
         <DndContext sensors={sensors}
@@ -203,7 +203,7 @@ const ProjectPage: FC = () => {
                             updateTask={updateTask}
                             deleteTask={removeTask}
                             createTask={createTask}
-                            draggable={userMember?.role != "MEMBER"}
+                            draggable={userMember?.role != "MEMBER" && !isMobile}
                         />
                     ))}
                 </SortableContext>

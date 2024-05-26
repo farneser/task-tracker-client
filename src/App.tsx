@@ -10,6 +10,7 @@ import ProjectPage from "@/components/pages/project/id/ProjectPage.tsx";
 import type {Router} from "@remix-run/router/dist/router";
 import {FC} from "react";
 import AcceptInvitePage from "@/components/pages/tokens/invites/AcceptInvitePage.tsx";
+import {ProjectIdProvider} from "@/components/providers/ProjectIdProvider.tsx";
 
 const router: Router = createBrowserRouter(
     createRoutesFromElements(
@@ -22,10 +23,17 @@ const router: Router = createBrowserRouter(
             <Route path="/i/accept" element={<AcceptInvitePage/>}/>
 
             {/* private routes */}
-            <Route element={<RequireAuth/>}>
+            <Route element={
+                <ProjectIdProvider>
+                    <RequireAuth/>
+                </ProjectIdProvider>
+            }>
                 <Route path="/p" element={<ProjectsPage/>}/>
-                <Route path="/p/:projectId" element={<ProjectPage/>}/>
+                <Route path="/p/:projectId" element={
+                    <ProjectPage/>
+                }/>
             </Route>
+
         </Route>
     )
 );

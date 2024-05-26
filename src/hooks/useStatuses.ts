@@ -8,9 +8,7 @@ const useStatuses = (projectId?: number | null) => {
         throw new Error('useStatuses must be used within a StatusProvider');
     }
 
-    if (projectId != undefined) {
-        context.setProjectId(projectId)
-    }
+    context.setProjectId(projectId != undefined ? projectId : null)
 
     return context;
 }
