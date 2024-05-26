@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {ChangeEvent, FC, useCallback, useEffect, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import styles from "./ColorPicker.module.scss";
 import {useLocalization} from "@/hooks/useLocalization.ts";
@@ -10,8 +10,9 @@ interface Color {
 }
 
 type ColorPickerProps = {
-    setColor: (color: string) => void;
+    setColor: (color: string) => Promise<void>;
     error?: boolean;
+    defaultColor?: string | null;
 }
 
 const rgbToHex = (r: number, g: number, b: number): string => {
@@ -65,21 +66,48 @@ function hexToRgb(hex: string): Color | null {
     return {red, green, blue};
 }
 
-const ColorPicker: React.FC<ColorPickerProps> = ({setColor, error: formError}) => {
-    const [hexColor, setHexColor] = useState<string>(randomLightColor());
+const processDefaultColor = (color: string | null | undefined): string | null => {
+    if (color === null || color === undefined) {
+        return null;
+    }
+
+    if (color.startsWith('#')) {
+        color = color.slice(1);
+    }
+
+    if (color.length !== 3 && color.length !== 6) {
+        return null;
+    }
+
+    const isHex = /^[0-9A-Fa-f]{3}$|^[0-9A-Fa-f]{6}$/.test(color);
+
+    if (!isHex) {
+        return null;
+    }
+
+    return `#${color.toUpperCase()}`;
+}
+
+
+const ColorPicker: FC<ColorPickerProps> = ({setColor, error: formError, defaultColor}) => {
+    const [hexColor, setHexColor] = useState<string>(processDefaultColor(defaultColor) ?? randomLightColor());
     const {control, watch, setValue} = useForm<Color>({defaultValues: {...hexToRgb(hexColor)}});
     const [error, setError] = useState(false);
 
     const {translations} = useLocalization();
 
-    const updateHexColor = () => {
+    const updateHexColor = useCallback(async () => {
         const [r, g, b] = watch(["red", "green", "blue"]);
         const newHexColor = rgbToHex(r, g, b);
         setHexColor(newHexColor);
-        setColor(newHexColor);
-    };
+        setColor(newHexColor).then();
+    }, [setColor, watch]);
 
-    const handleHexInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    useEffect(() => {
+        updateHexColor().then()
+    }, [updateHexColor]);
+
+    const handleHexInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const inputHex = e.target.value;
 
         if (inputHex.length > 7) {
@@ -96,7 +124,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({setColor, error: formError}) =
             const rgb = hexToRgb(inputHex);
 
             setHexColor(inputHex);
-            setColor(inputHex);
+            setColor(inputHex).then();
 
             if (rgb) {
                 setValue("red", rgb.red)
@@ -121,9 +149,9 @@ const ColorPicker: React.FC<ColorPickerProps> = ({setColor, error: formError}) =
                             min="0"
                             max="255"
                             value={value}
-                            onChange={(e) => {
+                            onChange={async (e) => {
                                 onChange(e.target.value);
-                                updateHexColor();
+                                await updateHexColor();
                             }}
                         />
                     )}
@@ -143,9 +171,9 @@ const ColorPicker: React.FC<ColorPickerProps> = ({setColor, error: formError}) =
                             min="0"
                             max="255"
                             value={value}
-                            onChange={(e) => {
+                            onChange={async (e) => {
                                 onChange(e.target.value);
-                                updateHexColor();
+                                await updateHexColor();
                             }}
                         />
                     )}
@@ -165,9 +193,9 @@ const ColorPicker: React.FC<ColorPickerProps> = ({setColor, error: formError}) =
                             min="0"
                             max="255"
                             value={value}
-                            onChange={(e) => {
+                            onChange={async (e) => {
                                 onChange(e.target.value);
-                                updateHexColor();
+                                await updateHexColor();
                             }}
                         />
                     )}

@@ -45,7 +45,6 @@ const StatusForm: FC<StatusFormProps> = ({onSubmit, status}) => {
             return;
         }
 
-        // Далее обрабатываем остальную часть submit
         onSubmit({...data, statusColor: color, isCompleted: isChecked});
         reset();
     }
@@ -68,7 +67,7 @@ const StatusForm: FC<StatusFormProps> = ({onSubmit, status}) => {
             {errors.statusName && <p className={styles.form__error}>{errors.statusName.message}</p>}
         </div>
         <div>
-            <ColorPicker error={colorError} setColor={(color) => {
+            <ColorPicker error={colorError} setColor={async (color) => {
                 setValue("statusColor", color)
             }}/>
         </div>
