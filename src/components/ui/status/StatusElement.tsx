@@ -8,13 +8,13 @@ import {SortableContext, useSortable} from "@dnd-kit/sortable";
 import {ItemTypes} from "@/utils/id/ItemTypes.ts";
 import {getStatusId, getTaskId} from "@/utils/id/id.utils.ts";
 import styles from "./StatusElement.module.scss";
-import TrashIcon from "@/components/ui/icons/TrashIcon.tsx";
 import BarsIcon from "@/components/ui/icons/BarsIcon.tsx";
 import PlusIcon from "@/components/ui/icons/PlusIcon.tsx";
 import CheckIcon from "@/components/ui/icons/CheckIcon.tsx";
 import TaskForm from "@/components/ui/task/form/TaskForm.tsx";
 import StatusForm from "@/components/ui/status/form/StatusForm.tsx";
 import {useLocalization} from "@/hooks/useLocalization.ts";
+import TrashIcon from "@/components/ui/icons/TrashIcon.tsx";
 
 type StatusProps = {
     status: StatusView;
@@ -54,6 +54,14 @@ const StatusElement: FC<StatusProps> = (
     } = usePopup();
 
     const [mouseIsOver, setMouseIsOver] = useState(false);
+    const [blockMouseIsOver, setBlockMouseIsOver] = useState(false)
+
+    const setMouseIsOverHandler = (state: boolean) => {
+        console.log(`state changed to ${state}`)
+        if (!blockMouseIsOver) {
+            setMouseIsOver(state)
+        }
+    }
 
     const {
         setNodeRef,
@@ -112,8 +120,8 @@ const StatusElement: FC<StatusProps> = (
                 <StatusForm onSubmit={onEditSubmit} status={status}/>
             </EditPopup>
             <div className={styles.status__container} ref={setNodeRef} style={{...style, ...borderColorStyle}}
-                 onMouseEnter={() => setMouseIsOver(true)}
-                 onMouseLeave={() => setMouseIsOver(false)}
+                 onMouseEnter={() => setMouseIsOverHandler(true)}
+                 onMouseLeave={() => setMouseIsOverHandler(false)}
             >
                 <div className={styles.header}>
                     {updateStatus ? <>
@@ -148,6 +156,9 @@ const StatusElement: FC<StatusProps> = (
                                 updateTask={updateTask}
                                 deleteTask={() => deleteTask && deleteTask(task.id)}
                                 statusColor={status.statusColor}
+                                popupIsOpenCallback={(state) => {
+                                    setBlockMouseIsOver(state)
+                                }}
                             />
                         ))}
                     </SortableContext>

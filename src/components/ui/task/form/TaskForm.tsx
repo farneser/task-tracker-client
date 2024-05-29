@@ -3,6 +3,8 @@ import {PatchTaskDto, TaskLookupView} from "@/services/task/task.types.ts";
 import {useForm} from "react-hook-form";
 import styles from "./TaskForm.module.scss";
 import {useLocalization} from "@/hooks/useLocalization.ts";
+import useMembers from "@/hooks/useMembers.ts";
+import useProjectId from "@/hooks/useProjectId.ts";
 
 type PatchTaskFormProps = {
     task?: TaskLookupView;
@@ -12,6 +14,8 @@ type PatchTaskFormProps = {
 
 const TaskForm: FC<PatchTaskFormProps> = ({onSubmit, task, statusId}) => {
     const {translations} = useLocalization();
+    const {projectId} = useProjectId();
+    const {members} = useMembers(projectId);
 
     const {
         register,
@@ -61,6 +65,14 @@ const TaskForm: FC<PatchTaskFormProps> = ({onSubmit, task, statusId}) => {
                               message: translations.taskForm.description.maxLength,
                           }
                       })} />
+        </div>
+        <div>
+            <select className={styles.form__input} {...register("assignedUserId")}>
+                <option value={-1}>NOT ASSIGNED</option>
+                {members.list.map((m) =>
+                    <option value={m.userId}>{m.username}</option>
+                )}
+            </select>
         </div>
         <div>
             <button type="submit" className={styles.form__button}>
