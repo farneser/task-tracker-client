@@ -42,7 +42,7 @@ const RequireAuth = () => {
                 {<div className={`${styles.sidebar} ${isSidebarVisible ? styles.show : styles.hide}`}>
                     <SideBar/>
                 </div>}
-                <div className={styles.sidebar__switch} onClick={toggleSidebar}>
+                <div className={styles.sidebar__switch} onClick={toggleSidebar} style={{cursor: "pointer"}}>
                     <div className={`${styles.sidebar__switch__container} ${isSidebarVisible ? styles.left : styles.right}`}/>
                 </div>
             </div>

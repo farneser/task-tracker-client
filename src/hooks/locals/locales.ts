@@ -41,6 +41,7 @@ export type Translations = {
     },
     statusElement: {
         createTask: string;
+        archive: string;
     },
     taskForm: {
         headingCreate: string;

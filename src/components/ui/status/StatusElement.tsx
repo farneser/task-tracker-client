@@ -15,6 +15,8 @@ import TaskForm from "@/components/ui/task/form/TaskForm.tsx";
 import StatusForm from "@/components/ui/status/form/StatusForm.tsx";
 import {useLocalization} from "@/hooks/useLocalization.ts";
 import TrashIcon from "@/components/ui/icons/TrashIcon.tsx";
+import useMembers from "@/hooks/useMembers.ts";
+import useProjectId from "@/hooks/useProjectId.ts";
 
 type StatusProps = {
     status: StatusView;
@@ -52,7 +54,8 @@ const StatusElement: FC<StatusProps> = (
         closePopup: closeCreatePopup,
         Popup: CreatePopup
     } = usePopup();
-
+    const {projectId} = useProjectId();
+    const {userMember} = useMembers(projectId)
     const [mouseIsOver, setMouseIsOver] = useState(false);
     const [blockMouseIsOver, setBlockMouseIsOver] = useState(false)
 
@@ -125,15 +128,21 @@ const StatusElement: FC<StatusProps> = (
             >
                 <div className={styles.header}>
                     {updateStatus ? <>
-                        {draggable &&
+                        {draggable && userMember?.role != "MEMBER" &&
                             <div className={styles.header__drag}
                                  {...attributes}
                                  {...listeners}
                             >
                                 <BarsIcon/>
                             </div>}
-                        <div onClick={reverseEditPopup}
-                             className={styles.header__title}>
+                        <div onClick={() => {
+                            if (userMember?.role != "MEMBER") {
+                                reverseEditPopup()
+                            }
+                        }}
+                             className={styles.header__title}
+                             style={{cursor: userMember?.role != "MEMBER" ? "pointer" : "auto"}}
+                        >
                             <div>{status.statusName}</div>
                             {status.isCompleted && <div style={{width: "30px", height: "30px"}}><CheckIcon/></div>}
                         </div>
@@ -141,7 +150,7 @@ const StatusElement: FC<StatusProps> = (
                         <div>{status.statusName}</div>
                         {status.isCompleted && <div style={{width: "30px", height: "30px"}}><CheckIcon/></div>}
                     </div>}
-                    {deleteStatus && mouseIsOver &&
+                    {deleteStatus && mouseIsOver && userMember?.role != "MEMBER" &&
                         <button className={styles.header__delete} onClick={deleteStatus}>
                             <TrashIcon/>
                         </button>}

@@ -86,7 +86,8 @@ const ru: Translations = {
         submitEdit: "Обновить статус"
     },
     statusElement: {
-        createTask: "Создать новую задачу"
+        createTask: "Создать новую задачу",
+        archive: "Архив",
     },
     taskForm: {
         headingCreate: "Создать новую задачу",

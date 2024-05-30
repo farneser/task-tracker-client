@@ -18,7 +18,7 @@ const ProjectsPage: FC = () => {
             projectService.get().then(data => data.filter(p => p.role === "CREATOR"))
         ]).then(([statuses, projects]) => {
             const tasksCount = statuses.reduce((acc, s) => acc + (s.tasks?.length || 0), 0);
-            const assignedTasksCount = statuses.reduce((acc, s) => acc + (s.tasks?.filter(t => t.assignedFor != null).length || 0), 0);
+            const assignedTasksCount = statuses.reduce((acc, s) => acc + (s.tasks?.filter(t => t.assignedUserId != null).length || 0), 0);
 
             setTasks(tasksCount);
             setAssignedTasks(assignedTasksCount);
