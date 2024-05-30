@@ -4,7 +4,7 @@ import Popup from "@/components/ui/popup/Popup.tsx";
 interface PopupHook {
     isOpen: boolean;
     openPopup: () => void;
-    Popup: FC<PropsWithChildren<{extended?: boolean}>>;
+    Popup: FC<PropsWithChildren<{ extended?: boolean }>>;
     closePopup: () => void
     reversePopup: () => void
 }
