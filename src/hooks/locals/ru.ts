@@ -108,6 +108,10 @@ const ru: Translations = {
             minLength: "Минимальная длина: 1 символ",
             maxLength: "Максимальная длина: 255 символов"
         },
+        assignedFor: {
+            label: "Ассоциировать задачу с пользователем",
+            notAssigned: "Не ассоциировать",
+        },
         submitCreate: "Добавить задачу",
         submitEdit: "Обновить задачу"
     },

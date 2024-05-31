@@ -67,8 +67,9 @@ const TaskForm: FC<PatchTaskFormProps> = ({onSubmit, task, statusId}) => {
                       })} />
         </div>
         <div>
+            <label className={styles.form__label}>{translations.taskForm.assignedFor.label}</label>
             <select className={styles.form__input} {...register("assignedUserId")}>
-                <option value={-1}>NOT ASSIGNED</option>
+                <option value={-1}>{translations.taskForm.assignedFor.notAssigned}</option>
                 {members.list.map((m) =>
                     <option value={m.userId}>{m.username}</option>
                 )}

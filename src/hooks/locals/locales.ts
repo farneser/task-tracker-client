@@ -48,6 +48,10 @@ export type Translations = {
         headingEdit: string;
         title: Field;
         description: Field;
+        assignedFor: {
+            label: string;
+            notAssigned: string;
+        };
         submitCreate: string;
         submitEdit: string;
     },
