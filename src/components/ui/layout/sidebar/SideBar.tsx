@@ -1,6 +1,6 @@
 import {FC, useEffect} from "react";
 import useProjects from "@/hooks/useProjects.ts";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import styles from "./SideBar.module.scss";
 import usePopup from "@/hooks/usePopup.tsx";
 import ProjectForm from "@/components/ui/project/form/ProjectForm.tsx";
@@ -12,7 +12,17 @@ import {useLocalization} from "@/hooks/useLocalization.ts";
 import ProjectElement from "@/components/ui/project/element/ProjectElement.tsx";
 
 const SideBar: FC = () => {
-    const {projects, createProject, isLoading: isProjectsLoading, updateProjects, removeProject, updateProject} = useProjects();
+    const {pathname} = useLocation()
+
+    const {
+        projects,
+        createProject,
+        isLoading: isProjectsLoading,
+        updateProjects,
+        removeProject,
+        updateProject
+    } = useProjects();
+
     const {user} = useAuth();
     const navigate = useNavigate();
     const {openPopup, closePopup, Popup} = usePopup();
@@ -32,11 +42,23 @@ const SideBar: FC = () => {
 
     const deleteProjectHandler = async (id: number) => {
         await removeProject(id);
+
         navigate("/p");
     }
 
     const patchProjectHandler = async (projectId: number, data: PatchProjectDto) => {
         await updateProject(projectId, data);
+    }
+
+    const getBackgroundColor = (path: string): { backgroundColor?: string } => {
+        const background: { backgroundColor?: string, fontWeight?: string } = {}
+
+        if (pathname == path) {
+            background.backgroundColor = "#49515f";
+            background.fontWeight = "bold";
+        }
+
+        return background;
     }
 
     return (<div className={styles.sidebar__container}>
@@ -45,7 +67,8 @@ const SideBar: FC = () => {
         </Popup>
         <div className={styles.sidebar__container__head}>
             <ul>
-                <li><Link to="p">{translations.sideBar.dashboard}</Link></li>
+                <li><Link to="p" style={{...getBackgroundColor("/p")}}>{translations.sideBar.dashboard}</Link>
+                </li>
                 <li><Link to="#" onClick={openPopup}>{translations.sideBar.createNewProject}</Link></li>
             </ul>
         </div>
@@ -58,6 +81,7 @@ const SideBar: FC = () => {
                             project={p}
                             deleteHandler={() => deleteProjectHandler(p.id)}
                             patchHandler={(data) => patchProjectHandler(p.id, data)}
+                            backgroundColor={getBackgroundColor(`/p/${p.id}`)}
                         />
                     </li>
                 ))}

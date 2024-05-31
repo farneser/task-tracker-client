@@ -41,12 +41,17 @@ export type Translations = {
     },
     statusElement: {
         createTask: string;
+        archive: string;
     },
     taskForm: {
         headingCreate: string;
         headingEdit: string;
         title: Field;
         description: Field;
+        assignedFor: {
+            label: string;
+            notAssigned: string;
+        };
         submitCreate: string;
         submitEdit: string;
     },
@@ -151,6 +156,8 @@ export type Translations = {
         statistics: string;
     }
 };
+
+export const DEFAULT_LOCALE: LocaleKey = "en";
 
 export type LocaleKey = "en" | "ru";
 

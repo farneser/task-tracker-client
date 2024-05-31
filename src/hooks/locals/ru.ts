@@ -86,7 +86,8 @@ const ru: Translations = {
         submitEdit: "Обновить статус"
     },
     statusElement: {
-        createTask: "Создать новую задачу"
+        createTask: "Создать новую задачу",
+        archive: "Архив",
     },
     taskForm: {
         headingCreate: "Создать новую задачу",
@@ -106,6 +107,10 @@ const ru: Translations = {
             invalid: "Недопустимое описание задачи",
             minLength: "Минимальная длина: 1 символ",
             maxLength: "Максимальная длина: 255 символов"
+        },
+        assignedFor: {
+            label: "Ассоциировать задачу с пользователем",
+            notAssigned: "Не ассоциировать",
         },
         submitCreate: "Добавить задачу",
         submitEdit: "Обновить задачу"

@@ -86,7 +86,8 @@ const en: Translations = {
         submitEdit: "Update status"
     },
     statusElement: {
-        createTask: "Create New Task"
+        createTask: "Create New Task",
+        archive: "Archive",
     },
     taskForm: {
         headingCreate: "Create a new task",
@@ -106,6 +107,10 @@ const en: Translations = {
             invalid: "Invalid task description",
             minLength: "Minimum length: 1 character",
             maxLength: "Maximum length: 255 characters"
+        },
+        assignedFor: {
+            label: "Assign task for user",
+            notAssigned: "Do not assign",
         },
         submitCreate: "Add task",
         submitEdit: "Update task"

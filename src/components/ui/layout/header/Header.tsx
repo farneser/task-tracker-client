@@ -24,19 +24,24 @@ const Header: FC = () => {
     const {Popup: UserPopup, reversePopup: reverseUserPopup, closePopup: closeUserPopup} = usePopup(false)
     const {Popup: MembersPopup, reversePopup: reverseMembersPopup} = usePopup(false)
     const navigate = useNavigate();
-    const {updateStatuses, setIsArchiveOpen, isArchiveOpen, statuses} = useStatuses()
+    const {updateStatuses, setIsArchiveOpen, isArchiveOpen, statuses} = useStatuses(projectId)
     const {updateTasks, archiveTasks} = useTasks()
     const {updateProjects} = useProjects();
 
     useEffect(() => {
-        refresh().then()
+        updateTasks().then()
+        updateMembers().then()
+
+        return () => {
+            console.log(`header cleanup ${projectId}`)
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [loading, user, projectId]);
+    }, [loading, projectId]);
 
     const refresh = async () => {
-        await updateStatuses().then()
-        await updateTasks().then()
-        await updateMembers().then()
+        updateStatuses()
+        await updateTasks()
+        await updateMembers()
     }
 
     const onSettingsSubmit = (data: UserView) => {

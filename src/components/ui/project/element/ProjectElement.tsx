@@ -12,9 +12,10 @@ type ProjectElementProps = {
     project: ProjectView;
     deleteHandler: () => Promise<void>;
     patchHandler: (data: PatchProjectDto) => Promise<void>;
+    backgroundColor?: { backgroundColor?: string };
 }
 
-const ProjectElement: FC<ProjectElementProps> = ({project, deleteHandler, patchHandler}) => {
+const ProjectElement: FC<ProjectElementProps> = ({backgroundColor, project, deleteHandler, patchHandler}) => {
     const {openPopup, closePopup, Popup} = usePopup();
     const {members} = useMembers(project.id);
     const navigate = useNavigate();
@@ -48,7 +49,7 @@ const ProjectElement: FC<ProjectElementProps> = ({project, deleteHandler, patchH
             </div>}
         </Popup>
         <Link to={`p/${project.id}`}
-              style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+              style={{display: "flex", justifyContent: "space-between", alignItems: "center", ...backgroundColor}}>
             <div>{project.projectName}</div>
             <div
                 style={{width: "30px"}}

@@ -208,7 +208,15 @@ const ProjectPage: FC = () => {
                     ))}
                 </SortableContext>
                 {isArchiveOpen && <StatusElement
-                    status={archiveStatus}
+                    status={{
+                        statusName: translations.statusElement.archive,
+                        statusColor: archiveStatus.statusColor,
+                        isCompleted: false,
+                        tasks: archiveStatus.tasks,
+                        projectId: archiveStatus.projectId,
+                        id: archiveStatus.id,
+                        orderNumber: archiveStatus.orderNumber,
+                    }}
                     tasks={tasks.filter(task => task.statusId < 0)}
                     deleteTask={removeTask}
                 />}
@@ -236,6 +244,7 @@ const ProjectPage: FC = () => {
                     {activeTask && (
                         <TaskElement task={activeTask} updateTask={updateTask} deleteTask={() => {
                             removeTask(activeTask.id).then()
+                        }} popupIsOpenCallback={() => {
                         }}/>
                     )}
                 </DragOverlay>,

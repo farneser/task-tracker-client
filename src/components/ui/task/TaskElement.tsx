@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import {PatchTaskDto, TaskLookupView} from "@/services/task/task.types.ts";
 import usePopup from "@/hooks/usePopup.tsx";
 import TaskForm from "@/components/ui/task/form/TaskForm.tsx";
@@ -16,12 +16,17 @@ type TaskElementProps = {
     deleteTask?: () => void;
     updateTask?: (id: number, data: PatchTaskDto) => void;
     statusColor?: string;
+    popupIsOpenCallback: (state: boolean) => void;
 };
 
-const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask, statusColor}) => {
-    const {reversePopup, closePopup, Popup} = usePopup();
+const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask, popupIsOpenCallback, statusColor}) => {
+    const {reversePopup, closePopup, Popup, isOpen} = usePopup();
 
     const {locale} = useLocalization();
+
+    useEffect(() => {
+        popupIsOpenCallback(isOpen)
+    }, [isOpen, popupIsOpenCallback]);
 
     const {
         setNodeRef,

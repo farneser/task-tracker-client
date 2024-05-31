@@ -15,7 +15,7 @@ export const taskService = {
             taskName: dto.taskName,
             description: dto.description,
             statusId: dto.statusId,
-            assignedFor: dto.assignedFor,
+            assignedFor: dto.assignedUserId,
         });
 
         return response.data;
@@ -29,7 +29,7 @@ export const taskService = {
             description: dto.description,
             statusId: dto.statusId,
             orderNumber: dto.orderNumber,
-            assignedFor: dto.assignedFor,
+            assignedFor: dto.assignedUserId,
         });
 
         return response.data;

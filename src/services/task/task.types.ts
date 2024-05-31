@@ -4,7 +4,7 @@ export interface CreateTaskDto {
     statusId: number;
     taskName: string;
     description: string;
-    assignedFor?: number;
+    assignedUserId?: number;
 }
 
 export interface PatchTaskDto extends CreateTaskDto {

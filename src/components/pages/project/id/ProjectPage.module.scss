@@ -12,11 +12,12 @@
   margin: auto 0;
   height: 90%;
 
-  & > div{
-    &:first-child{
+  & > div {
+    &:first-child {
       //margin-left: 20px;
     }
-    &:last-child{
+
+    &:last-child {
       //margin-right: 20px;
     }
   }

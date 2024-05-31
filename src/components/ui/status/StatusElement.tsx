@@ -8,13 +8,15 @@ import {SortableContext, useSortable} from "@dnd-kit/sortable";
 import {ItemTypes} from "@/utils/id/ItemTypes.ts";
 import {getStatusId, getTaskId} from "@/utils/id/id.utils.ts";
 import styles from "./StatusElement.module.scss";
-import TrashIcon from "@/components/ui/icons/TrashIcon.tsx";
 import BarsIcon from "@/components/ui/icons/BarsIcon.tsx";
 import PlusIcon from "@/components/ui/icons/PlusIcon.tsx";
 import CheckIcon from "@/components/ui/icons/CheckIcon.tsx";
 import TaskForm from "@/components/ui/task/form/TaskForm.tsx";
 import StatusForm from "@/components/ui/status/form/StatusForm.tsx";
 import {useLocalization} from "@/hooks/useLocalization.ts";
+import TrashIcon from "@/components/ui/icons/TrashIcon.tsx";
+import useMembers from "@/hooks/useMembers.ts";
+import useProjectId from "@/hooks/useProjectId.ts";
 
 type StatusProps = {
     status: StatusView;
@@ -52,8 +54,16 @@ const StatusElement: FC<StatusProps> = (
         closePopup: closeCreatePopup,
         Popup: CreatePopup
     } = usePopup();
-
+    const {projectId} = useProjectId();
+    const {userMember} = useMembers(projectId)
     const [mouseIsOver, setMouseIsOver] = useState(false);
+    const [blockMouseIsOver, setBlockMouseIsOver] = useState(false)
+
+    const setMouseIsOverHandler = (state: boolean) => {
+        if (!blockMouseIsOver) {
+            setMouseIsOver(state)
+        }
+    }
 
     const {
         setNodeRef,
@@ -112,20 +122,26 @@ const StatusElement: FC<StatusProps> = (
                 <StatusForm onSubmit={onEditSubmit} status={status}/>
             </EditPopup>
             <div className={styles.status__container} ref={setNodeRef} style={{...style, ...borderColorStyle}}
-                 onMouseEnter={() => setMouseIsOver(true)}
-                 onMouseLeave={() => setMouseIsOver(false)}
+                 onMouseEnter={() => setMouseIsOverHandler(true)}
+                 onMouseLeave={() => setMouseIsOverHandler(false)}
             >
                 <div className={styles.header}>
                     {updateStatus ? <>
-                        {draggable &&
+                        {draggable && userMember?.role != "MEMBER" &&
                             <div className={styles.header__drag}
                                  {...attributes}
                                  {...listeners}
                             >
                                 <BarsIcon/>
                             </div>}
-                        <div onClick={reverseEditPopup}
-                             className={styles.header__title}>
+                        <div onClick={() => {
+                            if (userMember?.role != "MEMBER") {
+                                reverseEditPopup()
+                            }
+                        }}
+                             className={styles.header__title}
+                             style={{cursor: userMember?.role != "MEMBER" ? "pointer" : "auto"}}
+                        >
                             <div>{status.statusName}</div>
                             {status.isCompleted && <div style={{width: "30px", height: "30px"}}><CheckIcon/></div>}
                         </div>
@@ -133,7 +149,7 @@ const StatusElement: FC<StatusProps> = (
                         <div>{status.statusName}</div>
                         {status.isCompleted && <div style={{width: "30px", height: "30px"}}><CheckIcon/></div>}
                     </div>}
-                    {deleteStatus && mouseIsOver &&
+                    {deleteStatus && mouseIsOver && userMember?.role != "MEMBER" &&
                         <button className={styles.header__delete} onClick={deleteStatus}>
                             <TrashIcon/>
                         </button>}
@@ -148,6 +164,9 @@ const StatusElement: FC<StatusProps> = (
                                 updateTask={updateTask}
                                 deleteTask={() => deleteTask && deleteTask(task.id)}
                                 statusColor={status.statusColor}
+                                popupIsOpenCallback={(state) => {
+                                    setBlockMouseIsOver(state)
+                                }}
                             />
                         ))}
                     </SortableContext>

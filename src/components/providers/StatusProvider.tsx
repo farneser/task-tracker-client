@@ -1,4 +1,4 @@
-import {createContext, FC, PropsWithChildren, useEffect, useState} from "react";
+import {createContext, FC, PropsWithChildren, useCallback, useEffect, useState} from "react";
 import {CreateStatusDto, PatchStatusDto, StatusView} from "@/services/status/status.types.ts";
 import {Message} from "@/models/Message.ts";
 import {statusService} from "@/services/status/status.service.ts";
@@ -8,7 +8,7 @@ interface StatusServiceHook {
     statuses: StatusView[];
     isLoading: boolean;
     error: Message | null;
-    updateStatuses: () => Promise<void>;
+    updateStatuses: () => void;
     createStatus: (status: CreateStatusDto) => Promise<void>;
     updateStatus: (id: number, status: PatchStatusDto) => Promise<void>;
     removeStatus: (statusId: number) => Promise<void>;
@@ -26,61 +26,67 @@ export const StatusProvider: FC<PropsWithChildren> = ({children}) => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<Message | null>(null);
     const [isArchiveOpen, setIsArchiveOpen] = useState(false);
-    const [projectId, setProjectId] = useState<number | null>();
+    const [projectId, setProjectId] = useState<number | null>(null);
+
+    const updateStatuses = useCallback(async () => {
+        setIsLoading(true);
+        let isRequestRelevant = true;
+
+        try {
+            const statusesData = projectId
+                ? await projectService.getStatuses(projectId)
+                : await statusService.get();
+
+            if (isRequestRelevant) {
+                setStatuses(statusesData);
+                setError(null);
+            }
+        } catch (error) {
+            if (isRequestRelevant) {
+                setError({message: "ERROR", status: 1});
+            }
+        } finally {
+            if (isRequestRelevant) {
+                setIsLoading(false);
+            }
+        }
+
+        return () => {
+            isRequestRelevant = false;
+        };
+    }, [projectId]);
 
     useEffect(() => {
         updateStatuses().then();
-    }, [projectId]);
-
-    const updateStatuses = async () => {
-        setIsLoading(true);
-
-        (projectId ? projectService.getStatuses(projectId) : statusService.get())
-            .then((statusesData) => {
-                setStatuses(statusesData);
-                setError(null)
-            })
-            .catch((error) => {
-                setError(error);
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
-    };
+    }, [projectId, updateStatuses]);
 
     const createStatus = async (status: CreateStatusDto) => {
-        const response = await statusService.create(status)
+        const response = await statusService.create(status);
 
-        setStatuses([...statuses, response]);
-    }
+        setStatuses((prevStatuses) => [...prevStatuses, response]);
+    };
 
     const removeStatus = async (statusId: number) => {
-        const newStatuses = statuses.filter((status) => status.id !== statusId);
+        await statusService.delete(statusId);
 
-        statusService.delete(statusId).then();
-
-        setStatuses(newStatuses);
-    }
+        setStatuses((prevStatuses) => prevStatuses.filter((status) => status.id !== statusId));
+    };
 
     const updateStatus = async (id: number, dto: PatchStatusDto) => {
-        statusService.patch(id, {...dto, orderNumber: dto.orderNumber + 1}).then();
+        await statusService.patch(id, {...dto, orderNumber: dto.orderNumber + 1});
 
-        setStatuses(statuses.map((status) => {
-            if (status.id === id) {
-                return {...status, ...dto};
-            }
-
-            return status;
-        }));
-    }
+        setStatuses((prevStatuses) =>
+            prevStatuses.map((status) => (status.id === id ? {...status, ...dto} : status))
+        );
+    };
 
     const setStatusesHandler = (statuses: StatusView[]) => {
         setStatuses(statuses);
-    }
+    };
 
     const setProjectIdHandler = (id: number | null) => {
         setProjectId(id);
-    }
+    };
 
     const archiveStatus: StatusView = {
         id: -1,
@@ -89,8 +95,8 @@ export const StatusProvider: FC<PropsWithChildren> = ({children}) => {
         projectId: -1,
         orderNumber: -1,
         isCompleted: false,
-        tasks: null
-    }
+        tasks: null,
+    };
 
     return (
         <StatusContext.Provider value={{
