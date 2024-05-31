@@ -36,7 +36,7 @@ export const StatusProvider: FC<PropsWithChildren> = ({children}) => {
             const statusesData = projectId
                 ? await projectService.getStatuses(projectId)
                 : await statusService.get();
-            console.log(projectId + " update statuses");
+
             if (isRequestRelevant) {
                 setStatuses(statusesData);
                 setError(null);

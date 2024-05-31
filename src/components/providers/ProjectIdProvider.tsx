@@ -22,6 +22,7 @@ export const ProjectIdProvider: FC<PropsWithChildren> = ({children}) => {
     }, [updateProjectId]);
 
     useEffect(() => {
+        console.log(`project is updated to ${projectIdParam} param`)
         updateProjectId()
     }, [projectIdParam, updateProjectId]);
 

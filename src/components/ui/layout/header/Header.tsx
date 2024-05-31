@@ -29,7 +29,12 @@ const Header: FC = () => {
     const {updateProjects} = useProjects();
 
     useEffect(() => {
-        refresh().then()
+        updateTasks().then()
+        updateMembers().then()
+
+        return () => {
+            console.log(`header cleanup ${projectId}`)
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loading, projectId]);
 

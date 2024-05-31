@@ -25,7 +25,6 @@ const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask, popupI
     const {locale} = useLocalization();
 
     useEffect(() => {
-        console.log(`effect ${isOpen}`)
         popupIsOpenCallback(isOpen)
     }, [isOpen, popupIsOpenCallback]);
 

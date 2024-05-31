@@ -60,7 +60,6 @@ const StatusElement: FC<StatusProps> = (
     const [blockMouseIsOver, setBlockMouseIsOver] = useState(false)
 
     const setMouseIsOverHandler = (state: boolean) => {
-        console.log(`state changed to ${state}`)
         if (!blockMouseIsOver) {
             setMouseIsOver(state)
         }

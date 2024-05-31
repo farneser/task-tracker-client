@@ -51,6 +51,7 @@ const ProjectMembersForm: FC<ProjectMembersFormProps> = ({token, projectId, leav
         <div className={styles.form}>
             {members.list.map((m) =>
                 <ProjectMemberElement
+                    key={m.userId}
                     member={m} user={userMember}
                     deleteHandler={() => deleteProjectMemberHandler(m.userId)}
                     patchHandler={(role) => patchProjectMemberHandler(m.userId, role)}
