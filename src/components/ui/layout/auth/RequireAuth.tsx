@@ -33,12 +33,19 @@ const RequireAuth = () => {
         return <Navigate to={getNavigatePath()} state={{from: location}} replace/>;
     }
 
+    const width: { maxWidth?: string, minWidth?: string } = {}
+
+    if (!isSidebarVisible) {
+        width.maxWidth = "2.5%";
+        width.minWidth = "2.5%";
+    }
+
     return <>
         <header>
             <Header/>
         </header>
         <main>
-            <div className={styles.main__sidebar__container}>
+            <div className={styles.main__sidebar__container} style={width}>
                 {<div className={`${styles.sidebar} ${isSidebarVisible ? styles.show : styles.hide}`}>
                     <SideBar/>
                 </div>}

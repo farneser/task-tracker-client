@@ -51,10 +51,11 @@ const SideBar: FC = () => {
     }
 
     const getBackgroundColor = (path: string): { backgroundColor?: string } => {
-        const background: { backgroundColor?: string } = {}
+        const background: { backgroundColor?: string, fontWeight?: string } = {}
 
         if (pathname == path) {
-            background.backgroundColor = "#49515f"
+            background.backgroundColor = "#49515f";
+            background.fontWeight = "bold";
         }
 
         return background;
@@ -66,7 +67,8 @@ const SideBar: FC = () => {
         </Popup>
         <div className={styles.sidebar__container__head}>
             <ul>
-                <li><Link to="p" style={getBackgroundColor("/p")}>{translations.sideBar.dashboard}</Link></li>
+                <li><Link to="p" style={{...getBackgroundColor("/p")}}>{translations.sideBar.dashboard}</Link>
+                </li>
                 <li><Link to="#" onClick={openPopup}>{translations.sideBar.createNewProject}</Link></li>
             </ul>
         </div>
