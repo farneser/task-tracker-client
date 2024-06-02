@@ -29,7 +29,7 @@ const Header: FC = () => {
     const {updateProjects} = useProjects();
 
     useEffect(() => {
-        updateTasks().then()
+        setIsArchiveOpen(false)
         updateMembers().then()
 
         return () => {
@@ -40,7 +40,7 @@ const Header: FC = () => {
 
     const refresh = async () => {
         updateStatuses()
-        await updateTasks()
+        updateTasks()
         await updateMembers()
     }
 
@@ -68,7 +68,7 @@ const Header: FC = () => {
             {projectId != null && <>
                 <button className={styles.header__button} onClick={refresh}>{translations.header.tasks.refresh}</button>
                 <button className={styles.header__button} onClick={() => archiveTasks(
-                    statuses.filter(c => c.isCompleted).map(c => c.id))}>
+                    statuses.filter(c => c.isCompleted && projectId == c.projectId).map(c => c.id))}>
                     {translations.header.tasks.archive}
                 </button>
                 <button className={styles.header__button} onClick={() => setIsArchiveOpen(!isArchiveOpen)}>

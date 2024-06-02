@@ -54,7 +54,7 @@ const ProjectPage: FC = () => {
 
     const navigate = useNavigate();
 
-    const {tasks, createTask, setTasks, updateTask, removeTask, isLoading: isTasksLoading} = useTasks()
+    const {tasks, createTask, setTasks, updateTask, removeTask, isLoading: isTasksLoading} = useTasks(projectId)
 
     const {reversePopup, closePopup, Popup} = usePopup(isStatusesLoading || statuses.length === 0);
     const statusesIds = useMemo(() => statuses.map((status) => getStatusId(status.id)), [statuses]);

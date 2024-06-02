@@ -1,5 +1,5 @@
 import axiosInstance from "@/api/api.interceptor.ts";
-import {TaskView} from "@/services/task/task.types.ts";
+import {TaskLookupView} from "@/services/task/task.types.ts";
 import {
     CreateProjectDto,
     PatchProjectDto,
@@ -39,8 +39,8 @@ export const projectService = {
         });
 
         return response.data;
-    }, async getTasks(id: number): Promise<TaskView[]> {
-        const response = await axiosInstance.get<TaskView[]>(`/api/v1/project/${id}/tasks`);
+    }, async getTasks(id: number): Promise<TaskLookupView[]> {
+        const response = await axiosInstance.get<TaskLookupView[]>(`/api/v1/project/${id}/tasks`);
 
         return response.data;
     }, async getStatuses(id: number): Promise<StatusView[]> {
