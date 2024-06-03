@@ -34,7 +34,7 @@ const ProjectsPage: FC = () => {
 
             Promise.all(promises).then(() => setMembers(memberCount)).catch(error => console.error("Error fetching members:", error));
         }).catch(error => console.error("Error fetching data:", error));
-    }, []);
+    }, [user?.id]);
 
     return <div className={styles.page}
                 style={{

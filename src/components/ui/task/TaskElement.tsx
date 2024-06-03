@@ -10,8 +10,6 @@ import {CSS} from "@dnd-kit/utilities";
 import {getTaskId} from "@/utils/id/id.utils.ts";
 import TrashIcon from "@/components/ui/icons/TrashIcon.tsx";
 import {useLocalization} from "@/hooks/useLocalization.ts";
-import {SyntheticListenerMap} from "@dnd-kit/core/dist/hooks/utilities";
-import {DraggableAttributes} from "@dnd-kit/core";
 
 type TaskElementProps = {
     task: TaskLookupView;
@@ -92,10 +90,10 @@ const TaskElement: FC<TaskElementProps> = (
         </div>
     }
 
-    let attr: (DraggableAttributes & (SyntheticListenerMap | undefined)) | {} = {...attributes, ...listeners}
+    let attr: object = {}
 
-    if (!draggable) {
-        attr = {}
+    if (draggable) {
+        attr = {...attributes, ...listeners}
     }
 
     return (<>
