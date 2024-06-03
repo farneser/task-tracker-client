@@ -5,42 +5,40 @@ import {useEffect, useState} from "react";
 import Loader from "@/components/ui/loader/Loader.tsx";
 import SideBar from "@/components/ui/layout/sidebar/SideBar.tsx";
 import styles from "./RequireAuth.module.scss";
-import {useWindowSize} from "@uidotdev/usehooks";
 
 const RequireAuth = () => {
     const location = useLocation();
-
-    const size = useWindowSize();
-
-    const isMobileWidth = size.width != null && size.width < 768;
     const {refreshAuth, user, getToken, loading} = useAuth();
 
-    const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(!isMobileWidth);
-    const [hasToggledSidebar, setHasToggledSidebar] = useState<boolean>(false);
+    const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+    const [isMobileWidth, setIsMobileWidth] = useState(true);
 
     useEffect(() => {
         if (!user) {
-            refreshAuth()
+            refreshAuth();
         }
     }, [refreshAuth, user]);
 
-    useEffect(() => {
-        if (!hasToggledSidebar) {
-            setIsSidebarVisible(!isMobileWidth);
-        }
-    }, [isMobileWidth, hasToggledSidebar]);
-
-    if (loading) {
-        return <Loader/>;
-    }
-
     const getNavigatePath = () => {
-        return `/auth/login?redirect=${location.pathname}`
-    }
+        return `/auth/login?redirect=${location.pathname}`;
+    };
 
     const toggleSidebar = () => {
         setIsSidebarVisible(!isSidebarVisible);
-        setHasToggledSidebar(true);
+    };
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobileWidth(window.innerWidth < 768);
+        };
+
+        window.addEventListener("resize", handleResize);
+
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    if (loading) {
+        return <Loader/>;
     }
 
     if (!getToken()) {
@@ -59,15 +57,19 @@ const RequireAuth = () => {
             <Header/>
         </header>
         <main>
-            <div className={`${styles.main__sidebar__container} ${isMobileWidth ? styles.main__sidebar__container_mobile : ""}`} style={width}>
+            <div
+                className={`${styles.main__sidebar__container} ${isMobileWidth ? styles.main__sidebar__container_mobile : ""}`}
+                style={width}>
                 <div className={`${styles.sidebar} ${isSidebarVisible ? styles.show : styles.hide}`}>
                     <SideBar/>
                 </div>
                 <div className={styles.sidebar__switch} onClick={toggleSidebar} style={{cursor: "pointer"}}>
-                    <div className={`${styles.sidebar__switch__container} ${isSidebarVisible ? styles.left : styles.right}`}/>
+                    <div
+                        className={`${styles.sidebar__switch__container} ${isSidebarVisible ? styles.left : styles.right}`}/>
                 </div>
             </div>
-            <div className={styles.main__content__container} style={{display: isMobileWidth && isSidebarVisible ? "none" : "block"}}>
+            <div className={styles.main__content__container}
+                 style={{display: isMobileWidth && isSidebarVisible ? "none" : "block"}}>
                 <Outlet/>
             </div>
         </main>
