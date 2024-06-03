@@ -3,8 +3,11 @@ import {statusService} from "@/services/status/status.service.ts";
 import styles from "./ProjectsPage.module.scss";
 import {projectService} from "@/services/project/project.service.ts";
 import {useLocalization} from "@/hooks/useLocalization.ts";
+import useAuth from "@/hooks/useAuth.ts";
 
 const ProjectsPage: FC = () => {
+
+    const {user} = useAuth();
 
     const [tasks, setTasks] = useState<number>(0);
     const [assignedTasks, setAssignedTasks] = useState<number>(0);
@@ -18,7 +21,7 @@ const ProjectsPage: FC = () => {
             projectService.get().then(data => data.filter(p => p.role === "CREATOR"))
         ]).then(([statuses, projects]) => {
             const tasksCount = statuses.reduce((acc, s) => acc + (s.tasks?.length || 0), 0);
-            const assignedTasksCount = statuses.reduce((acc, s) => acc + (s.tasks?.filter(t => t.assignedUserId != null).length || 0), 0);
+            const assignedTasksCount = statuses.reduce((acc, s) => acc + (s.tasks?.filter(t => t.assignedUserId == user?.id).length || 0), 0);
 
             setTasks(tasksCount);
             setAssignedTasks(assignedTasksCount);
@@ -31,7 +34,7 @@ const ProjectsPage: FC = () => {
 
             Promise.all(promises).then(() => setMembers(memberCount)).catch(error => console.error("Error fetching members:", error));
         }).catch(error => console.error("Error fetching data:", error));
-    }, []);
+    }, [user?.id]);
 
     return <div className={styles.page}
                 style={{

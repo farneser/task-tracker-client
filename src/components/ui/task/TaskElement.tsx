@@ -17,9 +17,19 @@ type TaskElementProps = {
     updateTask?: (id: number, data: PatchTaskDto) => void;
     statusColor?: string;
     popupIsOpenCallback: (state: boolean) => void;
+    isMobile?: boolean
 };
 
-const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask, popupIsOpenCallback, statusColor}) => {
+const TaskElement: FC<TaskElementProps> = (
+    {
+        task,
+        deleteTask,
+        updateTask,
+        popupIsOpenCallback,
+        statusColor,
+        isMobile
+    }
+) => {
     const {reversePopup, closePopup, Popup, isOpen} = usePopup();
 
     const {locale} = useLocalization();
@@ -80,10 +90,15 @@ const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask, popupI
         </div>
     }
 
+    let attr: object = {}
+
+    if (!isMobile) {
+        attr = {...attributes, ...listeners}
+    }
+
     return (<>
             <div ref={setNodeRef}
-                 {...attributes}
-                 {...listeners}
+                 {...attr}
                  className={styles.task__container}
                  style={{...style, ...borderColorStyle}}
                  onMouseEnter={() => setMouseIsOver(true)}
@@ -92,15 +107,19 @@ const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask, popupI
                 <div className={styles.task__name} onClick={() => {
                     return updateTask && reversePopup();
                 }}>
-                    <div>{task.taskName}</div>
-                    {mouseIsOver && deleteTask && <div>
+                    <div>
+                        <div>
+                            {task.taskName}
+                        </div>
+                        <div className={styles.task__description}>{task.description}</div>
+                        <div className={styles.task__date}>{formattedDate}</div>
+                    </div>
+                    {(mouseIsOver || isMobile) && deleteTask && <div>
                         <button onClick={deleteTask} className={styles.task__delete}>
                             <TrashIcon/>
                         </button>
                     </div>}
                 </div>
-                <div className={styles.task__description}>{task.description}</div>
-                <div className={styles.task__date}>{formattedDate}</div>
             </div>
             <Popup>
                 <TaskForm onSubmit={onSubmit} task={task} statusId={task.statusId}/>

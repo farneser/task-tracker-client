@@ -28,12 +28,12 @@
   }
 
   &__name {
-    font-weight: bold;
     display: flex;
     cursor: pointer;
+    justify-content: space-between;
 
-    div:first-child {
-      min-height: 35px;
+    div:first-child div:first-child {
+      font-weight: bold;
       width: calc(100% - 30px);
       margin-bottom: 8px;
 
@@ -61,6 +61,8 @@
     width: 30px;
     height: 30px;
     cursor: pointer;
+    position: relative;
+
     transition: $transition-speed;
 
     &:hover {

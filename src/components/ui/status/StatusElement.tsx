@@ -17,6 +17,7 @@ import {useLocalization} from "@/hooks/useLocalization.ts";
 import TrashIcon from "@/components/ui/icons/TrashIcon.tsx";
 import useMembers from "@/hooks/useMembers.ts";
 import useProjectId from "@/hooks/useProjectId.ts";
+import useIsMobile from "@/hooks/is-mobile-phone-hooks.ts";
 
 type StatusProps = {
     status: StatusView;
@@ -54,6 +55,7 @@ const StatusElement: FC<StatusProps> = (
         closePopup: closeCreatePopup,
         Popup: CreatePopup
     } = usePopup();
+
     const {projectId} = useProjectId();
     const {userMember} = useMembers(projectId)
     const [mouseIsOver, setMouseIsOver] = useState(false);
@@ -79,6 +81,7 @@ const StatusElement: FC<StatusProps> = (
             status: status,
         }
     })
+    const {isMobile} = useIsMobile();
 
     const tasksIds = useMemo(() => {
         return tasks.map((task) => getTaskId(task.id)) || [];
@@ -126,31 +129,34 @@ const StatusElement: FC<StatusProps> = (
                  onMouseLeave={() => setMouseIsOverHandler(false)}
             >
                 <div className={styles.header}>
-                    {updateStatus ? <>
-                        {draggable && userMember?.role != "MEMBER" &&
-                            <div className={styles.header__drag}
-                                 {...attributes}
-                                 {...listeners}
-                            >
-                                <BarsIcon/>
-                            </div>}
-                        <div onClick={() => {
-                            if (userMember?.role != "MEMBER") {
-                                reverseEditPopup()
-                            }
-                        }}
-                             className={styles.header__title}
-                             style={{cursor: userMember?.role != "MEMBER" ? "pointer" : "auto"}}
+                    {updateStatus && draggable && userMember?.role != "MEMBER" &&
+                        <div className={styles.header__drag}
+                             {...attributes}
+                             {...listeners}
+                             style={{minWidth: "30px"}}
                         >
-                            <div>{status.statusName}</div>
-                            {status.isCompleted && <div style={{width: "30px", height: "30px"}}><CheckIcon/></div>}
-                        </div>
-                    </> : <div>
+                            <BarsIcon/>
+                        </div>}
+
+                    <div onClick={() => {
+                        if (userMember?.role != "MEMBER" && updateStatus) {
+                            reverseEditPopup()
+                        }
+                    }}
+                         className={styles.header__title}
+                         style={{cursor: userMember?.role != "MEMBER" ? "pointer" : "auto"}}
+                    >
                         <div>{status.statusName}</div>
-                        {status.isCompleted && <div style={{width: "30px", height: "30px"}}><CheckIcon/></div>}
-                    </div>}
+                    </div>
+
+                    {status.isCompleted && <div style={{width: "30px", height: "30px"}}><CheckIcon/></div>}
+
                     {deleteStatus && mouseIsOver && userMember?.role != "MEMBER" &&
-                        <button className={styles.header__delete} onClick={deleteStatus}>
+                        <button
+                            className={styles.header__delete}
+                            onClick={deleteStatus}
+                            style={{minWidth: "30px"}}
+                        >
                             <TrashIcon/>
                         </button>}
                 </div>
@@ -164,6 +170,7 @@ const StatusElement: FC<StatusProps> = (
                                 updateTask={updateTask}
                                 deleteTask={() => deleteTask && deleteTask(task.id)}
                                 statusColor={status.statusColor}
+                                isMobile={isMobile}
                                 popupIsOpenCallback={(state) => {
                                     setBlockMouseIsOver(state)
                                 }}

@@ -1,20 +1,21 @@
-import {createContext, FC, PropsWithChildren, useEffect, useState} from "react";
+import {createContext, FC, PropsWithChildren, useCallback, useEffect, useState} from "react";
 import {Message} from "@/models/Message.ts";
 import {CreateTaskDto, PatchTaskDto, TaskLookupView} from "@/services/task/task.types.ts";
 import {taskService} from "@/services/task/task.service.ts";
+import {projectService} from "@/services/project/project.service.ts";
 
 interface TaskSeriesHook {
     tasks: TaskLookupView[];
     isLoading: boolean;
     error: Message | null;
     createTask: (task: CreateTaskDto) => Promise<void>;
-    updateTasks: () => Promise<void>;
+    updateTasks: () => void;
     updateTask: (id: number, data: PatchTaskDto) => Promise<void>;
     setTasks: (tasks: TaskLookupView[]) => void;
     removeTask: (taskId: number) => Promise<void>;
     archiveTasks: (statusIds: number[]) => Promise<void>;
+    setProjectId: (projectId: number | null) => void;
 }
-
 
 export const TaskContext = createContext<TaskSeriesHook | null>(null);
 
@@ -22,25 +23,39 @@ export const TaskProvider: FC<PropsWithChildren> = ({children}) => {
     const [tasks, setTasks] = useState<TaskLookupView[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<Message | null>(null);
+    const [projectId, setProjectId] = useState<number | null>(null);
+
+    const updateTasks = useCallback(async () => {
+        setIsLoading(true);
+        let isRequestRelevant = true;
+
+        try {
+            const tasksData = projectId
+                ? await projectService.getTasks(projectId)
+                : await taskService.get();
+
+            if (isRequestRelevant) {
+                setTasks(tasksData);
+                setError(null);
+            }
+        } catch (error) {
+            if (isRequestRelevant) {
+                setError({message: "ERROR", status: 1});
+            }
+        } finally {
+            if (isRequestRelevant) {
+                setIsLoading(false);
+            }
+        }
+
+        return () => {
+            isRequestRelevant = false;
+        };
+    }, [projectId]);
 
     useEffect(() => {
         updateTasks().then();
-    }, []);
-
-    const updateTasks = async () => {
-        setIsLoading(true);
-        taskService
-            .get()
-            .then((tasks) => {
-                setTasks(tasks);
-            })
-            .catch((error) => {
-                setError(error);
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
-    };
+    }, [projectId, updateTasks]);
 
     const updateTask = async (id: number, data: PatchTaskDto) => {
         taskService.patch(id, data).then();
@@ -82,12 +97,17 @@ export const TaskProvider: FC<PropsWithChildren> = ({children}) => {
         })
     }
 
+    const setProjectIdHandler = (id: number | null) => {
+        setProjectId(id);
+    };
+
     return (
         <TaskContext.Provider
             value={{
                 tasks, isLoading, error,
                 updateTasks, setTasks: setTasksHandler, updateTask,
-                removeTask, createTask, archiveTasks
+                removeTask, createTask, archiveTasks,
+                setProjectId: setProjectIdHandler
             }}>
             {children}
         </TaskContext.Provider>
