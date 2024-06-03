@@ -10,6 +10,8 @@ import {CSS} from "@dnd-kit/utilities";
 import {getTaskId} from "@/utils/id/id.utils.ts";
 import TrashIcon from "@/components/ui/icons/TrashIcon.tsx";
 import {useLocalization} from "@/hooks/useLocalization.ts";
+import {SyntheticListenerMap} from "@dnd-kit/core/dist/hooks/utilities";
+import {DraggableAttributes} from "@dnd-kit/core";
 
 type TaskElementProps = {
     task: TaskLookupView;
@@ -17,9 +19,19 @@ type TaskElementProps = {
     updateTask?: (id: number, data: PatchTaskDto) => void;
     statusColor?: string;
     popupIsOpenCallback: (state: boolean) => void;
+    draggable?: boolean
 };
 
-const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask, popupIsOpenCallback, statusColor}) => {
+const TaskElement: FC<TaskElementProps> = (
+    {
+        task,
+        deleteTask,
+        updateTask,
+        popupIsOpenCallback,
+        statusColor,
+        draggable
+    }
+) => {
     const {reversePopup, closePopup, Popup, isOpen} = usePopup();
 
     const {locale} = useLocalization();
@@ -80,10 +92,15 @@ const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask, popupI
         </div>
     }
 
+    let attr: (DraggableAttributes & (SyntheticListenerMap | undefined)) | {} = {...attributes, ...listeners}
+
+    if (!draggable) {
+        attr = {}
+    }
+
     return (<>
             <div ref={setNodeRef}
-                 {...attributes}
-                 {...listeners}
+                 {...attr}
                  className={styles.task__container}
                  style={{...style, ...borderColorStyle}}
                  onMouseEnter={() => setMouseIsOver(true)}
@@ -105,7 +122,6 @@ const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask, popupI
                         </button>
                     </div>}
                 </div>
-
             </div>
             <Popup>
                 <TaskForm onSubmit={onSubmit} task={task} statusId={task.statusId}/>

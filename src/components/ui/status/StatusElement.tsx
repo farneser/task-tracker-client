@@ -17,6 +17,7 @@ import {useLocalization} from "@/hooks/useLocalization.ts";
 import TrashIcon from "@/components/ui/icons/TrashIcon.tsx";
 import useMembers from "@/hooks/useMembers.ts";
 import useProjectId from "@/hooks/useProjectId.ts";
+import useIsMobile from "@/hooks/is-mobile-phone-hooks.ts";
 
 type StatusProps = {
     status: StatusView;
@@ -54,6 +55,7 @@ const StatusElement: FC<StatusProps> = (
         closePopup: closeCreatePopup,
         Popup: CreatePopup
     } = usePopup();
+
     const {projectId} = useProjectId();
     const {userMember} = useMembers(projectId)
     const [mouseIsOver, setMouseIsOver] = useState(false);
@@ -79,6 +81,7 @@ const StatusElement: FC<StatusProps> = (
             status: status,
         }
     })
+    const {isMobile} = useIsMobile();
 
     const tasksIds = useMemo(() => {
         return tasks.map((task) => getTaskId(task.id)) || [];
@@ -167,6 +170,7 @@ const StatusElement: FC<StatusProps> = (
                                 updateTask={updateTask}
                                 deleteTask={() => deleteTask && deleteTask(task.id)}
                                 statusColor={status.statusColor}
+                                draggable={!isMobile}
                                 popupIsOpenCallback={(state) => {
                                     setBlockMouseIsOver(state)
                                 }}
