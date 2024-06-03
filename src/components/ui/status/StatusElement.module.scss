@@ -49,10 +49,17 @@
         cursor: pointer;
         transition: $transition-speed;
         align-items: center;
+        width: 60%;
+        margin: auto 0;
 
         &:hover {
           color: $accent-color;
           transition: $transition-out-speed;
+        }
+
+        div:first-child {
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
       }
 

@@ -239,6 +239,7 @@ const ProjectPage: FC = () => {
                             updateTask={updateTask}
                             deleteTask={removeTask}
                             createTask={createTask}
+                            draggable={true}
                         />
                     )}
                     {activeTask && (

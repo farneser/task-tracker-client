@@ -126,31 +126,34 @@ const StatusElement: FC<StatusProps> = (
                  onMouseLeave={() => setMouseIsOverHandler(false)}
             >
                 <div className={styles.header}>
-                    {updateStatus ? <>
-                        {draggable && userMember?.role != "MEMBER" &&
-                            <div className={styles.header__drag}
-                                 {...attributes}
-                                 {...listeners}
-                            >
-                                <BarsIcon/>
-                            </div>}
-                        <div onClick={() => {
-                            if (userMember?.role != "MEMBER") {
-                                reverseEditPopup()
-                            }
-                        }}
-                             className={styles.header__title}
-                             style={{cursor: userMember?.role != "MEMBER" ? "pointer" : "auto"}}
+                    {updateStatus && draggable && userMember?.role != "MEMBER" &&
+                        <div className={styles.header__drag}
+                             {...attributes}
+                             {...listeners}
+                             style={{minWidth: "30px"}}
                         >
-                            <div>{status.statusName}</div>
-                            {status.isCompleted && <div style={{width: "30px", height: "30px"}}><CheckIcon/></div>}
-                        </div>
-                    </> : <div>
+                            <BarsIcon/>
+                        </div>}
+
+                    <div onClick={() => {
+                        if (userMember?.role != "MEMBER" && updateStatus) {
+                            reverseEditPopup()
+                        }
+                    }}
+                         className={styles.header__title}
+                         style={{cursor: userMember?.role != "MEMBER" ? "pointer" : "auto"}}
+                    >
                         <div>{status.statusName}</div>
-                        {status.isCompleted && <div style={{width: "30px", height: "30px"}}><CheckIcon/></div>}
-                    </div>}
+                    </div>
+
+                    {status.isCompleted && <div style={{width: "30px", height: "30px"}}><CheckIcon/></div>}
+
                     {deleteStatus && mouseIsOver && userMember?.role != "MEMBER" &&
-                        <button className={styles.header__delete} onClick={deleteStatus}>
+                        <button
+                            className={styles.header__delete}
+                            onClick={deleteStatus}
+                            style={{minWidth: "30px"}}
+                        >
                             <TrashIcon/>
                         </button>}
                 </div>
