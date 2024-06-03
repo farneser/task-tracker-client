@@ -92,15 +92,20 @@ const TaskElement: FC<TaskElementProps> = ({task, deleteTask, updateTask, popupI
                 <div className={styles.task__name} onClick={() => {
                     return updateTask && reversePopup();
                 }}>
-                    <div>{task.taskName}</div>
-                    {mouseIsOver && deleteTask && <div>
+                    <div>
+                        <div>
+                            {task.taskName}
+                        </div>
+                        <div className={styles.task__description}>{task.description}</div>
+                        <div className={styles.task__date}>{formattedDate}</div>
+                    </div>
+                    {deleteTask && <div>
                         <button onClick={deleteTask} className={styles.task__delete}>
                             <TrashIcon/>
                         </button>
                     </div>}
                 </div>
-                <div className={styles.task__description}>{task.description}</div>
-                <div className={styles.task__date}>{formattedDate}</div>
+
             </div>
             <Popup>
                 <TaskForm onSubmit={onSubmit} task={task} statusId={task.statusId}/>

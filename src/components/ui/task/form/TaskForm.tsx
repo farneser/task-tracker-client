@@ -59,12 +59,7 @@ const TaskForm: FC<PatchTaskFormProps> = ({onSubmit, task, statusId}) => {
             <label className={styles.form__label}>{translations.taskForm.description.label}</label>
             <textarea className={styles.form__input + " " + styles.form__input_area}
                       placeholder={translations.taskForm.description.placeholder}
-                      {...register("description", {
-                          maxLength: {
-                              value: 255,
-                              message: translations.taskForm.description.maxLength,
-                          }
-                      })} />
+                      {...register("description")} />
         </div>
         <div>
             <label className={styles.form__label}>{translations.taskForm.assignedFor.label}</label>
