@@ -1,7 +1,7 @@
 import {Navigate, Outlet, useLocation} from "react-router-dom";
 import useAuth from "@/hooks/useAuth.ts";
 import Header from "@/components/ui/layout/header/Header.tsx";
-import {useEffect, useState} from "react";
+import {memo, useEffect, useState} from "react";
 import Loader from "@/components/ui/loader/Loader.tsx";
 import SideBar from "@/components/ui/layout/sidebar/SideBar.tsx";
 import styles from "./RequireAuth.module.scss";
@@ -60,7 +60,7 @@ const RequireAuth = () => {
     return (
         <>
             <header>
-                <Header/>
+                <MemoHeader/>
             </header>
             <main>
                 <div
@@ -82,5 +82,7 @@ const RequireAuth = () => {
         </>
     );
 }
+
+const MemoHeader = memo(Header);
 
 export default RequireAuth;
