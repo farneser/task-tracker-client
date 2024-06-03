@@ -170,7 +170,7 @@ const StatusElement: FC<StatusProps> = (
                                 updateTask={updateTask}
                                 deleteTask={() => deleteTask && deleteTask(task.id)}
                                 statusColor={status.statusColor}
-                                draggable={!isMobile}
+                                isMobile={isMobile}
                                 popupIsOpenCallback={(state) => {
                                     setBlockMouseIsOver(state)
                                 }}

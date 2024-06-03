@@ -17,7 +17,7 @@ type TaskElementProps = {
     updateTask?: (id: number, data: PatchTaskDto) => void;
     statusColor?: string;
     popupIsOpenCallback: (state: boolean) => void;
-    draggable?: boolean
+    isMobile?: boolean
 };
 
 const TaskElement: FC<TaskElementProps> = (
@@ -27,7 +27,7 @@ const TaskElement: FC<TaskElementProps> = (
         updateTask,
         popupIsOpenCallback,
         statusColor,
-        draggable
+        isMobile
     }
 ) => {
     const {reversePopup, closePopup, Popup, isOpen} = usePopup();
@@ -92,7 +92,7 @@ const TaskElement: FC<TaskElementProps> = (
 
     let attr: object = {}
 
-    if (draggable) {
+    if (!isMobile) {
         attr = {...attributes, ...listeners}
     }
 
@@ -114,7 +114,7 @@ const TaskElement: FC<TaskElementProps> = (
                         <div className={styles.task__description}>{task.description}</div>
                         <div className={styles.task__date}>{formattedDate}</div>
                     </div>
-                    {deleteTask && <div>
+                    {(mouseIsOver || isMobile) && deleteTask && <div>
                         <button onClick={deleteTask} className={styles.task__delete}>
                             <TrashIcon/>
                         </button>

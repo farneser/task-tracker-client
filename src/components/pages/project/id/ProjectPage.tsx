@@ -38,6 +38,8 @@ const ProjectPage: FC = () => {
     const {translations} = useLocalization();
     const {projectId} = useProjectId();
 
+    console.log("project rerenders")
+
     const {
         statuses,
         createStatus,
