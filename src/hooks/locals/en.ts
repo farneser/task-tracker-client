@@ -28,7 +28,7 @@ const en: Translations = {
             label: "Username",
             placeholder: "Enter your username",
             required: "This field is required",
-            invalid: "Invalid format",
+            invalid: "Invalid input: only Latin letters, digits, and underscores are allowed.",
             minLength: "Minimum length: 4 characters",
             maxLength: "Maximum length: 64 characters"
         },
