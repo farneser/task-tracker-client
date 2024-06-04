@@ -108,6 +108,7 @@ const en: Translations = {
             minLength: "Minimum length: 1 character",
             maxLength: "Maximum length: 255 characters"
         },
+        statusId: "Task status",
         assignedFor: {
             label: "Assign task for user",
             notAssigned: "Do not assign",

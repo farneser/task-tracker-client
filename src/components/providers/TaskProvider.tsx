@@ -62,7 +62,7 @@ export const TaskProvider: FC<PropsWithChildren> = ({children}) => {
 
         setTasks(tasks.map((task) => {
             if (task.id === id) {
-                return {...task, ...data};
+                return {...task, ...data, statusId: Number(data.statusId)};
             }
             return task;
         }));

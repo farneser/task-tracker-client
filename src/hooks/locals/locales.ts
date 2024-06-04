@@ -48,6 +48,7 @@ export type Translations = {
         headingEdit: string;
         title: Field;
         description: Field;
+        statusId: string,
         assignedFor: {
             label: string;
             notAssigned: string;
