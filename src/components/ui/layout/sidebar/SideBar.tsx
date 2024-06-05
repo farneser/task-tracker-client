@@ -11,7 +11,11 @@ import {useLocalization} from "@/hooks/useLocalization.ts";
 
 import ProjectElement from "@/components/ui/project/element/ProjectElement.tsx";
 
-const SideBar: FC = () => {
+type SideBarProps = {
+    onProjectClick: (id: number) => void;
+}
+
+const SideBar: FC<SideBarProps> = ({onProjectClick}) => {
     const {pathname} = useLocation()
 
     const {
@@ -67,8 +71,7 @@ const SideBar: FC = () => {
         </Popup>
         <div className={styles.sidebar__container__head}>
             <ul>
-                <li><Link to="p" style={{...getBackgroundColor("/p")}}>{translations.sideBar.dashboard}</Link>
-                </li>
+                <li><Link to="p" style={{...getBackgroundColor("/p")}}>{translations.sideBar.dashboard}</Link></li>
                 <li><Link to="#" onClick={openPopup}>{translations.sideBar.createNewProject}</Link></li>
             </ul>
         </div>
@@ -76,7 +79,7 @@ const SideBar: FC = () => {
         <div className={styles.sidebar__container__list}>
             {isProjectsLoading ? <Loader/> : <ul>
                 {projects.sort((p1, p2) => (p1.id < p2.id) ? 0 : 1).map(p => (
-                    <li key={p.id}>
+                    <li key={p.id} onClick={() => onProjectClick(p.id)}>
                         <ProjectElement
                             project={p}
                             deleteHandler={() => deleteProjectHandler(p.id)}

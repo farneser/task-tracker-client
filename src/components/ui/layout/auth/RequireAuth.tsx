@@ -57,6 +57,12 @@ const RequireAuth = () => {
         minWidth: isSidebarVisible ? undefined : "2.5%"
     };
 
+    const onProjectClick = () => {
+        if (isMobileWidth) {
+            toggleSidebar()
+        }
+    }
+
     return (
         <>
             <header>
@@ -65,13 +71,19 @@ const RequireAuth = () => {
             <main>
                 <div
                     className={`${styles.main__sidebar__container} ${isMobileWidth ? styles.main__sidebar__container_mobile : ""}`}
-                    style={width}>
+                    style={width}
+                >
                     <div className={`${styles.sidebar} ${isSidebarVisible ? styles.show : styles.hide}`}>
-                        <SideBar/>
+                        <SideBar onProjectClick={onProjectClick}/>
                     </div>
-                    <div className={styles.sidebar__switch} onClick={toggleSidebar} style={{cursor: "pointer"}}>
+                    <div
+                        className={styles.sidebar__switch}
+                        onClick={toggleSidebar}
+                        style={{cursor: "pointer"}}
+                    >
                         <div
-                            className={`${styles.sidebar__switch__container} ${isSidebarVisible ? styles.left : styles.right}`}/>
+                            className={`${styles.sidebar__switch__container} ${isSidebarVisible ? styles.left : styles.right}`}
+                        />
                     </div>
                 </div>
                 <div className={styles.main__content__container}
