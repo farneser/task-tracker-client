@@ -35,7 +35,17 @@ export const TaskProvider: FC<PropsWithChildren> = ({children}) => {
                 : await taskService.get();
 
             if (isRequestRelevant) {
-                setTasks(tasksData);
+                setTasks(tasksData.sort((t1, t2) => {
+                    if (t1.orderNumber < t2.orderNumber) {
+                        return -1;
+                    }
+
+                    if (t1.orderNumber > t2.orderNumber) {
+                        return 1;
+                    }
+
+                    return 0;
+                }));
                 setError(null);
             }
         } catch (error) {
