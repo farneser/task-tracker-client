@@ -18,7 +18,7 @@ import {
 import {arrayMove, SortableContext} from "@dnd-kit/sortable";
 import {createPortal} from "react-dom";
 import {ItemTypes} from "@/utils/id/ItemTypes.ts";
-import {TaskLookupView} from "@/services/task/task.types.ts";
+import {PatchTaskDto, TaskLookupView} from "@/services/task/task.types.ts";
 import TaskElement from "@/components/ui/task/TaskElement.tsx";
 import useTasks from "@/hooks/useTasks.ts";
 import styles from "./ProjectPage.module.scss";
@@ -38,8 +38,6 @@ const ProjectPage: FC = () => {
     const {translations} = useLocalization();
     const {projectId} = useProjectId();
 
-    console.log("project rerenders")
-
     const {
         statuses,
         createStatus,
@@ -56,7 +54,14 @@ const ProjectPage: FC = () => {
 
     const navigate = useNavigate();
 
-    const {tasks, createTask, setTasks, updateTask, removeTask, isLoading: isTasksLoading} = useTasks(projectId)
+    const {
+        tasks,
+        createTask,
+        setTasks,
+        updateTask: updateTaskHandler,
+        removeTask,
+        isLoading: isTasksLoading
+    } = useTasks(projectId)
 
     const {reversePopup, closePopup, Popup} = usePopup(isStatusesLoading || statuses.length === 0);
     const statusesIds = useMemo(() => statuses.map((status) => getStatusId(status.id)), [statuses]);
@@ -82,6 +87,10 @@ const ProjectPage: FC = () => {
 
         closePopup();
     };
+
+    const updateTask = async (id: number, data: PatchTaskDto) => {
+        await updateTaskHandler(id, data)
+    }
 
     const onDragStart = (event: DragStartEvent) => {
         if (event.active.data.current?.type === ItemTypes.STATUS) {
@@ -182,13 +191,13 @@ const ProjectPage: FC = () => {
         navigate("/p")
     }
 
-
     return (<div className={styles["kanban-container"]}>
-        <DndContext sensors={sensors}
-                    onDragStart={onDragStart}
-                    onDragEnd={onDragEnd}
-                    onDragOver={onDragOver}>
-
+        <DndContext
+            sensors={sensors}
+            onDragStart={onDragStart}
+            onDragEnd={onDragEnd}
+            onDragOver={onDragOver}
+        >
             <Popup>
                 <StatusForm onSubmit={onSubmit}/>
             </Popup>
@@ -206,6 +215,19 @@ const ProjectPage: FC = () => {
                             deleteTask={removeTask}
                             createTask={createTask}
                             draggable={userMember?.role != "MEMBER" && !isMobile}
+                            move={(id, isLeftDirection) => {
+                                setStatuses(((statuses) => {
+                                    const statusIndex = statuses.findIndex((status) => status.id === id);
+
+                                    const overStatusIndex = statuses.findIndex((status) => status.id == statuses[statusIndex + (isLeftDirection ? -1 : 1)].id);
+
+                                    statuses[statusIndex].orderNumber = overStatusIndex;
+
+                                    updateStatus(statuses[statusIndex].id, statuses[statusIndex]).then();
+
+                                    return arrayMove(statuses, statusIndex, overStatusIndex);
+                                })(statuses))
+                            }}
                         />
                     ))}
                 </SortableContext>

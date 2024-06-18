@@ -18,6 +18,7 @@ import TrashIcon from "@/components/ui/icons/TrashIcon.tsx";
 import useMembers from "@/hooks/useMembers.ts";
 import useProjectId from "@/hooks/useProjectId.ts";
 import useIsMobile from "@/hooks/is-mobile-phone-hooks.ts";
+import useStatuses from "@/hooks/useStatuses.ts";
 
 type StatusProps = {
     status: StatusView;
@@ -28,6 +29,7 @@ type StatusProps = {
     deleteTask?: (id: number) => void;
     tasks: TaskLookupView[];
     draggable?: boolean;
+    move?: (id: number, isLeftDirection: boolean) => void;
 };
 
 const StatusElement: FC<StatusProps> = (
@@ -39,7 +41,8 @@ const StatusElement: FC<StatusProps> = (
         deleteStatus,
         updateStatus,
         createTask,
-        draggable
+        draggable,
+        move,
     }
 ) => {
     const {translations} = useLocalization();
@@ -60,6 +63,8 @@ const StatusElement: FC<StatusProps> = (
     const {userMember} = useMembers(projectId)
     const [mouseIsOver, setMouseIsOver] = useState(false);
     const [blockMouseIsOver, setBlockMouseIsOver] = useState(false)
+
+    const {statuses} = useStatuses(projectId);
 
     const setMouseIsOverHandler = (state: boolean) => {
         if (!blockMouseIsOver) {
@@ -117,16 +122,48 @@ const StatusElement: FC<StatusProps> = (
                     className={styles.status__container_overlay}></div>
     }
 
+    const isFirst = (): boolean => {
+        return statuses.findIndex(s => s.id == status.id) == 0;
+    };
+
+    const isLast = (): boolean => {
+        return statuses.findIndex(s => s.id == status.id) == statuses.length - 1;
+    };
+
+    const moveStatus = (isMoveLeft: boolean) => {
+        move && move(status.id, isMoveLeft);
+    }
+
     return (<>
             <CreatePopup>
                 <TaskForm onSubmit={onCreateSubmit} statusId={status.id}/>
             </CreatePopup>
             <EditPopup>
                 <StatusForm onSubmit={onEditSubmit} status={status}/>
+                {move && <div className={styles.form}
+                              style={{display: "flex", justifyContent: "space-around", marginTop: "3%"}}>
+                    {!isFirst() && <button
+                        className={styles.form__button}
+                        style={{left: 0}}
+                        onClick={() => moveStatus(true)}
+                    >
+                        move left
+                    </button>}
+                    {!isLast() && <button
+                        className={styles.form__button}
+                        style={{right: 0}}
+                        onClick={() => moveStatus(false)}
+                    >
+                        move right
+                    </button>}
+                </div>}
             </EditPopup>
-            <div className={styles.status__container} ref={setNodeRef} style={{...style, ...borderColorStyle}}
-                 onMouseEnter={() => setMouseIsOverHandler(true)}
-                 onMouseLeave={() => setMouseIsOverHandler(false)}
+            <div
+                className={styles.status__container}
+                ref={setNodeRef}
+                style={{...style, ...borderColorStyle}}
+                onMouseEnter={() => setMouseIsOverHandler(true)}
+                onMouseLeave={() => setMouseIsOverHandler(false)}
             >
                 <div className={styles.header}>
                     {updateStatus && draggable && userMember?.role != "MEMBER" &&

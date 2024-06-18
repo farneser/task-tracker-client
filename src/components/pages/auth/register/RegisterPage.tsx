@@ -57,6 +57,10 @@ const RegisterPage: FC = () => {
                             maxLength: {
                                 value: 64,
                                 message: translations.registerPage.username.maxLength
+                            },
+                            pattern: {
+                                message: translations.registerPage.username.invalid,
+                                value: /^[a-zA-Z0-9_]+$/
                             }
                         })}
                     />

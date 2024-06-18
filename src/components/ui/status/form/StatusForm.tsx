@@ -67,9 +67,13 @@ const StatusForm: FC<StatusFormProps> = ({onSubmit, status}) => {
             {errors.statusName && <p className={styles.form__error}>{errors.statusName.message}</p>}
         </div>
         <div>
-            <ColorPicker error={colorError} setColor={async (color) => {
-                setValue("statusColor", color)
-            }}/>
+            <ColorPicker
+                error={colorError}
+                setColor={async (color) => {
+                    setValue("statusColor", color)
+                }}
+                defaultColor={status?.statusColor}
+            />
         </div>
         <div className={styles.createColumnForm__form__field}>
             <label className={styles.form__label}>{translations.statusForm.isCompleted.label}</label>

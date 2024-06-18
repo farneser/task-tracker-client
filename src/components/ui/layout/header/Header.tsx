@@ -79,13 +79,13 @@ const Header: FC = () => {
                     className={styles.header__button}
                 >{translations.header.members(members.list.length)}</button>
             </>}
-            {user?.email && <>
-                <div className={styles.header__user} onClick={reverseUserPopup}>
+            {user?.email && <div style={{display: "flex", margin: "auto 0 auto auto"}}>
+                <div className={styles.header__user} onClick={reverseUserPopup} style={{marginRight: "5px"}}>
                     <span>{translations.header.loginAs(user.email)}</span>
                     <span className={styles.header__settings}><SettingsIcon/></span>
                 </div>
                 <Gravatar email={user.email} size={40} className="avatar"/>
-            </>}
+            </div>}
 
             <button className={styles.header__button} onClick={logout}>{translations.header.logout}</button>
         </div>

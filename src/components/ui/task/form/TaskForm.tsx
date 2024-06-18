@@ -5,10 +5,11 @@ import styles from "./TaskForm.module.scss";
 import {useLocalization} from "@/hooks/useLocalization.ts";
 import useMembers from "@/hooks/useMembers.ts";
 import useProjectId from "@/hooks/useProjectId.ts";
+import useStatuses from "@/hooks/useStatuses.ts";
 
 type PatchTaskFormProps = {
     task?: TaskLookupView;
-    statusId: number;
+    statusId?: number;
     onSubmit: (data: PatchTaskDto) => void;
 }
 
@@ -16,6 +17,8 @@ const TaskForm: FC<PatchTaskFormProps> = ({onSubmit, task, statusId}) => {
     const {translations} = useLocalization();
     const {projectId} = useProjectId();
     const {members} = useMembers(projectId);
+
+    const {statuses} = useStatuses(projectId)
 
     const {
         register,
@@ -30,7 +33,7 @@ const TaskForm: FC<PatchTaskFormProps> = ({onSubmit, task, statusId}) => {
     }, [setFocus]);
 
     const submit = (data: PatchTaskDto) => {
-        onSubmit({...data, statusId: statusId});
+        onSubmit({...data, statusId: task == null && statusId ? statusId : data.statusId});
         reset();
     }
 
@@ -61,6 +64,14 @@ const TaskForm: FC<PatchTaskFormProps> = ({onSubmit, task, statusId}) => {
                       placeholder={translations.taskForm.description.placeholder}
                       {...register("description")} />
         </div>
+        {task && <div>
+            <label className={styles.form__label}>{translations.taskForm.statusId}</label>
+            <select className={styles.form__input} {...register("statusId")}>
+                {statuses.map((s) =>
+                    <option value={s.id}>{s.statusName}</option>
+                )}
+            </select>
+        </div>}
         <div>
             <label className={styles.form__label}>{translations.taskForm.assignedFor.label}</label>
             <select className={styles.form__input} {...register("assignedUserId")}>
