@@ -195,11 +195,12 @@ const ProjectPage: FC = () => {
 
 
     return (<div className={styles["kanban-container"]}>
-        <DndContext sensors={sensors}
-                    onDragStart={onDragStart}
-                    onDragEnd={onDragEnd}
-                    onDragOver={onDragOver}>
-
+        <DndContext
+            sensors={sensors}
+            onDragStart={onDragStart}
+            onDragEnd={onDragEnd}
+            onDragOver={onDragOver}
+        >
             <Popup>
                 <StatusForm onSubmit={onSubmit}/>
             </Popup>
@@ -217,6 +218,19 @@ const ProjectPage: FC = () => {
                             deleteTask={removeTask}
                             createTask={createTask}
                             draggable={userMember?.role != "MEMBER" && !isMobile}
+                            move={(id, isLeftDirection) => {
+                                setStatuses(((statuses) => {
+                                    const statusIndex = statuses.findIndex((status) => status.id === id);
+
+                                    const overStatusIndex = statuses.findIndex((status) => status.id == statuses[statusIndex + (isLeftDirection ? -1 : 1)].id);
+
+                                    statuses[statusIndex].orderNumber = overStatusIndex;
+
+                                    updateStatus(statuses[statusIndex].id, statuses[statusIndex]).then();
+
+                                    return arrayMove(statuses, statusIndex, overStatusIndex);
+                                })(statuses))
+                            }}
                         />
                     ))}
                 </SortableContext>
