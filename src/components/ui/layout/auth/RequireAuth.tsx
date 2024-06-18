@@ -1,18 +1,17 @@
 import {Navigate, Outlet, useLocation} from "react-router-dom";
 import useAuth from "@/hooks/useAuth.ts";
 import Header from "@/components/ui/layout/header/Header.tsx";
-import {memo, useEffect, useState} from "react";
+import {memo, useEffect} from "react";
 import Loader from "@/components/ui/loader/Loader.tsx";
 import SideBar from "@/components/ui/layout/sidebar/SideBar.tsx";
 import styles from "./RequireAuth.module.scss";
+import useLayout from "@/hooks/useLayout.ts";
 
 const RequireAuth = () => {
     const location = useLocation();
     const {refreshAuth, user, getToken, loading} = useAuth();
 
-    const [isSidebarVisible, setIsSidebarVisible] = useState(true);
-    const [isSidebarToggled, setIsSidebarToggled] = useState(false);
-    const [isMobileWidth, setIsMobileWidth] = useState(true);
+    const {toggleSidebar, isHeaderVisible, isSidebarVisible, isMobileWidth} = useLayout();
 
     useEffect(() => {
         if (!user) {
@@ -20,28 +19,8 @@ const RequireAuth = () => {
         }
     }, [refreshAuth, user]);
 
-    useEffect(() => {
-        const handleResize = () => {
-            setIsMobileWidth(window.innerWidth < 768);
-            if (!isSidebarToggled) {
-                setIsSidebarVisible(window.innerWidth >= 768);
-            }
-        };
-
-        handleResize()
-
-        window.addEventListener("resize", handleResize);
-
-        return () => window.removeEventListener("resize", handleResize);
-    }, [isSidebarToggled]);
-
     const getNavigatePath = () => {
         return `/auth/login?redirect=${location.pathname}`;
-    };
-
-    const toggleSidebar = () => {
-        setIsSidebarVisible(!isSidebarVisible);
-        setIsSidebarToggled(true);
     };
 
     if (loading) {
@@ -65,9 +44,9 @@ const RequireAuth = () => {
 
     return (
         <>
-            <header>
+            {isHeaderVisible && <header>
                 <MemoHeader/>
-            </header>
+            </header>}
             <main>
                 <div
                     className={`${styles.main__sidebar__container} ${isMobileWidth ? styles.main__sidebar__container_mobile : ""}`}

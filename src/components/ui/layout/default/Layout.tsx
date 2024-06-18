@@ -2,13 +2,16 @@ import {FC} from "react";
 import {Outlet} from "react-router-dom";
 import styles from "./Layout.module.scss";
 import Footer from "@/components/ui/layout/footer/Footer.tsx";
+import useLayout from "@/hooks/useLayout.ts";
 
 const Layout: FC = () => {
+    const {isFooterVisible} = useLayout();
+
     return <div className={styles.layout__container}>
         <Outlet/>
-        <footer>
+        {isFooterVisible && <footer>
             <Footer/>
-        </footer>
+        </footer>}
     </div>
 }
 

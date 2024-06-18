@@ -188,7 +188,7 @@ const StatusElement: FC<StatusProps> = (
 
                     {status.isCompleted && <div style={{width: "30px", height: "30px"}}><CheckIcon/></div>}
 
-                    {deleteStatus && mouseIsOver && userMember?.role != "MEMBER" &&
+                    {deleteStatus && (mouseIsOver || isMobile) && userMember?.role != "MEMBER" &&
                         <button
                             className={styles.header__delete}
                             onClick={deleteStatus}
