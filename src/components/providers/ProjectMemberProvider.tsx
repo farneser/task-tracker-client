@@ -40,19 +40,15 @@ export const ProjectMemberProvider: FC<PropsWithChildren> = ({children}) => {
     const requestState = useRef({projectId: null as number | null});
 
     const updateMembers = useCallback(async () => {
-        console.log(projectId + " project id")
         requestState.current.projectId = projectId;
 
         setIsLoading(true);
 
-        console.log(`project id ${projectId} and state project id ${requestState.current.projectId}`)
-
         if (projectId) {
             try {
                 const statusesData = await projectService.getMembers(projectId);
-                console.log(`${requestState.current.projectId} === ${projectId}`)
+
                 if (requestState.current.projectId === projectId) {
-                    console.log(`members in project ${projectId} = ${statusesData.length}`)
                     setMembers(statusesData);
                     setError(null);
                 }
@@ -98,7 +94,6 @@ export const ProjectMemberProvider: FC<PropsWithChildren> = ({children}) => {
     }, [projectId]);
 
     useEffect(() => {
-        console.log(`project id changed to ${projectId}`)
         const updateMembersAndInviteToken = async () => {
             await updateMembers();
             await updateInviteToken();
@@ -107,7 +102,7 @@ export const ProjectMemberProvider: FC<PropsWithChildren> = ({children}) => {
         updateMembersAndInviteToken().then();
 
         return () => {
-            console.log(`useEffect cleanup for projectId: ${projectId}`);
+            console.log(`project member cleanup for projectId: ${projectId}`);
         };
     }, [projectId, updateMembers, updateInviteToken]);
 
