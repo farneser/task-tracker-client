@@ -4,6 +4,17 @@
   width: 100%;
   color: $text-color;
 
+  @mixin header-responsive {
+    @media (max-width: 1200px) {
+      &__container {
+
+        button {
+          display: block;
+        }
+      }
+    }
+  }
+
   &__container {
     display: flex;
     align-items: center;
@@ -35,26 +46,41 @@
     height: 30px;
   }
 
+  @mixin user-responsive {
+    @media (max-width: 1200px) {
+      &__user {
+        margin: 5px 10px;
+      }
+    }
+  }
+
   &__user {
     display: flex;
     align-items: center;
     margin: auto 0 auto auto;
-    cursor: pointer;
-    transition: $transition-speed;
 
-    & > span {
-      margin: 10px 5px;
+    &__container {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: $transition-speed;
 
-      &:last-child {
-        margin: 0;
+      & > span {
+        margin: 10px 5px;
+
+        &:last-child {
+          margin: 0;
+        }
+      }
+
+      &:hover {
+        color: $accent-color;
+        transition: $transition-out-speed;
       }
     }
-
-    &:hover {
-      color: $accent-color;
-      transition: $transition-out-speed;
-    }
   }
+
+  @include user-responsive;
 
   &__button {
     border: none;
@@ -67,4 +93,6 @@
       transition: $transition-out-speed;
     }
   }
+
+  @include header-responsive;
 }

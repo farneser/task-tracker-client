@@ -2,12 +2,12 @@ import {createContext, FC, PropsWithChildren, useEffect, useState} from "react";
 
 export interface ILayoutContext {
     isFooterVisible: boolean;
-    setFooterVisible: (state: boolean) => void;
     isSidebarVisible: boolean;
     isSidebarToggled: boolean;
     isMobileWidth: boolean;
     isHeaderVisible: boolean;
     toggleSidebar: () => void;
+    width: number;
 }
 
 export const LayoutContext = createContext<ILayoutContext | null>(null);
@@ -18,15 +18,12 @@ export const LayoutProvider: FC<PropsWithChildren> = ({children}) => {
     const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(true);
     const [isSidebarToggled, setIsSidebarToggled] = useState<boolean>(false);
     const [isMobileWidth, setIsMobileWidth] = useState<boolean>(true);
-
     const [isHeaderVisible, setIsHeaderVisible] = useState<boolean>(true);
+    const [width, setWidth] = useState<number>(window.innerWidth);
 
     useEffect(() => {
         const handleResize = () => {
-            setIsMobileWidth(window.innerWidth < 768);
-            if (!isSidebarToggled) {
-                setIsSidebarVisible(window.innerWidth >= 768);
-            }
+            setWidth(window.innerWidth);
         };
 
         handleResize()
@@ -34,7 +31,15 @@ export const LayoutProvider: FC<PropsWithChildren> = ({children}) => {
         window.addEventListener("resize", handleResize);
 
         return () => window.removeEventListener("resize", handleResize);
-    }, [isSidebarToggled]);
+    }, []);
+
+    useEffect(() => {
+        setIsMobileWidth(width < 768);
+
+        if (!isSidebarToggled) {
+            setIsSidebarVisible(width >= 768);
+        }
+    }, [isSidebarToggled, width]);
 
     useEffect(() => {
         setIsFooterVisible(!isMobileWidth || isSidebarVisible)
@@ -49,12 +54,12 @@ export const LayoutProvider: FC<PropsWithChildren> = ({children}) => {
     return (
         <LayoutContext.Provider value={{
             isFooterVisible: isFooterVisible,
-            setFooterVisible: (state: boolean) => setIsFooterVisible(state),
             isSidebarVisible: isSidebarVisible,
             isSidebarToggled: isSidebarToggled,
             isMobileWidth: isMobileWidth,
             isHeaderVisible: isHeaderVisible,
-            toggleSidebar: toggleSidebar
+            toggleSidebar: toggleSidebar,
+            width,
         }}>
             {children}
         </LayoutContext.Provider>

@@ -10,7 +10,7 @@ import useLayout from "@/hooks/useLayout.ts";
 const RequireAuth = () => {
     const location = useLocation();
     const {refreshAuth, user, getToken, loading} = useAuth();
-
+    console.log(useLayout().width)
     const {toggleSidebar, isHeaderVisible, isSidebarVisible, isMobileWidth} = useLayout();
 
     useEffect(() => {
@@ -18,6 +18,7 @@ const RequireAuth = () => {
             refreshAuth();
         }
     }, [refreshAuth, user]);
+
 
     const getNavigatePath = () => {
         return `/auth/login?redirect=${location.pathname}`;

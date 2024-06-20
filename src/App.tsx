@@ -11,6 +11,10 @@ import type {Router} from "@remix-run/router/dist/router";
 import {FC} from "react";
 import AcceptInvitePage from "@/components/pages/tokens/invites/AcceptInvitePage.tsx";
 import {ProjectIdProvider} from "@/components/providers/ProjectIdProvider.tsx";
+import {ProjectMemberProvider} from "@/components/providers/ProjectMemberProvider.tsx";
+import {StatusProvider} from "@/components/providers/StatusProvider.tsx";
+import {TaskProvider} from "@/components/providers/TaskProvider.tsx";
+import {ProjectProvider} from "@/components/providers/ProjectProvider.tsx";
 
 const router: Router = createBrowserRouter(
     createRoutesFromElements(
@@ -24,9 +28,17 @@ const router: Router = createBrowserRouter(
 
             {/* private routes */}
             <Route element={
-                <ProjectIdProvider>
-                    <RequireAuth/>
-                </ProjectIdProvider>
+                <ProjectProvider>
+                    <ProjectMemberProvider>
+                        <StatusProvider>
+                            <TaskProvider>
+                                <ProjectIdProvider>
+                                    <RequireAuth/>
+                                </ProjectIdProvider>
+                            </TaskProvider>
+                        </StatusProvider>
+                    </ProjectMemberProvider>
+                </ProjectProvider>
             }>
                 <Route path="/p" element={<ProjectsPage/>}/>
                 <Route path="/p/:projectId" element={
