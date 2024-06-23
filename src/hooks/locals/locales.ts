@@ -17,7 +17,7 @@ export type Translations = {
         login: Field;
         password: Field;
         accountNotExists: string;
-    },
+    };
     registerPage: {
         heading: string;
         submit: string;
@@ -26,7 +26,7 @@ export type Translations = {
         password: Field;
         confirmPassword: Field;
         accountAlreadyExists: string;
-    },
+    };
     statusForm: {
         headingCreate: string;
         headingEdit: string;
@@ -35,46 +35,46 @@ export type Translations = {
         isCompleted: {
             label: string;
             required: string;
-        },
+        };
         submitCreate: string;
         submitEdit: string;
-    },
+    };
     statusElement: {
         createTask: string;
         archive: string;
-    },
+    };
     taskForm: {
         headingCreate: string;
         headingEdit: string;
         title: Field;
         description: Field;
-        statusId: string,
+        statusId: string;
         assignedFor: {
             label: string;
             notAssigned: string;
         };
         submitCreate: string;
         submitEdit: string;
-    },
+    };
     projectPage: {
         createStatus: string;
-    },
+    };
     credentials: {
         author: string;
         repo: string;
         icons: string;
-    },
+    };
     sideBar: {
         dashboard: string;
         createNewProject: string;
-    },
+    };
     members: {
         inviteLink: {
             create: string;
             delete: string;
             placeholder: string;
             copied: string;
-        },
+        };
         member: {
             delete: string;
             leave: string;
@@ -86,20 +86,20 @@ export type Translations = {
                 creator: string;
             }
         }
-    },
+    };
     header: {
         members: (id: number) => string;
         archive: {
             open: string;
             close: string;
-        },
+        };
         tasks: {
             archive: string;
             refresh: string;
-        },
+        };
         loginAs: (email: string) => string;
         logout: string;
-    },
+    };
     confirmEmailPage: {
         successfullyConfirm: string;
         error: {
@@ -107,7 +107,7 @@ export type Translations = {
             message: string;
         };
         home: string;
-    },
+    };
     acceptInvitePage: {
         title: string;
         invite: (email: string, projectName: string) => string;
@@ -116,40 +116,44 @@ export type Translations = {
             message: string;
         };
         accept: string;
-    },
+    };
     project: {
         leave: string;
         delete: string;
-    },
+    };
     projectForm: {
         headingCreate: string;
         headingEdit: string;
         projectName: Field;
         submitCreate: string;
         submitEdit: string;
-    },
+    };
     colorPicker: {
         color: {
             red: string;
             green: string;
             blue: string;
-        },
+        };
         select: string;
         hex: string;
         error: string;
-    },
+    };
     userSettings: {
         header: string;
         emailNotifications: string;
+        stats: {
+            get: string;
+            sent: string;
+        };
         save: string;
-    },
+    };
     welcomePage: {
         title: string;
         message: string;
         login: string;
         register: string;
         dashboard: string;
-    },
+    };
     projectsPage: {
         uncompletedTasks: (num: number) => string;
         assignedTasks: (num: number) => string;

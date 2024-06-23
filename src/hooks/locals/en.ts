@@ -208,6 +208,10 @@ const en: Translations = {
     userSettings: {
         header: "User settings",
         emailNotifications: "Subscribe for email notifications",
+        stats: {
+            get: "Get statistics by email",
+            sent: "Statistics sent"
+        },
         save: "Save settings",
     },
     welcomePage: {
