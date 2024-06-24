@@ -40,15 +40,15 @@ const router: Router = createBrowserRouter(
             {/* private routes */}
             <Route element={
                 <ProjectProvider>
-                    <ProjectMemberProvider>
-                        <StatusProvider>
-                            <TaskProvider>
-                                <ProjectIdProvider>
+                    <ProjectIdProvider>
+                        <ProjectMemberProvider>
+                            <StatusProvider>
+                                <TaskProvider>
                                     <RequireAuth/>
-                                </ProjectIdProvider>
-                            </TaskProvider>
-                        </StatusProvider>
-                    </ProjectMemberProvider>
+                                </TaskProvider>
+                            </StatusProvider>
+                        </ProjectMemberProvider>
+                    </ProjectIdProvider>
                 </ProjectProvider>
             }>
                 <Route path="/p" element={<ProjectsPage/>}/>

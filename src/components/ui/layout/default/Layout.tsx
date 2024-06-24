@@ -1,11 +1,11 @@
-import { FC, useState, useEffect, useRef } from "react";
-import { Outlet } from "react-router-dom";
+import {FC, useState, useEffect, useRef} from "react";
+import {Outlet} from "react-router-dom";
 import styles from "./Layout.module.scss";
 import Footer from "@/components/ui/layout/footer/Footer.tsx";
 import useLayout from "@/hooks/useLayout.ts";
 
 const Layout: FC = () => {
-    const { isFooterVisible, isTextPage, isMobileWidth } = useLayout();
+    const {isFooterVisible, isTextPage, isMobileWidth} = useLayout();
     const layoutRef = useRef<HTMLDivElement>(null);
     const [isLayoutTallerThanScreen, setIsLayoutTallerThanScreen] = useState(false);
 
@@ -27,7 +27,9 @@ const Layout: FC = () => {
         if (layoutRef.current) {
             const layoutHeight = layoutRef.current.scrollHeight;
             const screenHeight = window.innerHeight;
+
             console.log(`Layout height: ${layoutHeight}, Screen height: ${screenHeight}`);
+
             setIsLayoutTallerThanScreen(layoutHeight > screenHeight);
         }
     };
@@ -53,11 +55,11 @@ const Layout: FC = () => {
             style={getHeight()}
         >
             <div className={styles.layout__content}>
-                <Outlet />
+                <Outlet/>
             </div>
             {(isFooterVisible || isTextPage) && (
                 <footer>
-                    <Footer />
+                    <Footer/>
                 </footer>
             )}
         </div>
