@@ -4,17 +4,6 @@
   width: 100%;
   color: $text-color;
 
-  @mixin header-responsive {
-    @media (max-width: 1200px) {
-      &__container {
-
-        button {
-          display: block;
-        }
-      }
-    }
-  }
-
   &__container {
     display: flex;
     align-items: center;
@@ -30,28 +19,32 @@
     & > button {
       background-color: lighten($background-color, 10%);
       padding: 10px 20px;
+      font-size: 1rem;
 
       &:hover {
         background-color: lighten($background-color, 15%);
       }
     }
 
+    @media (max-width: 1200px) {
+      & > button {
+        display: block;
+        font-size: 0.9rem;
+      }
+    }
+
     @media (max-width: 768px) {
       padding: 0;
+
+      & > button {
+        padding: 8px 16px;
+      }
     }
   }
 
   &__settings {
     width: 30px;
     height: 30px;
-  }
-
-  @mixin user-responsive {
-    @media (max-width: 1200px) {
-      &__user {
-        margin: 5px 10px;
-      }
-    }
   }
 
   &__user {
@@ -67,6 +60,7 @@
 
       & > span {
         margin: 10px 5px;
+        font-size: 1rem;
 
         &:last-child {
           margin: 0;
@@ -78,9 +72,21 @@
         transition: $transition-out-speed;
       }
     }
-  }
 
-  @include user-responsive;
+    @media (max-width: 1200px) {
+      margin: 5px 10px;
+
+      &__container > span {
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      &__container > span {
+        margin: 8px 4px;
+      }
+    }
+  }
 
   &__button {
     border: none;
@@ -92,7 +98,14 @@
     &:hover {
       transition: $transition-out-speed;
     }
-  }
 
-  @include header-responsive;
+    @media (max-width: 1200px) {
+      font-size: 0.9rem;
+      padding: 4px 8px;
+    }
+
+    @media (max-width: 768px) {
+      margin: 8px 4px;
+    }
+  }
 }

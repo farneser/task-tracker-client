@@ -13,9 +13,10 @@ import ProjectElement from "@/components/ui/project/element/ProjectElement.tsx";
 
 type SideBarProps = {
     onProjectClick: (id: number) => void;
+    onMainClick: () => void;
 }
 
-const SideBar: FC<SideBarProps> = ({onProjectClick}) => {
+const SideBar: FC<SideBarProps> = ({onProjectClick, onMainClick}) => {
     const {pathname} = useLocation()
 
     const {
@@ -71,7 +72,9 @@ const SideBar: FC<SideBarProps> = ({onProjectClick}) => {
         </Popup>
         <div className={styles.sidebar__container__head}>
             <ul>
-                <li><Link to="p" style={{...getBackgroundColor("/p")}}>{translations.sideBar.dashboard}</Link></li>
+                <li onClick={onMainClick}><Link to="p"
+                                                style={{...getBackgroundColor("/p")}}>{translations.sideBar.dashboard}</Link>
+                </li>
                 <li><Link to="#" onClick={openPopup}>{translations.sideBar.createNewProject}</Link></li>
             </ul>
         </div>
