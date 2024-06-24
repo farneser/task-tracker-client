@@ -26,6 +26,7 @@
 .create__status__container {
   height: 100%;
   margin: 0 10px;
+  text-wrap: nowrap;
 
   button {
     background: lighten($background-color, 5%);

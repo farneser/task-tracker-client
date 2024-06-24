@@ -40,29 +40,31 @@ export const ProjectMemberProvider: FC<PropsWithChildren> = ({children}) => {
     const requestState = useRef({projectId: null as number | null});
 
     const updateMembers = useCallback(async () => {
-        requestState.current.projectId = projectId;
+        if (!projectId) {
+            setMembers([]);
+            setIsLoading(false);
+            setError(null);
+            return;
+        }
 
         setIsLoading(true);
 
-        if (projectId) {
-            try {
-                const statusesData = await projectService.getMembers(projectId);
+        try {
+            const statusesData = await projectService.getMembers(projectId);
 
-                if (requestState.current.projectId === projectId) {
-                    setMembers(statusesData);
-                    setError(null);
-                }
-            } catch (error) {
-                if (requestState.current.projectId === projectId) {
-                    setError(error as Message);
-                }
-            } finally {
-                if (requestState.current.projectId === projectId) {
-                    setIsLoading(false);
-                }
+            if (requestState.current.projectId === projectId) {
+                setMembers(statusesData);
+                setError(null);
             }
-        } else {
-            setMembers([]);
+        } catch (error) {
+            if (requestState.current.projectId === projectId) {
+                setError(error as Message);
+                setMembers([]);
+            }
+        } finally {
+            if (requestState.current.projectId === projectId) {
+                setIsLoading(false);
+            }
         }
     }, [projectId]);
 
