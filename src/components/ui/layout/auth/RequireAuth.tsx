@@ -54,7 +54,7 @@ const RequireAuth = () => {
                     style={width}
                 >
                     <div className={`${styles.sidebar} ${isSidebarVisible ? styles.show : styles.hide}`}>
-                        <SideBar onProjectClick={onProjectClick}/>
+                        <SideBar onProjectClick={onProjectClick} onMainClick={toggleSidebar}/>
                     </div>
                     <div
                         className={styles.sidebar__switch}
@@ -66,8 +66,10 @@ const RequireAuth = () => {
                         />
                     </div>
                 </div>
-                <div className={styles.main__content__container}
-                     style={{display: isMobileWidth && isSidebarVisible ? "none" : "block"}}>
+                <div
+                    className={styles.main__content__container}
+                    style={{display: isMobileWidth && isSidebarVisible ? "none" : "block"}}
+                >
                     <Outlet/>
                 </div>
             </main>
