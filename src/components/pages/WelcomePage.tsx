@@ -23,7 +23,7 @@ const WelcomePage: FC = () => {
 
     const {user} = useAuth();
 
-    return <div className={styles.page}>
+    return <div className={styles.page} style={{margin: "0 auto"}}>
         <div className={styles.form}>
             <div className={styles.title}>{translations.welcomePage.title}</div>
             <div className={styles.message}>

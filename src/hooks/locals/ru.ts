@@ -20,7 +20,7 @@ const ru: Translations = {
             minLength: "Минимальная длина: 8 символов",
             maxLength: "Максимальная длина: 255 символов"
         },
-        accountNotExists: "Отсутсвует аккаунт?"
+        accountNotExists: "Отсутствует аккаунт?"
     },
     registerPage: {
         heading: "Страница регистрации",

@@ -45,7 +45,6 @@ const router: Router = createBrowserRouter(
                     <ProjectPage/>
                 }/>
             </Route>
-
         </Route>
     )
 );
