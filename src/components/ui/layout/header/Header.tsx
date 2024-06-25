@@ -66,9 +66,18 @@ const Header: FC = () => {
 
         <div className={styles.header__container}>
             {projectId != null && <>
-                <button className={styles.header__button} onClick={refresh}>{translations.header.tasks.refresh}</button>
-                <button className={styles.header__button} onClick={() => archiveTasks(
-                    statuses.filter(c => c.isCompleted && projectId == c.projectId).map(c => c.id))}>
+                <button
+                    className={styles.header__button}
+                    onClick={refresh}
+                >
+                    {translations.header.tasks.refresh}
+                </button>
+                <button
+                    className={styles.header__button}
+                    onClick={() => archiveTasks(statuses
+                        .filter(c => c.isCompleted && projectId == c.projectId)
+                        .map(c => c.id))
+                    }>
                     {translations.header.tasks.archive}
                 </button>
                 <button className={styles.header__button} onClick={() => setIsArchiveOpen(!isArchiveOpen)}>
@@ -79,8 +88,8 @@ const Header: FC = () => {
                     className={styles.header__button}
                 >{translations.header.members(members.list.length)}</button>
             </>}
-            {user?.email && <div style={{display: "flex", margin: "auto 0 auto auto"}}>
-                <div className={styles.header__user} onClick={reverseUserPopup} style={{marginRight: "5px"}}>
+            {user?.email && <div className={styles.header__user}>
+                <div className={styles.header__user__container} onClick={reverseUserPopup} style={{marginRight: "5px"}}>
                     <span>{translations.header.loginAs(user.email)}</span>
                     <span className={styles.header__settings}><SettingsIcon/></span>
                 </div>

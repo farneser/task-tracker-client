@@ -13,5 +13,8 @@ export const userService = {
         });
 
         return data.data;
+    },
+    async getStatistics(): Promise<void> {
+        await axiosInstance.post("/api/v1/user/statistics")
     }
 }

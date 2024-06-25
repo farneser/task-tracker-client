@@ -7,6 +7,7 @@ import {useForm} from "react-hook-form";
 import {Message} from "@/models/Message.ts";
 import {errorMessages} from "@/components/pages/auth/errors.ts";
 import {useLocalization} from "@/hooks/useLocalization.ts";
+import styles from "./LoginPage.module.scss";
 
 const LoginPage: FC = () => {
     const {translations} = useLocalization();
@@ -47,19 +48,19 @@ const LoginPage: FC = () => {
     }
 
     return (
-        <div className="page">
-            <form className="form" onSubmit={handleSubmit(onSubmit)}>
+        <div className={styles.page}>
+            <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <h1>{translations.loginPage.heading}</h1>
                 </div>
                 <div>
-                    {error && <p className="form__error">
+                    {error && <p className={styles.form__error}>
                         {errorMessages[`${error.status}`] || error.message}</p>}
-                    <label className="form__label">{translations.loginPage.login.label}</label>
+                    <label className={styles.form__label}>{translations.loginPage.login.label}</label>
                     <input
                         type="text"
                         placeholder={translations.loginPage.login.placeholder}
-                        className="form__input"
+                        className={styles.form__input}
                         {...register('login', {
                             required: translations.loginPage.login.required,
                             minLength: {
@@ -72,15 +73,15 @@ const LoginPage: FC = () => {
                             }
                         })}
                     />
-                    {errors.login && <p className="form__error">{errors.login.message}</p>}
+                    {errors.login && <p className={styles.form__error}>{errors.login.message}</p>}
                 </div>
 
                 <div>
-                    <label className="form__label">{translations.loginPage.password.label}</label>
+                    <label className={styles.form__label}>{translations.loginPage.password.label}</label>
                     <input
                         type="password"
                         placeholder={translations.loginPage.password.placeholder}
-                        className="form__input"
+                        className={styles.form__input}
                         {...register('password', {
                             required: translations.loginPage.password.required,
                             maxLength: {
@@ -94,15 +95,15 @@ const LoginPage: FC = () => {
                         })}
                     />
                     {errors.password && (
-                        <p className="form__error">{errors.password.message}</p>
+                        <p className={styles.form__error}>{errors.password.message}</p>
                     )}
                 </div>
                 <div>
-                    <button type="submit" className="form__button">
+                    <button type="submit" className={styles.form__button}>
                         {translations.loginPage.submit}
                     </button>
                 </div>
-                <div className="form__link">
+                <div className={styles.form__link}>
                     <Link to={"/auth/register"}>{translations.loginPage.accountNotExists}</Link>
                 </div>
             </form>

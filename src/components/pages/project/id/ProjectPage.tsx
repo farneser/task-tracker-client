@@ -149,7 +149,9 @@ const ProjectPage: FC = () => {
                 const activeIndex = tasks.findIndex((t) => t.id === parseId(activeId));
                 const overIndex = tasks.findIndex((t) => t.id === parseId(overId));
 
-                tasks[activeIndex].orderNumber = overIndex;
+                tasks[activeIndex].orderNumber = tasks
+                    .filter(t => t.statusId === tasks[overIndex].statusId)
+                    .findIndex((t) => t.id === parseId(overId)) + 1;
 
                 if (tasks[activeIndex].statusId != tasks[overIndex].statusId) {
                     tasks[activeIndex].statusId = tasks[overIndex].statusId;

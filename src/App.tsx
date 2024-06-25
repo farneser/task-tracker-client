@@ -11,10 +11,25 @@ import type {Router} from "@remix-run/router/dist/router";
 import {FC} from "react";
 import AcceptInvitePage from "@/components/pages/tokens/invites/AcceptInvitePage.tsx";
 import {ProjectIdProvider} from "@/components/providers/ProjectIdProvider.tsx";
+import {ProjectMemberProvider} from "@/components/providers/ProjectMemberProvider.tsx";
+import {StatusProvider} from "@/components/providers/StatusProvider.tsx";
+import {TaskProvider} from "@/components/providers/TaskProvider.tsx";
+import {ProjectProvider} from "@/components/providers/ProjectProvider.tsx";
+import {LayoutProvider} from "@/components/providers/LayoutProvider.tsx";
+import {LocalizationProvider} from "@/components/providers/LocalizationProvider.tsx";
+import {AuthProvider} from "@/components/providers/AuthProvider.tsx";
 
 const router: Router = createBrowserRouter(
     createRoutesFromElements(
-        <Route path="/" element={<Layout/>}>
+        <Route path="/" element={
+            <LayoutProvider>
+                <LocalizationProvider>
+                    <AuthProvider>
+                        <Layout/>
+                    </AuthProvider>
+                </LocalizationProvider>
+            </LayoutProvider>
+        }>
             {/* public rotes */}
             <Route index element={<WelcomePage/>}/>
             <Route path="/confirm" element={<ConfirmPage/>}/>
@@ -24,16 +39,23 @@ const router: Router = createBrowserRouter(
 
             {/* private routes */}
             <Route element={
-                <ProjectIdProvider>
-                    <RequireAuth/>
-                </ProjectIdProvider>
+                <ProjectProvider>
+                    <ProjectIdProvider>
+                        <ProjectMemberProvider>
+                            <StatusProvider>
+                                <TaskProvider>
+                                    <RequireAuth/>
+                                </TaskProvider>
+                            </StatusProvider>
+                        </ProjectMemberProvider>
+                    </ProjectIdProvider>
+                </ProjectProvider>
             }>
                 <Route path="/p" element={<ProjectsPage/>}/>
                 <Route path="/p/:projectId" element={
                     <ProjectPage/>
                 }/>
             </Route>
-
         </Route>
     )
 );

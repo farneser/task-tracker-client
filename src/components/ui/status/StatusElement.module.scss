@@ -1,6 +1,10 @@
 @import "src/styles/constants";
 @import "src/styles/form";
 
+$status-container-width: 350px;
+$status-container-width-1200: 310px;
+$status-container-width-768: 270px;
+
 .status {
 
   &__container {
@@ -8,8 +12,8 @@
     background: darken($background-color, 5%);
     height: 100%;
     display: flex;
-    width: 350px;
-    min-width: 350px;
+    width: $status-container-width;
+    min-width: $status-container-width;
     flex-direction: column;
     border: 1px solid rgba(lighten($background-color, 15%), 0.3);
     box-shadow: 0 0 15px rgba(lighten($background-color, 15%), 0.3);
@@ -17,8 +21,8 @@
 
     &_overlay {
       background-color: rgba(darken($background-color, 5%), 0.3);
-      width: 350px;
-      min-width: 350px;
+      width: $status-container-width;
+      min-width: $status-container-width;
       border-radius: $border-radius;
       border: 1px solid $accent-color;
       margin: 0 10px;
@@ -117,6 +121,30 @@
         background: lighten($background-color, 10%);
         color: $accent-color;
         transition: $transition-out-speed;
+      }
+    }
+  }
+
+  @media (max-width: 1200px) {
+    &__container {
+      width: $status-container-width-1200;
+      min-width: $status-container-width-1200;
+
+      &_overlay {
+        width: $status-container-width-1200;
+        min-width: $status-container-width-1200;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    &__container {
+      width: $status-container-width-768;
+      min-width: $status-container-width-768;
+
+      &_overlay {
+        width: $status-container-width-768;
+        min-width: $status-container-width-768;
       }
     }
   }

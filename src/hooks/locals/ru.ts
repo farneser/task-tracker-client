@@ -20,7 +20,7 @@ const ru: Translations = {
             minLength: "Минимальная длина: 8 символов",
             maxLength: "Максимальная длина: 255 символов"
         },
-        accountNotExists: "Отсутсвует аккаунт?"
+        accountNotExists: "Отсутствует аккаунт?"
     },
     registerPage: {
         heading: "Страница регистрации",
@@ -208,6 +208,10 @@ const ru: Translations = {
     userSettings: {
         header: "Настройки пользователя",
         emailNotifications: "Подписаться на уведомления по электронной почте",
+        stats: {
+            get: "Получить статистику на почту",
+            sent: "Статика отправлена",
+        },
         save: "Сохранить настройки",
     },
     welcomePage: {

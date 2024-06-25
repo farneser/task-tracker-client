@@ -114,11 +114,12 @@ const TaskElement: FC<TaskElementProps> = (
                         <div className={styles.task__description}>{task.description}</div>
                         <div className={styles.task__date}>{formattedDate}</div>
                     </div>
-                    {(mouseIsOver || isMobile) && deleteTask && <div>
+                    {(mouseIsOver || isMobile) && deleteTask ? <div>
                         <button onClick={deleteTask} className={styles.task__delete}>
                             <TrashIcon/>
                         </button>
-                    </div>}
+                    {/*FIXME 20.06.2024: cursed block width fix*/}
+                    </div> : <div style={{width: "30px", display: "block", color: "transparent"}}>dummy</div>}
                 </div>
             </div>
             <Popup>

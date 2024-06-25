@@ -43,11 +43,7 @@ export const authService = {
     async confirm(id: string): Promise<Message | null> {
         const message = await axios.post<Message>(`${constants.baseUrl}/api/v1/auth/confirm?token=${id}`)
 
-        if ((message.data as Message).status != null) {
-            return null
-        }
-
-        return message.data as Message
+        return message.data
     }
 }
 
