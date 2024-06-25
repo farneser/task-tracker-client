@@ -67,8 +67,6 @@ const RegisterPage: FC = () => {
                     {errors.username && <p className={styles.form__error}>{errors.username.message}</p>}
                 </div>
                 <div>
-                    {error && <p className={styles.form__error}>
-                        {errorMessages[`${error.status}`] || error.message}</p>}
                     <label className={styles.form__label}>{translations.registerPage.email.label}</label>
                     <input
                         type="text"

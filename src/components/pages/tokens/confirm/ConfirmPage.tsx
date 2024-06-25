@@ -8,6 +8,7 @@ const ConfirmPage: FC = () => {
     const {translations} = useLocalization();
     const navigate = useNavigate();
     const [isValidToken, setIsValidToken] = useState(false);
+    const [isValidTokenBlock, setIsValidTokenBlock] = useState(false);
 
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
@@ -17,8 +18,9 @@ const ConfirmPage: FC = () => {
         const checkTokenValidity = async () => {
             try {
                 const data = await authService.confirm(token!)
-
+                console.log(data)
                 if (data) {
+                    console.log("if")
                     setIsValidToken(true);
                 } else {
                     setIsValidToken(false);
@@ -35,13 +37,19 @@ const ConfirmPage: FC = () => {
         }
     }, []);
 
+    useEffect(() => {
+        if (isValidToken){
+            setIsValidTokenBlock(true)
+        }
+    }, [isValidToken]);
+
     const handleReturnHome = () => {
         navigate('/p');
     };
 
     return <div className={styles.page}>
         <div className={styles.form + " " + styles.page__container}>
-            {isValidToken ? (
+            {isValidTokenBlock ? (
                 <div>
                     <h1 className={styles.title}>{translations.confirmEmailPage.successfullyConfirm}</h1>
                 </div>
