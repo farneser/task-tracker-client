@@ -6,7 +6,7 @@ main {
   display: flex;
 
   .main__sidebar__container {
-    min-width: 25%;
+    min-width: max(25%, 270px);
     max-width: 25%;
     display: flex;
     transition: max-width 0.5s ease;
